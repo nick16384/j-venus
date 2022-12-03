@@ -1,0 +1,1559 @@
+theophil@theophil-Ubuntu:/$ ls
+theophil@theophil-Ubuntu:/$ ls
+theophil@theophil-Ubuntu:/$ ls
+theophil@theophil-Ubuntu:/$ ls
+theophil@theophil-Ubuntu:/$ 
+>
+cls
+theophil@theophil-Ubuntu:/$ 
+theophil@theophil-Ubuntu:/$ ls
+theophil@theophil-Ubuntu:/$ cls
+theophil@theophil-Ubuntu:/$ 
+theophil@theophil-Ubuntu:/$ 
+theophil@theophil-Ubuntu:/$ cat /home/theophil/Desktop/JavaDOS/data/cmd_history
+theophil@theophil-Ubuntu:/$ print hi
+print hi
+ls
+theophil@theophil-Ubuntu:/$ exit
+theophil@theophil-Ubuntu:/$ exit
+ls
+exit
+print hi
+print hi
+ls
+ls
+ls
+>> ls
+ls
+ls
+ls
+ls
+ls
+>> ls
+ls
+ls
+top
+exit
+ls
+ls
+exit
+exit
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+ls
+cls
+ls
+exit
+cls
+ls
+apt moo
+ls
+exit
+ex
+>> ex
+prompt $-
+cls
+pgrep java
+cls -allowParallelExecution
+nano
+pstree
+cls
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+>
+ls
+ls -allowParallelExecution
+etc	usr	lib	run	snap
+genStacktrace
+class components.TestException: 
+genStacktrace
+genStacktrace java.lang.NullPointerException
+cls
+genStacktrace
+cls
+genStacktrace java.lang.IllegalArgumentException
+exit
+ls
+exit
+print hi
+print hi
+print hi
+ls
+cls
+exit
+ls
+exit
+ls
+clear
+ls
+ls /
+clear
+ls ..
+ls /../
+cd bin
+exit
+cls
+print hello | print world
+encrypt
+cls
+encrypt shift2c /etc/javados/EasyTextToEncrypt.txt
+encrypt /etc/javados/EasyTextToEncrypt.txt
+encrypt -inputFile /etc/javados/EasyTextToEncrypt.txt
+decrypt
+exit
+theophil@theophil-Ubuntu:/$ ls
+prompt
+	Thread.java, Line 833
+exit
+rickroll
+suiii
+exit
+print \u001B[0;31m
+exit
+print \u001B[0;31m
+theophil@theophil-Ubuntu:/$[0;31mHelloexit
+	EventDispatchThread.java,[0;31mHelloLine[0;31mHello90
+	EventDispatchThread.java,[0;31mHelloLine[0;31mHello90
+	EventDispatchThread.java,[0;31mHelloLine[0;31mHello90
+cls
+theophil@theophil-Ubuntu:/$[0;31mHelloprompt $-
+cls
+theophil@theophil-Ubuntu:/$[0;31mHelloexit -allowParallelExecution -silent -noPrompt
+	EventDispatchThread.java,[0;31mHelloLine[0;31mHello90
+theophil@theophil-Ubuntu:/$[0;31mHellogenStacktrace java.lang.IllegalArgumentException
+theophil@theophil-Ubuntu:/$[0;31mHelloexit
+ls
+print hi
+printf \u001B[35mHello
+printf hi
+printf hiprintf \u001B[35mHello
+printf \u001B[1;31mHi
+sysexec ls
+cd src
+ls
+ls
+cd engine
+ls
+cd ..
+pci
+sysexec clear
+cd home
+cd /theophil
+ssh theophil@192.168.178.60 -p 46
+ssh theophil@192.168.178.60 -p 468
+To check for new updates run: sudo apt update
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+ps -ef
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+ps -ef
+To force execution, type '-forceExecThread' (not recommended!)
+ps -ef -allowParallelExecution
+sysexec -allowParallelExecution "ps -ef"
+ps -ef
+systemctl status ssh
+print hi
+sudo systemctl status ssh
+print hi
+hi
+prompt $PATH
+cd Desktop
+cd ..
+cd usr
+cd bin
+ls
+snice	gdk-pixbuf-csource	aspell-import	nsupdate	mmount
+apt list
+cls
+hae?
+reset
+cd usr
+cd bin
+ls
+su
+su
+exit
+ls
+exit
+ls
+clear
+nano
+sysexec clear
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+exit
+ls
+cls
+ls
+printf hi
+exit
+ls
+printf hihellO
+echo hihellO
+exit hihellO
+exit
+kill 102253
+sysexec "kill 103253"
+print hi
+ls
+clear
+cat /etc/passwd
+exit
+ping google.com
+clear
+exceed
+exit
+encrypt --help
+encrypt shift2c something
+encrypt shft2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+exit
+encrypt shift2c something
+encrypt shift2c something
+Encryption with Shift2C started...
+encrypt shift2c something
+exit
+ls
+etc	usr	lib	run	snap
+encrypt shift2c something
+exit
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c hi 12
+encrypt shift2c hello 123
+exit
+encrypt shift2c "hello world"
+encrypt "hello world"
+encrypt shift2c "helloworld"
+encrypt shift2c something_cool
+encrypt shift2c thisEwillEbeEspaces
+exit
+Set Install Folder: /etc/javados
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c something
+encrypt shift2c hello 00000
+encrypt shift2c hello 00001
+encrypt shift2c hello
+exit
+encrypt shift2c something
+encrypt shift2c something
+exit
+encrypt shift2c something
+encrypt shift2c something 999999999
+exit
+encrypt shift2c helloworld
+exit
+encrypt shift2c 3w4z9itnzewt9qz983wxn2zn
+exit
+encrypt shift2c asrgtnwoie
+encrypt shift2c helloworld 0000000000
+exit
+encrypt shift2c helloworld
+decrypt shift2c
+exit
+decrypt shift2c something 000000000
+decrypt shift2c something 000000000
+decrypt shift2c something 000000000
+decrypt shift2c something 000000000
+encrypt shift2c hello
+decrypt shift2c AAE0S 99634
+encrypt shift2c hello 99634
+exit
+encrypt shift2c hi 11
+decrypt shift2c 1J 11
+encrypt shift2c hi 99
+decrypt shift2c AE 99
+decrypt shift2c AE 99
+encrypt shift2c helloworld 1111111111
+decrypt shift2c 1FMMPXPSME 1111111111
+encrypt shift2c HELLOWORLD 9999999999
+exit
+Set Install Folder: /etc/javados
+encrypt shift2c helloworld 9999999999
+exit
+encrypt shift2c helloworld 9999999999
+decrypt shift2c AA77X6X079 9999999999
+exit
+cls
+encrypt shift2c helloworld 9999999999
+decrypt shift2c AA77X6X079 9999999999
+exit
+encrypt shift2c helloworld
+cls
+decrypt shift2c E6MMS0OTNA 3211440227
+exit
+cls
+decrypt shift2c E6MMS0OTNA 3211440227
+exit
+cls
+encrypt shift2c lala 1234
+clear
+decrypt shift2c M908 1234
+encrypt shift2c LAL1 1234
+decrypt shift2c M906 1234
+encrypt shift2c lala 1234
+decrypt shift2c MCOE 1234
+encrypt shift2c /etc/javados/TextToEncrypt.txt
+exit
+encrypt shift2c /etc/javados/TextToEncrypt.txt
+exit
+encrypt shift2c /etc/javados/TextToEncrypt.txt
+encrypt shift2c /etc/javados/TextToEncrypt.txt
+clear
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+cls
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+clear
+encrypt shift2c /etc/javados/large.txt
+  print [ord(c) for c in s]
+cls
+cls
+encrypt shift2c /etc/javados/large.txt
+cls
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+clear
+encrypt shift2c /etc/javados/INSTALL/README.txt
+cls
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+exit
+clear
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+exit
+encrypt shift2c /etc/javados/INSTALL/README.txt
+clear
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+exit
+clear
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+exit
+cls
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+exit
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+clear
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+exit
+encrypt shift2c /etc/javados/INSTALL/dos437.txt
+encrypt shift2c /etc/javados/INSTALL/dos437.txt
+clear
+encrypt shift2c /etc/javados/in.txt
+clear
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+exit
+encrypt shift2c /etc/javados/in.txt
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+clear
+encrypt shift2c /etc/javados/in.txt 99999999999999999999999999999999
+exit
+encrypt shift2c /etc/javados/out.txt
+cls
+encrypt shift2c /etc/javados/EasyTextToEncrypt.txt
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+encrypt shift2c /etc/javados/EasyTextToEncrypt.txt
+decrypt shift2c /etc/javados/out.txt /etc/javados/key.txt
+exit
+exit
+exit
+Running in shell mode. Type 'end-session' to return to linux. 
+<
+clear
+prompt
+cxls
+cls
+prompt default
+exit
+exit
+print hi
+clear
+crs.lzss
+crs.lzss helloworld
+crs
+exit
+clear
+crs
+crs.lzss
+crs.lzss helloworld
+crs
+crs.lzss
+paramMissing
+clear
+crs.lzss helloworld
+crs.not
+crs.whatthefuck
+clear
+crs
+crs.hi
+exit
+crs
+exit
+crs
+clear
+crs.lzss
+crs.lzss helloworld
+crs.lzss
+crs.lzss
+clear
+crs.lzss myInputString
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss helloworld
+clear
+crs.lzss /etc/javados/file.txt
+129
+clear
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file.txt
+clear
+crs.lzss /etc/javados/file.txt
+clear
+crs.lzss /etc/javados/file.txt
+clear
+crs.lzss /etc/javados/file.txt
+suiiii
+cls
+exit
+exit
+crs.lzss /etc/javados/file.txt
+crs.lzss irgendeintext
+clear
+crs.lzss irgendeinText
+exit
+clear
+clear
+shellmode normal
+crs.lzss
+exit
+ls
+clear
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss helloworld
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file.txt
+clear
+exit
+clear
+crs.lzss /etc/javados/file.txt
+clear
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss hello
+clear
+crs.lzss /etc/javados/file.txt
+clear
+crs.lzss howisitgoing,areyougood??
+clear
+crs.lzss hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+exit
+clear
+crs.lzss hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+exit
+clear
+crs.lzss /etc/javados/file.txt
+I WILL N
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss helloworld
+exit
+crs.lzss helloworld
+exit
+crs.lzss hellworld
+exit
+crs.lzss helloworld
+exit
+crs.lzss oaoaoaoaaaooooaa
+exit
+clear
+crs.lzss helloworld
+exit
+Set Install Folder: /etc/javados
+clear
+crs.lzss helloworld
+exit
+clear
+crs.lzss /etc/javados/file.txt
+exit
+Running in shell mode. Type 'end-session' to return to linux. 
+clear
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss helloworld
+crs.lzss aaoaoooaooaoaa
+crs.lzss aa
+crs.lzss a
+exit
+crs.lzss /etc/javados/file.txt
+clear
+crs.lzss /etc/javados/TextToEncrypt.txt
+exit
+crs.lzss hi,thisismyworld
+crs.lzss hi,thisismyworld
+exi
+exit
+crs.lzss helloworld
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss /etc/javados/TextToEncrypt.txt
+exit
+crs.lzss /etc/javados/TextToEncrypt.txt
+exit
+crs.lzss helloworld
+crs.lzss ..........................helloworld
+clear
+crs.lzss aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahelloworld
+exit
+crs.lzss aaooaoaooaoaooaooaoooaooaoaoaooaoaoaooaooaoa
+exit
+exit
+clear
+crs.lzss /etc/javados/file2.txt
+exit
+crs.lzss /etc/javados/file2.txt
+EE1E11
+exit
+crs.lzss /etc/javados/file2.txt
+exit
+cls
+crs.lzss /etc/javados/file2.txt
+clear
+crs.lzss /etc/javados/file2.txt
+ext
+exit
+clear
+crs.lzss /etc/javados/file2.txt
+exit
+clear
+crs.lzss /etc/javados/file2.txt
+exit
+clear
+crs.lzss /etc/javados/file2.txt
+crs.lzss /etc/javados/file2.txt
+exit
+clear
+crs.lzss hello
+crs.lzss hellohellohellohellohellohellohellohellohellohello
+exit
+Running in shell mode. Type 'end-session' to return to linux. 
+clear
+crs.lzss lllllllllllllllllllllllllllllllllllllllllllllllo
+crs.lzss lllllllllllllllllllllllllllllllllllllllllllllll
+crs.lzss /etc/javados/file2.txt
+.txt
+.txtcrs.lzss /etc/javados/file2.txt
+crs.lzss /etc/javados/file.txt
+exit
+crs.lzss hello
+exit
+crs.lzss hello
+exit
+clear
+crs.lzss hello
+exit
+clear
+crs.lzss aaaaooaoaoaooaoaooaooaaooaooaoaooaoaooaoaoaoaooaoaaa
+exit
+clear
+crs.lzss aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+crs.lzss aaoaoooaoaoaaaoaoaooaooaooaoaaa
+exit
+clear
+crs.lzss aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+exit
+clear
+crs.lzss aaaaaaaaaaaaaoaooaoaoaoaoaoaaaoaooaaoaoaoaoaoaooaoaooaaa
+exit
+clear
+crs.lzss aaaaaaaaaaaaaaaaaooooaoaoaoaooaoaoaoaoooaooaoaoa
+crs.lzss aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+crs.lzss hello
+class java.util.NoSuchElementException: 
+clear
+exit
+crs.lzss hello
+crs.lzss ................................hello
+crs.lzss ................................helloh
+crs.lzss /etc/javados/file2.txt
+exit
+crs.lzss hello
+clear
+crs.lzss /etc/javados/file3.txt
+exit
+Running in shell mode. Type 'end-session' to return to linux. 
+crs.lzss /etc/javados/file3.txt
+exit
+clear
+crs.lzss /etc/javados/file3.txt
+exit
+clear
+crs.lzss /etc/javados/file3.txt
+exit
+clear
+crs.lzss /etc/javados/file3.txt
+clear
+crs.lzss helloworld!
+exit
+crs.lzss helloworld!
+exit
+crs.lzss helloworld!
+exit
+crs.lzss helloworld
+cls
+crs.lzss /etc/javados/file.txt
+exit
+clear
+crs.lzss /etc/javados/file2.txt
+crs.lzss helloworld!
+crs.lzss aaooaoaooaoaoaooaaooaoaoa
+end-session
+clear
+crs.lzss hello
+crs.lzss helloworld
+exit
+clear
+crs.lzss helloworld
+exit
+crs.lzss helloworld.
+clear
+crs.lzss /etc/javados/file2.txt
+exit
+clear
+crs.lzss helloworld
+exit
+crs.lzss helloworld
+exit
+crs.lzss helloworld.
+exit
+crs.lzss helloworld.
+exit
+crs.lzss helloworld
+exit
+crs.lzss helloworld
+exit
+crs.lzss helloworld
+exit
+crs.lzss helloworld
+exit
+crs.lzss helloworld
+crs.lzss IAMTEXTIAMTEXT
+exit
+crs.lzss helloworld
+exit
+crs.lzss helloworld.
+exit
+crs.lzss /etc/javados/file2.txt
+exitexit
+stop
+terminate
+crs.lzss helloworld
+crs.lzss /etc/javados/file2.txt
+<14,1>
+exit
+crs.lzss /etc/javados/file2.txt
+exit
+crs.lzss /etc/javados/file2.txt
+crs.lzss /etc/javados/file2.txt
+exit
+crs.lzss /etc/javados/file2.txt
+exit
+crs.lzss /etc/javados/file2.txt
+exit
+print hello?
+exit
+shellmode legacy
+print cmds?
+shellmode native
+print hi
+print hi
+sysexec apt moo
+print test
+print
+print hi
+exi
+print hi
+chksum -test-32 irgendwas
+genStacktrace
+genStacktrace java.io.IOException
+exit
+exit
+env
+chEnv -add hello world
+env
+chEnv -add thisis anotherValue
+env
+chEnv -modify thisis hey!
+env
+exit
+chEnv
+exit
+env
+exit
+env
+exit
+env
+chEnv -add $ROOT /etc/javados/
+env
+chEnv -add $ROOT somethingelse
+exit
+exit
+env
+exit
+env
+exit
+env
+exit
+env
+env
+env
+env
+env
+env
+env
+env
+env
+env
+GNU General Public License: Oracle Corporation 
+env
+chEnv -add $ROOT /etc/javados/
+env
+exit
+chEnv -add hello world
+env
+clear
+chEnv -add $ROOT /etc/javados/
+env
+chEnv -modify hello helloWorld
+chEnv -modify nonExistent test
+env
+exit
+chEnv -add hello world
+chEnv -add $ROOT /etc/javados/
+env
+chEnv -modify hello helloWorld
+chEnv -modify nonExistent test
+exit
+ls
+reset
+exit
+print hi
+ls
+ls
+ls /
+apt moo
+apt update
+sudo apt update
+sudo apt update
+To force execution, type '-forceExecThread' (not recommended!)
+exit
+exit -allowParallelExecution
+print "HELLO"
+end-session
+stacktrace
+throwStacktrace
+stacktrace NullPointerException
+print """
+print "Hi""
+print "Hi"Heööl"
+There was an error parsing the command: Uneven number of '"'
+apt
+apt moo
+tree
+tree /
+ping google.com
+exit
+GNU General Public License: Oracle Corporation 
+env
+env -add $TEST hallo
+env
+print $TESThallo
+clear
+chenv -add $TEST hallo
+env
+print $TESThello
+chEnv -add $TEST hallo
+clear
+env
+print hi
+print hello $TEST hello
+chEnv -add $TEST hallo
+clear
+print $TEST
+chenv -add $TEST hallo
+clear
+print $TEST
+print $TEST
+clear
+chEnv -add $TEST hallo
+chEnv -add $TEST halloclear
+print $TEST
+chEnv -add $TEST hallo
+clear
+print $TEST hello
+exit
+exit
+exit
+chEnv -add $TEST hallo
+env
+clear
+print $NOPE hi
+print $TEST hi
+exit
+env
+exit
+env
+cd $$NULL
+cd home
+env
+exit
+print
+print hi
+clear
+env
+cd home
+cd $FSROOT
+Running in shell mode. Type 'end-session' to return to linux. 
+cd home
+cd $FSROOT
+cd $JDOS_ROOT
+pwd
+pwd
+cd $HOSTNAME
+clear
+print $USERNAME@$HOSTNAME:$PATH$ 
+print $USERNAME
+print $USERNAME @ $HOSTNAME : $PATH $
+exit
+env
+print $$NULL
+env
+env
+env
+apt moo
+print $$ALL
+env
+chEnv -modify $$NULL hi
+chEnv -add $$NULL hi
+env
+exit
+env
+chEnv -modify $$NULL hi
+chEnv -add $$NULL hi
+env
+exit
+print $$NULL
+exit
+print $$NULL
+print $$NULL
+print $$NULL
+env
+cd $$NULL
+$$NULL
+$$NULL
+chEnv -add $CMD print
+chenv -add $CMD print
+chenv -add CMD print
+en
+env
+exit
+chEnv -add $CMD print
+chEnv -add $PARAM1 helloWorld
+$CMD $PARAM1
+exit
+General System information: 
+env
+env
+env
+env
+$20
+env
+env
+env
+env
+env
+mem
+env
+exit
+env
+env
+exit
+env
+env
+env
+exit
+env
+env
+class java.util.ConcurrentModificationException: 
+env
+class java.util.ConcurrentModificationException: 
+env
+class java.util.ConcurrentModificationException: 
+chEnv -modify $20 whattheheck
+env
+print $20
+env
+exit
+CmdNotFound
+exit
+env
+exit
+env
+env
+exit
+env
+exit
+env
+exit
+$$ALL
+$$NULL
+$$NULL
+$$NULL
+print hi
+print $$ALL
+print $$NULL
+print $$NULL
+clear
+clear $$NULL
+reload $$NULL
+clear
+chEnv -add $BUG $$NULL
+env
+exit
+chEnv -add $BUG $$NULL
+env
+exit
+Set Install Folder: /etc/javados
+env
+chEnv -add $BUG $$NULL
+exit
+clear
+ls
+ver
+env
+reload
+exit
+exit
+env
+exit
+print hi
+print hello
+print hello worl
+print hello world
+print whatever
+print second whatever
+exit
+exit
+Running in shell mode. Type 'end-session' to return to linux. 
+clear
+apt moo
+apt moo
+aptmoo
+apt moo
+exit
+apt moo
+clear
+apt moo
+apt moo
+apt moo
+print hihihhi
+apt moo
+exit
+apt moo
+apt moo
+apt moo
+apt moo
+apt moo
+apt moo
+reload
+apt moo
+apt moo
+apt moo
+apt moo
+apt moo
+apt moo
+apt moo
+apt moo
+exit
+apt moo
+apt moo
+apt moo
+apt moo
+exit
+apt moo
+apt moo
+apt moo
+apt moo
+exit
+apt moo
+exit
+exit
+exit
+env
+exit
+Running in shell mode. Type 'end-session' to return to linux. 
+TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+print \u001B[0;31mHello
+exit
+apt search test
+clear
+event
+cd
+clear
+exit
+apt update
+ansi
+man terminfo
+printf
+printf \u001B[0;31mHello
+printf \u001B[0;31mHello
+print \u001B[0;31mHello
+print \u001B[0;31m Hello
+print \u001B[0;31mHello\u001B[0m
+print \u001B[31;mHello
+for x in {0..8}; do for i in {30..37}; do for a in {40..47}; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo ""
+bash /home/theophil/Desktop/colorTest.sh
+exit
+print hi
+exit
+bash /home/theophil/Desktop/colorTest.sh
+\e[8;35;40m \e[8;35;41m \e[8;35;42m \e[8;35;43m \e[8;35;44m \e[8;35;45m \e[8;35;46m \e[8;35;47m 
+	EventDispatchThread.java, Line 90
+exit
+clear
+exit
+exit
+bash /home/theophil/Desktop/colorTest.sh
+bash /home/theophil/Desktop/colorTest.sh
+tput colors
+exit
+bash /home/theophil/Desktop/colorTest.sh
+exit
+printf "My favorite styles are \e[0;31m red \e[0m , \e[1;32m bold green \e[0m and \e[7;44m inverted blue \e[0m \n"
+exit
+printf "My favorite styles are \e[0;31m red \e[0m , \e[1;32m bold green \e[0m and \e[7;44m inverted blue \e[0m \n"
+Running in shell mode. Type 'end-session' to return to linux. 
+apt moo
+apt moo
+clear
+      return null;
+printf "My favorite styles are \e[0;31m red \e[0m , \e[1;32m bold green \e[0m and \e[7;44m inverted blue \e[0m \n"
+exit
+ver
+bash /home/theophil/Desktop/colorTest.sh
+\e[8;37;40m \e[8;37;41m \e[8;37;42m \e[8;37;43m \e[8;37;44m \e[8;37;45m \e[8;37;46m \e[8;37;47m 
+	EventDispatchThread.java, Line 90
+exit
+JavaDOS Version: 22.08 Warning: Beta Version, Problems may occur! 
+print test
+GNU General Public License: Oracle Corporation 
+print hi
+>
+env
+env
+clear
+test
+\/ Test error sent \/TestError
+exit
+Running in shell mode. Type 'end-session' to return to linux. 
+exit
+exit
+exit
+addEnv $TEST hi
+env
+apt moo
+clear
+apt update
+python3
+exit
+exit
+env
+echo $VERSION
+exit
+exit
+exit
+print hi
+print "hi"
+exit
+sysexec /sbin/nologin
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+hi
+cowsay
+fortune
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+To force execution, type '-forceExecThread' (not recommended!)
+exit -force
+To force execution, type '-forceExecThread' (not recommended!)
+exit
+exit
+reloa
+reloa
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+exit
+env
+exitr
+exit
+sysexec exit
+exit
+exit
+exit
+print test
+echo "test"
+echo "Test double testtest"
+echo "Test double testtest Test"
+echo "Test Test"
+clear
+env
+echo $VEXUS_BIN
+exit
+print hi
+print hello
+lalala	print hello	print hi
+exit
+print hi
+print hello
+lala	print hello	print hi
+exit
+print hi
+print hello
+lala	print hello	print hi
+exit
+print help
+help
+env
+exit
+echo moin
+ext
+exit
+print hellow
+moin
+thiscmddoesnotwork
+genStackTrace
+genStackTrace java-lang-NullPointerException
+genStackTrace java.lang.NullPointerException
+exit
+echo MOINMOIN!!!
+exit
+echo MOINMOIN!!!22222
+exit
+sysexec pwd
+pwd
+exit
+sysexec pwd
+pwd
+exit
+printWorkingDir
+vm
+exit
+exit
+exit
+echo moinsen
+exit
+exit
+exit
+Init success!
+print hi
+clear
+fprint()
+printf()
+moinsen
+ls
+exit
+exit
+exit
+jdos_old.jar
+/etc/vexus/commands/jdos_old.jar
+/etc/vexus/commands/jdos_old.jar
+jdos_old
+jdos_old.jar
+exit
+jdos_old
+jdos_old.jar
+exit
+jdos_old
+jdos_old
+jdos_old
+jdos_old
+exit
+jdos_old
+jdos_old
+jdos_old
+jdos_old
+jdos_old
+exit
+jdos_old
+exit
+jdos_old
+CmdNotFound
+clear
+java
+sysexec java
+exit
+debug
+exit
+debug
+exit
+debug
+exit
+debug
+debug
+exit
+debug
+debug
+exit
+dbg
+exit
+debug
+dbg
+exit
+debug
+exit
+dbg
+exit
+debug
+exit
+dbg
+test
+exit
+jansi-2.1.0
+exit
+sysexec echo hi
+sysexec echo hi
+sysexec echo hi
+sysexec echo hi
+class java.util.NoSuchElementException: 
+sysexec apt moo
+apt moo
+sudo echo hi
+class java.util.NoSuchElementException: 
+clear
+sysexec sudo echo moin
+sysexec sudo echo moin
+sysexec apt moo
+apt moo
+clear
+clear
+sysexec apt moo
+exit
+sysexec apt moo
+sysexec apt update
+sysexec sudo echo hi
+sysexec sudo apt update
+clear
+sysexec sudo apt update
+sudo apt upgrade
+clear
+sysexec sudo apt update
+clear
+sysexec sudo apt upgrade
+sysexec cksum
+sysexec sudo echo hi
+sysexec cksum
+sysexec cksum
+sysexec cksum
+sysexec sudo apt upgrade
+After this operation, 272 kB of additional disk space will be used.
+exit
+exit
+exit
+clear
+sysexec sudo apt upgrade
+exit
+sysexec sudo apt update
+exit
+apt moo
+apt moo
+apt moo
+exit
+apt moo
+System
+apt moo
+clear
+apt update
+exit
+apt moo
+apt moo
+apt moo
+apt moo
+apt moo
+apt moo
+exit
+apt moo
+sysexec apt moo
+clear
+sysexec clear
+sysexec lscpu | less
+sysexec lscpu
+clear
+exit
+sysexec apt moo
+sysexec lscpu
+clear
+exit
+sysexec lscpu
+clear
+exit
+sysexec lscpu
+Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+clear
+sysexec lscpu
+sysexec lscpu
+sysexec lscpu
+clear
+exit
+exit
+sysexec cksum
+exit
+sysexec echo -
+sysexec echo
+exit
+sysexec cksum
+exit
+sysexec cksum
+sysexec cksum
+exit
+sysexec cksum -
+exit
+sysexec lscpu
+NUMA node0 CPU(s):               0-3
+sysexec apt moo
+exit
+clear
+sysexec lscpu
+exit
+sudo apt moo
+clear
+exit
+sysexec apt moo
+sysexec lspci
+clear
+exit
+sysexec lscpu
+clear
+sysexec apt moo
+sysexec apt moo
+sysexec apt moo
+sysexec apt moo
+sysexec apt moo
+exit
+sysexec apt moo
+clear
+dbg
+debug
+sysexec echo test
+sysexec apt moo
+sysexec lscpu
+ls
+sysexec lscpu
+exit
+sysexec lscpu
+clear
+exit
+sysexec apt moo
+..."Have you mooed today?"...
+sysexec lscpu
+clear
+exit
+lscpu
+clear
+apt moo
+apt
+  upgrade - upgrade the system by installing/upgrading packages
+sysexec ls /
+exit
+lscpu
+clear
+exit
+lscpu
+BogoMIPS:                        4983.93
+exit
+exit
+exit
+echo hi
+print hi
+sysexec apt moo
+exit
+echo hi
+print hi
+sysexec echo hi
+exit
+clear
+reload
+reload
+cd bin
+ls
+clear
+cd ..
+clear
+exit
+exit
+exit -force
+exit -f
+sysexec cksum
+sysexec cksum
+exit
+print moin
+echo moin
+print moinsen
+exit
+reload
+Success: $SCROLL_AT_LINES -> 0
+clear
+env --help
+env -h
+chEnv --help
+chEnv -update
+clear
+chEnv -update $$ALL
+clear
+exit
+print moinsen
+exit
+apt list
+print
+cksum
+exit
+print
+print
+sysexec echo moin
+sudo apt update
+sysexec sudo apt update
+sysexec sudo apt update
+sysexec sudo apt update
+Get:23 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 DEP-11 Metadata [13.3 kB]
+clear
+sysexec sudo apt upgrade
+After this operation, 4,154 kB of additional disk space will be used.
+mpo
+newInput
+exit
+print test
+print moin
+print moin
+prompt $$
+theophil@theophil-Ubuntu:/$ prompt $$
+	Thread.java, Line 833
+clear
+prompt
+print moin
+print moinsen
+print moinmoin!
+print moin2!
+print moin
+print moin2
+print moin
+print moin
+print moinsen2
+sysexec sudo apt upgrade
+clear
+sudo apt upgrade
+sysexec sudo apt upgrade
+After this operation, 4,141 kB of additional disk space will be used.
+exit
+sysexec sudo apt update
+clear
+clear
+clear
+print iiii
+clear
+print moin wird zweimal
+sysexec apt moo
+sysexec apt moo
+print moiin
+clear
+cksum
+print moooooin2
+genStackTrace
+exit
+genStacktrace
+exit

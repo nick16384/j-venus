@@ -1,0 +1,24 @@
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Command runtime (execution) exception
+class java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0 [Message]
+	Index 0 out of bounds for length 0 [Localized Message]
+Cause: null
+Full Stacktrace:
+-> jdk.internal.util.Preconditions.outOfBounds()
+	Preconditions.java, at Line 64
+-> jdk.internal.util.Preconditions.outOfBoundsCheckIndex()
+	Preconditions.java, at Line 70
+-> jdk.internal.util.Preconditions.checkIndex()
+	Preconditions.java, at Line 266
+-> java.util.Objects.checkIndex()
+	Objects.java, at Line 359
+-> java.util.ArrayList.get()
+	ArrayList.java, at Line 427
+-> internalCommands.File_listDirectory.listDirectory()
+	File_listDirectory.java, at Line 25
+-> main.CommandMain.executeCommand()
+	CommandMain.java, at Line 234
+-> main.CommandMain$2.run()
+	CommandMain.java, at Line 123
+-> java.lang.Thread.run()
+	Thread.java, at Line 833

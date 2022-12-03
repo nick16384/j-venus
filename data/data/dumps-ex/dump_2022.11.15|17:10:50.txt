@@ -1,0 +1,14 @@
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Command runtime (execution) exception
+class components.TestException: This is a test exception. [Message]
+	This is a test exception. [Localized Message]
+Cause: null
+Full Stacktrace:
+-> internalCommands.System_Generate_Stacktrace.generateStacktrace()
+	System_Generate_Stacktrace.java, at Line 20
+-> main.CommandMain.executeCommand()
+	CommandMain.java, at Line 249
+-> main.CommandMain$2.run()
+	CommandMain.java, at Line 123
+-> java.lang.Thread.run()
+	Thread.java, at Line 833
