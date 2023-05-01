@@ -63,9 +63,12 @@ public class Main extends JFrame {
 		OpenLib.cmdLinePrepare();
 		sys.setActivePhase("run");
 		
-		while (jfxWinloader.getCmdLine() == null)
-			try { Thread.sleep(100); } catch (InterruptedException ie) { ie.printStackTrace(); }
-		jfxWinloader.getCmdLine().setText("");
+		for (int i = 0; i < 100; i++) {
+			//FIXME cmdLine text cannot be updated after primaryStage.show() was called.
+			sys.log("I wanna write to cmdLine");
+			try { Thread.sleep(500); } catch (InterruptedException ie) { ie.printStackTrace(); }
+			jfxWinloader.setText("Hello whats going on dude?!");
+		}
 		//==================================== INIT END ====================================
 	}
 	public static LinkedList<String> commandHistory = new LinkedList<>();
