@@ -18,7 +18,7 @@ public class JFxWinloader extends Application {
 	private TextArea cmdLine;
 	
 	public void loadGUI(String[] args) {
-		launch(args);
+		Application.launch(args);
 	}
 	
 	public void stop() {
