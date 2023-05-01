@@ -54,7 +54,6 @@ public class Main extends JFrame {
 		} else {
 			sys.log("MAIN", 1, "Starting with default AWT window loader.");
 			awt.windowManager.AWTWinload.awtWinload();
-			sys.log("Some stuff");
 		}
 		
 		sys.setActivePhase("run");
