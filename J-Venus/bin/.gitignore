@@ -1,0 +1,11 @@
+/.classpath
+/.project
+/commandProcessing/
+/components/
+/engine/
+/internalCommands/
+/libraries/
+/main/
+/modules/
+/net/
+/windowManager/
