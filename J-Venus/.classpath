@@ -17,5 +17,16 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/theophil/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19-linux.jar" sourcepath="/home/theophil/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="javadoc_location" value="jar:file:/home/theophil/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19-javadoc.jar!/"/>
+			<attribute name="maven.groupId" value="org.openjfx"/>
+			<attribute name="maven.artifactId" value="javafx-graphics"/>
+			<attribute name="maven.version" value="19"/>
+			<attribute name="maven.classifier" value="linux"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -52,7 +52,7 @@ public class JFXANSI extends JTextPane {
 			return;
 		StyleContext sc = StyleContext.getDefaultStyleContext();
 		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
-		if (Main.jfxWinloader.getCmdLine() != null)
+		if (Main.cmdLine != null)
 			insertNewString(s, c, aset); //Private method
 	}
 
@@ -179,7 +179,7 @@ public class JFXANSI extends JTextPane {
 	private void insertNewString(String s, Color c, AttributeSet aset) {
 		sys.log("JFXANSI", 2, "Appending text with JavaFX ANSI class. No color output currently supported.");
 		int len = textArea.lengthProperty().get(); 
-		try {textArea.appendText(s);} 
+		try {Main.jfxWinloader.appendText(s);} 
 		catch (Exception e) {
 			sys.log("ANSI_APPEND", 3, "BadLocationException while appending text.");
 			try {
