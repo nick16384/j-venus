@@ -7,7 +7,7 @@ import java.awt.GraphicsEnvironment;
 
 /**
  * Checks whether the OS support transparent JFrames or not
- * @author theophil
+ * @author nick16384
  *
  */
 
