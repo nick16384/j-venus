@@ -6,6 +6,12 @@ import commandProcessing.CommandMain;
 import engine.sys;
 import libraries.OpenLib;
 
+/**
+ * Protocols are chains of commands intended for different uses and with additional properties.
+ * @author nick16384
+ *
+ */
+
 public class Protocol {
 	private String name = "";
 	private int severity = 0;
@@ -33,7 +39,7 @@ public class Protocol {
 		else if (severity == 5) { sys.log("PRTCL", 0, "Protocol may only show errors."); }
 		else if (severity == 6) { sys.log("PRTCL", 0, "Protocol is allowed to suspend current execution."); }
 		else if (severity == 7) {
-			sys.log("PRTCL", 0, "Protocol may entirely stop JavaDOS execution and/or");
+			sys.log("PRTCL", 0, "Protocol may entirely stop J-Venus execution and/or");
 			sys.log("PRTCL", 0, "do actions (e.g. native mode) involving that.");
 		} else if (severity == 8) { sys.log("PRTCL", 0, "If JVM is allowed to, Protocol may change system files."); }
 		else if (severity > 8) { sys.log("PRTCL", 2, "Severity is above specified max. level (8)"); }

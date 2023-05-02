@@ -24,7 +24,7 @@ import threads.ThreadAllocator;
  * Contains all initialization code (e.g. preparing envvars).
  * Moved from Main to here for better readability.
  * Info: Can only be executed when in pre-init phase
- * @author theophil
+ * @author nick16384
  *
  */
 
