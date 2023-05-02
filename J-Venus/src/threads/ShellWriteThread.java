@@ -120,7 +120,10 @@ public class ShellWriteThread implements VexusThread {
 						if (writeQueue != "" && !sys.getActivePhase().equals("error")) {
 
 							// Autoscroll
-							autoscroll();
+							if (!Main.javafxEnabled)
+								autoscroll();
+							else
+								sys.log("SWT", 1, "Autoscroll unnecessary. JavaFX supports it by itself.");
 							// Autoscroll end
 
 							try {
