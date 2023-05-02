@@ -1,10 +1,17 @@
 package jfx.windowManager;
 
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 
+import javax.swing.text.BadLocationException;
+
+import awt.windowManager.WindowMain;
+import engine.Keyboard;
 import engine.sys;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
@@ -68,13 +75,17 @@ public class JFxWinloader extends Application {
 					// ON COMMAND SUBMIT =================================================
 		        	actionOnEnter();
 		        	// COMMAND SUBMIT END ================================================
-				} else if (event.getCode().equals(KeyCode.PLUS)) {
+				} else if (event.getCode().equals(KeyCode.UP)) {
+					handleCommandRepeat();
+				}
+				
+				if (event.getCode().equals(KeyCode.PAGE_UP)) {
 					sys.log("JFX", 1, "Increasing shell font size.");
 					Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() + 1));
 					// Remove last character
 					Main.cmdLine.setText(Main.cmdLine.getText().substring(0, Main.cmdLine.getText().length() - 1));
 					Main.cmdLine.positionCaret(Main.cmdLine.getText().length());
-				} else if (event.getCode().equals(KeyCode.MINUS)) {
+				} else if (event.getCode().equals(KeyCode.PAGE_DOWN)) {
 					sys.log("JFX", 1, "Shrinking shell font size.");
 					Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
 					// Remove last character
@@ -107,7 +118,7 @@ public class JFxWinloader extends Application {
 	public void appendText(String text) {
 		sys.log("JFX", 1, "Appending new text to cmdLine with " + text.length() + " characters.");
 		
-		if (Main.cmdLine != null) {
+		if (sys.getActivePhase().equals("run") && Main.cmdLine != null) {
 			Main.cmdLine.setEditable(false);
 			Platform.requestNextPulse();
 			// Enqueue cmdLine write in JavaFX thread
@@ -123,6 +134,50 @@ public class JFxWinloader extends Application {
 	
 	public void clearCmdLine() {
 		Main.cmdLine.clear();
+	}
+	
+	/**
+	 * handleCommandRepeat() is responsible for adding the last-executed command
+	 * into the shell.
+	 */
+	
+	private void handleCommandRepeat() {
+		//========================================COMMAND REPEAT============================================
+		main.Main.tabCountInRow++;
+		OpenLib.cmdLinePrepare();
+		
+		main.Main.commandHistory.clear();
+		try {
+			//Add all entries of cmd_history to LinkedList main.Main.commandHistory
+			main.Main.commandHistory.addAll(Arrays.asList(Files.readString(Paths.get(
+					VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "cmd_history")).split("\n")));
+		} catch (IOException ioe) {
+			//TODO edit command history and TAB repeating further
+			sys.log("MAIN", 3, "CMD History read fail. main.Main.commandHistory<LinkedList> is empty now.");
+		}
+		
+		if (main.Main.tabCountInRow > main.Main.commandHistory.size()) {
+			Toolkit.getDefaultToolkit().beep();
+			sys.log("MAIN", 1, "Command history end reached");
+		} else if (main.Main.tabCountInRow == 1) {
+			//Write out last command without it getting protected (..., true)
+			sys.log("REPEAT", 0, "Command repeat: "
+					+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
+			sys.shellPrint(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
+		} else {
+			//TODO Find some sort of replaceLast() \/ -------------------
+			/*try {
+				WindowMain.cmdLine.getStyledDocument().remove(
+						WindowMain.cmdLine.getText().indexOf(main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow + 1)),
+						main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow + 1).length());
+			} catch (BadLocationException ble) {
+				OpenLib.logWrite("MAIN", 3, "Command repeat error: Could not remove old command");
+			}*/
+			sys.log("REPEAT", 0, "Command repeat(" + main.Main.tabCountInRow + "): "
+					+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
+			sys.shellPrint(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
+		}
+		//========================================COMMAND REPEAT END============================================
 	}
 	
 	/**
