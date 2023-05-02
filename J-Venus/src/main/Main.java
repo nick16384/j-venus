@@ -19,6 +19,8 @@ public class Main extends JFrame {
 	public static boolean singleThreaded = false;
 	public static boolean javafxEnabled = false;
 	
+	public static String wqtest = "";
+	
 	public static ThreadAllocator ThreadAllocMain;
 	public static JFxWinloader jfxWinloader;
 	
@@ -68,7 +70,7 @@ public class Main extends JFrame {
 			//TODO remove autoscroll when JFX is enabled, since the window does that by itself
 			//sys.log("I wanna write to cmdLine");
 			try { Thread.sleep(500); } catch (InterruptedException ie) { ie.printStackTrace(); }
-			jfxWinloader.setText("Hello whats going on dude?!");
+			jfxWinloader.appendText("Hello whats going on dude?!");
 		}
 		//==================================== INIT END ====================================
 	}
