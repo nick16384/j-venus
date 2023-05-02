@@ -66,7 +66,7 @@ public class Main extends JFrame {
 		for (int i = 0; i < 100; i++) {
 			//FIXME cmdLine text cannot be updated after primaryStage.show() was called.
 			//TODO remove autoscroll when JFX is enabled, since the window does that by itself
-			sys.log("I wanna write to cmdLine");
+			//sys.log("I wanna write to cmdLine");
 			try { Thread.sleep(500); } catch (InterruptedException ie) { ie.printStackTrace(); }
 			jfxWinloader.setText("Hello whats going on dude?!");
 		}

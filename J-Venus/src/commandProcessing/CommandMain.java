@@ -22,7 +22,7 @@ import main.Main;
  * Developer's note: This class originally used main.Main.cmdLine access,
  * but was existent until version 22.12 (included), so main.Main.cmdLine
  * was replaced with Main.mainFrame.getCmdLine()
- * @author theophil
+ * @author nick16384
  * @deprecated Class deprecated due to limited single-thread support, which was fixed
  * in new class commandProcessing.CommandManager
  */

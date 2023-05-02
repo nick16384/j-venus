@@ -2,7 +2,7 @@ package libraries;
 
 /**
  * Contains all Command errors with error descriptions
- * @author theophil
+ * @author nick16384
  */
 public enum ErrCodes {
 	//TODO Add error codes:

@@ -67,12 +67,14 @@ public class JFxWinloader extends Application {
 				cmdLine.appendText(text);
 			});
 		}*/
+		sys.log("cmdLine write sys call\n");
 		if (cmdLine == null)
 			return;
+		sys.log("cmdLine write sys call success");
+		
 		cmdLine.appendText("show now");
 
         new Thread(new Runnable() {
-
             public void run() {
                 for (int i = 0; i < 2000; i++) {
 

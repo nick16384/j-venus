@@ -36,7 +36,7 @@ import main.Main;
  * Class for writing out request to shell in a separate thread. Support for
  * auto-formatting in ANSI
  * 
- * @author theophil
+ * @author nick16384
  *
  */
 public class ShellWriteThread implements VexusThread {

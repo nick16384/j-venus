@@ -19,7 +19,7 @@ import libraries.VarLib;
  * Legacy class: Has been replaced by direct JAR execution in CommandMain,
  * Instead of locating, renaming, and compiling files.
  * JAR format also supports multiple classes, which makes execution much easier.
- * @author theophil
+ * @author nick16384
  * @deprecated
  */
 
