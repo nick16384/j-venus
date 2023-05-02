@@ -16,7 +16,7 @@ import libraries.VarLib;
 import main.Main;
 
 public class JFxWinloader extends Application {
-	private TextArea cmdLine;
+	//private TextArea Main.cmdLine;
 	//private String Main.wqtest = "";
 	
 	public void loadGUI(String[] args) {
@@ -38,38 +38,22 @@ public class JFxWinloader extends Application {
 		
 		try {
 			primaryStage.setTitle("J-Venus " + VarLib.getVersion());
-			cmdLine = new TextArea();
-			cmdLine.setWrapText(true);
-			cmdLine.setText("SHELL INIT\n Another bit of text");
-			cmdLine.setStyle("-fx-text-fill: green");
-			cmdLine.setStyle("-fx-background-color: #aabbcc");
-			cmdLine.setStyle("-fx-font: 12pt Consolas");
-			cmdLine.relocate(0, 0);
+			Main.cmdLine = new TextArea();
+			Main.cmdLine.setWrapText(true);
+			Main.cmdLine.setText("SHELL INIT\n Another bit of text");
+			Main.cmdLine.setStyle("-fx-text-fill: green");
+			Main.cmdLine.setStyle("-fx-background-color: #aabbcc");
+			Main.cmdLine.setStyle("-fx-font: 12pt Consolas");
+			Main.cmdLine.relocate(0, 0);
 			
 			//TODO add Event Listener for Enter input
 			//TODO change style to match a console
 
 			StackPane root = new StackPane();
-			root.getChildren().add(cmdLine);
-			primaryStage.setScene(new Scene(root, 300, 250));
+			root.getChildren().add(Main.cmdLine);
+			primaryStage.setScene(new Scene(root, 900, 550));
 			primaryStage.show();
 			
-			new Thread(() -> {
-				sys.log("JFXT:INTERNAL", 1, "JFXT internal thread started.");
-				while (!Main.ThreadAllocMain.getWDT().isShutdownSignalActive()) {
-					sys.log("JFXT:INTERNAL", 0, "Main.wqtest: \"" + Main.wqtest + "\"");
-					try { Thread.sleep(500); } catch (InterruptedException ie) { ie.printStackTrace(); }
-					if (Main.wqtest != null && !Main.wqtest.isBlank()) {
-						cmdLine.setEditable(false);
-						sys.log("New text inside Main.wqtest!");
-						Platform.requestNextPulse();
-						Platform.runLater(() -> { cmdLine.appendText(new String(Main.wqtest.toCharArray())); });
-						Platform.requestNextPulse();
-						Main.wqtest = "";
-						cmdLine.setEditable(true);
-					}
-				}
-			}, "JFXT:INTERNAL").start();
 			sys.log("JFX", 1, "start(primaryStage) method end reached.");
 			
 		} catch (Exception ex) {
@@ -79,28 +63,27 @@ public class JFxWinloader extends Application {
 	}
 	
 	public TextArea getCmdLine() {
-		return this.cmdLine;
+		return Main.cmdLine;
 	}
 	
 	public void appendText(String text) {
-		sys.log("JFX", 1, "Appending new text to JFXT Main.wqtest");
-		Main.wqtest += text;
+		sys.log("JFX", 1, "Appending new text to cmdLine. Length: " + text.length());
 		
-		if (cmdLine != null) {
-			cmdLine.setEditable(false);
-			sys.log("New text inside Main.wqtest!");
+		if (Main.cmdLine != null) {
+			Main.cmdLine.setEditable(false);
 			Platform.requestNextPulse();
-			Platform.runLater(() -> { cmdLine.appendText("Wuast"); });
+			// Enqueue cmdLine write in JavaFX thread
+			Platform.runLater(() -> {
+				 Main.cmdLine.appendText(text);
+			});
 			Platform.requestNextPulse();
-			Main.wqtest = "";
-			cmdLine.setEditable(true);
+			Main.cmdLine.setEditable(true);
 		} else {
-			sys.log("DAS ÄH KANN NIX DIGGA");
+			sys.log("JFX", 3, "Appending text not possible, because Main.cmdLine is null.");
 		}
-		
 	}
 	
 	public void clearCmdLine() {
-		cmdLine.clear();
+		Main.cmdLine.clear();
 	}
 }
