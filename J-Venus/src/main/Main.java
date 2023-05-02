@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import engine.sys;
+import javafx.scene.control.TextArea;
 import jfx.windowManager.JFxWinloader;
 import libraries.OpenLib;
 import libraries.VarLib;
@@ -19,7 +20,7 @@ public class Main extends JFrame {
 	public static boolean singleThreaded = false;
 	public static boolean javafxEnabled = false;
 	
-	public static String wqtest = "";
+	public static TextArea cmdLine;
 	
 	public static ThreadAllocator ThreadAllocMain;
 	public static JFxWinloader jfxWinloader;
@@ -65,13 +66,6 @@ public class Main extends JFrame {
 		OpenLib.cmdLinePrepare();
 		sys.setActivePhase("run");
 		
-		for (int i = 0; i < 100; i++) {
-			//FIXME cmdLine text cannot be updated after primaryStage.show() was called.
-			//TODO remove autoscroll when JFX is enabled, since the window does that by itself
-			//sys.log("I wanna write to cmdLine");
-			try { Thread.sleep(500); } catch (InterruptedException ie) { ie.printStackTrace(); }
-			jfxWinloader.appendText("Hello whats going on dude?!");
-		}
 		//==================================== INIT END ====================================
 	}
 	public static LinkedList<String> commandHistory = new LinkedList<>();
