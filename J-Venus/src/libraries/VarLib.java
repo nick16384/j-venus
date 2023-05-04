@@ -200,15 +200,18 @@ public class VarLib {
 		sys.log("VARLIB", 1, "Finished adding envV, validating...");
 		if (getEnv(key) != null && getEnv(key).equals(val)) {
 			sys.log("VARLIB", 1, "Validation succeeded: " + key + ", " + getEnv(key));
-			sys.shellPrint(AWTANSI.B_Green, "Success: " + key + " -> " + val + "\n");
+			if (!sys.getActivePhase().equals("init"))
+				sys.shellPrint(AWTANSI.B_Green, "Success: " + key + " -> " + val + "\n");
 		} else {
 			sys.log("VARLIB", 3, "Validation failed; " + val + " != " + getEnv(key));
-			sys.shellPrint(AWTANSI.B_Yellow, "Could not create envV. Information below:\n");
-			sys.shellPrint("Created variable, but validation failed \\/\n"
-					+ "Method call key: " + key + "\n"
-					+ "Method call value: " + val + "\n"
-					+ "envV Value with getEnv() call: " + getEnv(key) + "\n");
-			sys.shellPrint(AWTANSI.B_Magenta, "Try 'env' to see, if your envV exists or try again.\n");
+			if (!sys.getActivePhase().equals("init")) {
+				sys.shellPrint(AWTANSI.B_Yellow, "Could not create envV. Information below:\n");
+				sys.shellPrint("Created variable, but validation failed \\/\n"
+						+ "Method call key: " + key + "\n"
+						+ "Method call value: " + val + "\n"
+						+ "envV Value with getEnv() call: " + getEnv(key) + "\n");
+				sys.shellPrint(AWTANSI.B_Magenta, "Try 'env' to see, if your envV exists or try again.\n");
+			}
 		}
 	}
 	
@@ -271,12 +274,13 @@ public class VarLib {
 		}
 		if (motdRaw != "") {
 			motd = "";
-			String[] motdRawLines = motdRaw.split("\n");
+			motd = motdRaw;
+			/*String[] motdRawLines = motdRaw.split("\n");
 			for (String line : motdRawLines) {
 				if (!line.startsWith("#") && (!line.startsWith("//"))) {
 					motd += line + "\n";
 				}
-			}
+			}*/
 			int evcount = 0;
 			while (motd.contains("$")) {
 				evcount++;

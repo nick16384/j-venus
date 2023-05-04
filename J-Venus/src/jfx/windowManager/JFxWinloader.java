@@ -15,6 +15,7 @@ import engine.Keyboard;
 import engine.sys;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Text;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -23,6 +24,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.image.Image;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -67,6 +69,22 @@ public class JFxWinloader extends Application {
 					+ " -fx-text-fill: #00ff00; ");
 			sys.log("\n" + Main.cmdLine.getStyle());
 			Main.cmdLine.setFont(new Font("Terminus (TTF)", 18));
+			
+			int colorStart = 5;
+			
+			//FIXME Fix ANSI colors for JavaFX
+			//TODO rename every "JavaDOS", "J-Vexus" and "J-Venus" part to SEMICOLONS
+			
+			Text txt = new Text("WUAST");
+			//Main.cmdLine.insertText(colorStart, "WUAST", Color.WHITE);
+			Image icon = null;
+			sys.log("JFX", 1,
+					"Icon path: " + VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "semicolons-icon.png");
+			try { icon = new Image(
+					"file:" + VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "semicolons-icon.png"); }
+			catch (Exception ex) { ex.printStackTrace(); }
+			primaryStage.getIcons().add(icon);
+			
 			
 			Main.cmdLine.relocate(0, 0);
 			

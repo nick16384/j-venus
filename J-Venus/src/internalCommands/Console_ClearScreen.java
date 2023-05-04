@@ -12,7 +12,7 @@ public class Console_ClearScreen
   public static String clearScreen(ArrayList<String> params, Map<String, String> paramsWithValues) {
 	  
 	  if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null) {
-		  Main.jfxWinloader.getCmdLine().setText("");
+		  Main.jfxWinloader.clearCmdLine();
 	  } else if (Main.mainFrame != null) {
 		  new components.ProtectedTextComponent(Main.mainFrame.getCmdLine()).unprotectAllText();
 		  Main.mainFrame.getCmdLine().setText("");
