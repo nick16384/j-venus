@@ -59,6 +59,9 @@ public class Main extends JFrame {
 			awt.windowManager.AWTWinload.awtWinload();
 		}
 		
+		if (ThreadAllocMain.getJFXT().isGUIActive())
+			jfxWinloader.clearCmdLine();
+		
 		sys.setActivePhase("run");
 		try { new components.Command("clear --noPrompt").start(); } catch (Exception ex) { ex.printStackTrace(); }
 		try { Thread.sleep(200); } catch (InterruptedException ie) { ie.printStackTrace(); }

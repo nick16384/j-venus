@@ -25,6 +25,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Utilities;
 
 import awt.windowManager.WindowMain;
+import components.Command;
 import components.ProtectedTextComponent;
 import engine.AWTANSI;
 import engine.sys;
@@ -47,7 +48,7 @@ public class ShellWriteThread implements VexusThread {
 	private String writeQueue = "";
 	private String prevWrite = ""; // Contains previously written text
 	private int CMDLINE_MAX_LINE_COUNT = 0;
-	protected boolean interrupt = false;
+	//protected boolean interrupt = false;
 	private boolean suspend = false;
 	private Thread shellWriteThread;
 
@@ -88,88 +89,101 @@ public class ShellWriteThread implements VexusThread {
 				//Run if neither WDT's shutdown signal nor local suspend signal is active
 				while (!Main.ThreadAllocMain.isShutdownSignalActive() && !suspend) {
 					try {
-						Thread.sleep(50);
+						//Wait until thread gets InterruptedException
+						Thread.sleep(200);
 					} catch (InterruptedException ie) {
-						ie.printStackTrace();
-					}
+						sys.log("SWT", 1, "Got interrupt, writing to shell.");
+						if (!writeQueue.isBlank()) {
+							// TODO make user input only and not writeQueue in shellStream
+							// TODO make command not found detection, instead of big stacktrace
+							// TODO fix error "badpos setcaretpos" sometimes occurring
 
-					if (interrupt) {
-						// TODO make user input only and not writeQueue in shellStream
-						// TODO make command not found detection, instead of big stacktrace
-						// TODO fix error "badpos setcaretpos" sometimes occurring
-
-						// Check if user has inputed anything, and if yes, update shellStream
-						// UPDATE SHELL STREAM
-						// ==============================================================================
-						// updateShellStream();
-						// END UPDATE SHELL STREAM
-						// ==========================================================================
-
-						try {
-							CMDLINE_MAX_LINE_COUNT = Integer.parseInt(VarLib.getEnv("$CMDLINE_MAX_LINE_COUNT"));
-							sys.log("SHLWRT", 1, "Current cmdLine max. line count: " + CMDLINE_MAX_LINE_COUNT);
-						} catch (NumberFormatException nfe) {
-							sys.log("WRITE", 2, "Could not parse $CMDLINE_MAX_LINE_COUNT:"
-									+ " NumberFormatException. Using default value: 26");
-							sys.shellPrint(2, "WRITE", "Could not parse $CMDLINE_MAX_LINE_COUNT.\n"
-									+ "Please check, whether $CMDLINE_MAX_LINE_COUNT contains characters and also run\n"
-									+ "'chEnv -update $CMDLINE_MAX_LINE_COUNT' if that is the case or the error reoccurs.\n");
-							CMDLINE_MAX_LINE_COUNT = 26;
-						}
-
-						if (writeQueue != "" && !sys.getActivePhase().equals("error")) {
-
-							// Autoscroll
-							if (!Main.javafxEnabled)
-								autoscroll();
-							else
-								sys.log("SWT", 1, "Autoscroll unnecessary. JavaFX supports it by itself.");
-							// Autoscroll end
-
+							// Check if user has inputed anything, and if yes, update shellStream
+							// UPDATE SHELL STREAM
+							// ==============================================================================
+							// updateShellStream();
+							// END UPDATE SHELL STREAM
+							// ==========================================================================
+							
 							try {
-								// ================================================================
-								// Insert write queue (either JavaFX or AWT)
-								if (Main.javafxEnabled)
-									new engine.JFXANSI(Main.jfxWinloader.getCmdLine()).appendANSI(writeQueue);
-								else
-									new engine.AWTANSI(Main.mainFrame.getCmdLine()).appendANSI(writeQueue);
-								
-								// ================================================================
-
-							} catch (BadLocationException ble) {
-								sys.log("SWT", 3, "Cannot write to cmdLine: BadLocationException");
-							} catch (NullPointerException npe) {
-								sys.log("SWT", 3, "Cannot write to cmdLine: NullPointerException (main.mainFrame probably is null)");
-							}
-							try {
-								if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
-									Main.jfxWinloader.getCmdLine().selectPositionCaret(
-											Main.jfxWinloader.getCmdLine().lengthProperty().get());
-								else
-									Main.mainFrame.getCmdLine()
-											.setCaretPosition(Main.mainFrame.getCmdLine().getText().length());
-							} catch (IllegalArgumentException iae) {
-								sys.log("SWT", 2, "Setting cursor to last position failed, because the value was out of range.");
-							} catch (NullPointerException npe) {
-								sys.log("SWT", 2, "Setting cursor to last position failed, because main.mainFrame is null.");
+								CMDLINE_MAX_LINE_COUNT = Integer.parseInt(VarLib.getEnv("$CMDLINE_MAX_LINE_COUNT"));
+								sys.log("SHLWRT", 1, "Current cmdLine max. line count: " + CMDLINE_MAX_LINE_COUNT);
+							} catch (NumberFormatException nfe) {
+								sys.log("WRITE", 2, "Could not parse $CMDLINE_MAX_LINE_COUNT:"
+										+ " NumberFormatException. Using default value: 26");
+								sys.shellPrint(2, "WRITE", "Could not parse $CMDLINE_MAX_LINE_COUNT.\n"
+										+ "Please check, whether $CMDLINE_MAX_LINE_COUNT contains characters and also run\n"
+										+ "'chEnv -update $CMDLINE_MAX_LINE_COUNT'"
+										+ "if that is the case or the error reoccurs.\n");
+								CMDLINE_MAX_LINE_COUNT = 26;
 							}
 
-							prevWrite = writeQueue; // Set previously written text to writeQueue
-							writeQueue = ""; // Clear write queue
+							if (writeQueue != "" && !sys.getActivePhase().equals("error")) {
 
-							if (!noProtectVar) {
+								// Autoscroll
+								if (!Main.javafxEnabled)
+									autoscroll();
+								else
+									sys.log("SWT", 1, "Autoscroll unnecessary. JavaFX supports it by itself.");
+								// Autoscroll end
+
 								try {
-									if (!Main.javafxEnabled)
-										new ProtectedTextComponent(Main.mainFrame.getCmdLine()).protectText(
-												Main.mainFrame.getCmdLine().getText().lastIndexOf(VarLib.getPrompt()),
-												Main.mainFrame.getCmdLine().getText().length() - 1);
+									// ================================================================
+									// Insert write queue (either JavaFX or AWT)
+									if (writeQueue.contains("\033[2J")) {
+										sys.log("SWT", 1, "ClearScreen ANSI character received.");
+										if (Main.javafxEnabled)
+											Main.jfxWinloader.clearCmdLine();
+										else
+											try { new Command("clear").start(); }
+											catch (IOException ioe) { ioe.printStackTrace(); }
+									} else {
+										if (Main.javafxEnabled)
+											new engine.JFXANSI(Main.jfxWinloader.getCmdLine()).appendANSI(writeQueue);
+										else
+											new engine.AWTANSI(Main.mainFrame.getCmdLine()).appendANSI(writeQueue);
+									}
+									
+									// ================================================================
+
+								} catch (BadLocationException ble) {
+									sys.log("SWT", 3, "Cannot write to cmdLine: BadLocationException");
 								} catch (NullPointerException npe) {
-									sys.log("SWT", 3, "Text could not be protected from user deletion, probably because main.mainFrame is null.");
+									sys.log("SWT", 3, "Cannot write to cmdLine:"
+											+ " NullPointerException (main.mainFrame probably is null)");
 								}
-							} else {
-								noProtectVar = false;
+								try {
+									if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
+										Main.jfxWinloader.getCmdLine().selectPositionCaret(
+												Main.jfxWinloader.getCmdLine().lengthProperty().get());
+									else
+										Main.mainFrame.getCmdLine()
+												.setCaretPosition(Main.mainFrame.getCmdLine().getText().length());
+								} catch (IllegalArgumentException iae) {
+									sys.log("SWT", 2, "Setting cursor to last position failed,"
+											+ "because the value was out of range.");
+								} catch (NullPointerException npe) {
+									sys.log("SWT", 2, "Setting cursor to last position failed,"
+											+ "because main.mainFrame is null.");
+								}
+
+								prevWrite = writeQueue; // Set previously written text to writeQueue
+								writeQueue = ""; // Clear write queue
+
+								if (!noProtectVar) {
+									try {
+										if (!Main.javafxEnabled)
+											new ProtectedTextComponent(Main.mainFrame.getCmdLine()).protectText(
+													Main.mainFrame.getCmdLine().getText().lastIndexOf(VarLib.getPrompt()),
+													Main.mainFrame.getCmdLine().getText().length() - 1);
+									} catch (NullPointerException npe) {
+										sys.log("SWT", 3, "Text could not be protected from user deletion,"
+												+ " probably because main.mainFrame is null.");
+									}
+								} else {
+									noProtectVar = false;
+								}
 							}
-							interrupt = false;
 						}
 					}
 					// TODO If cmdLine operations glitch, then try:
@@ -199,7 +213,7 @@ public class ShellWriteThread implements VexusThread {
 		}
 		sys.log("MSG", 0, "SHELLWRITE: " + message.strip());
 		writeQueue += message;
-		interrupt = true;
+		shellWriteThread.interrupt();
 		// main.Main.cmdLine.repaint();
 		// main.Main.cmdLine.revalidate();
 	}
@@ -212,7 +226,7 @@ public class ShellWriteThread implements VexusThread {
 		// Reset color at end, so log doesn't get messed up with colors:
 		sys.log("MSG", 0, "SHELLWRITE-ANSI: " + message.strip() + "\u001B[0m");
 		writeQueue += message;
-		interrupt = true;
+		shellWriteThread.interrupt();
 	}
 	
 	@Override
