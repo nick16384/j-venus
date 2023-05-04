@@ -27,8 +27,8 @@ public class WatchdogThread2 implements VexusThread {
 				while (true) {
 					if (sys.getActivePhase().equals("run")) {
 						if (Main.ThreadAllocMain.isWDTActive()) {
-							sys.shellPrintln(AWTANSI.B_Green, "Init success!");
-							OpenLib.cmdLinePrepare();
+							/*sys.shellPrintln(AWTANSI.B_Green, "Init success!");
+							OpenLib.cmdLinePrepare();*/
 							
 							try {
 								if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)

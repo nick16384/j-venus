@@ -18,7 +18,9 @@ public class System_Debug {
 	public static String debug(ArrayList<String> params, Map<String, String> paramsWithValues) {
 		String rtVal = "OK"; //Return value (overall status)
 		
-		sys.shellPrint(AWTANSI.D_Cyan, "Debug information:\n" + "Directories:\n");
+		sys.shellPrint(AWTANSI.D_Cyan, "Debug information:\n");
+		sys.shellPrint(AWTANSI.D_Cyan, "JVM Process PID: " + ProcessHandle.current().pid() + "\n");
+		sys.shellPrint(AWTANSI.D_Cyan, "Directories:\n");
 		sys.shellPrint(AWTANSI.D_Yellow,
 		  "\tCurrent        : " + VarLib.getCurrentDir() + "\n"
 		+ "\tVexus root     : " + VarLib.getDefaultDir().getAbsolutePath() + "\n"
