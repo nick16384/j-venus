@@ -1,8 +1,8 @@
-# j-vexus
+# j-venus
 A java shell project
 
-Info: This project was renamed to the following new name:
-S.E.M.I.C.O.L.O.N.S.
+## Info: This project was renamed to the following new name:
+**S.E.M.I.C.O.L.O.N.S.**
 it's a backronym for:
 S: super
 E: enhanced
