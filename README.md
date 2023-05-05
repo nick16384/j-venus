@@ -1,8 +1,8 @@
-# j-venus
+#j-venus
 A java shell project
 
-## Info: This project has been renamed.
-~~New name:~~
+##This project has been renamed.
+*New name:*
 **S.E.M.I.C.O.L.O.N.S.**
 it's a backronym for:
 
