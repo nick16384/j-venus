@@ -1,6 +1,7 @@
-#j-venus<br>
-A java shell project<br>
-##This project has been renamed.<br>
+# j-venus <br>
+A java shell project<br
+
+## This project has been renamed. <br>
 *New name:*<br>
 **S.E.M.I.C.O.L.O.N.S.**<br>
 or:<br>
