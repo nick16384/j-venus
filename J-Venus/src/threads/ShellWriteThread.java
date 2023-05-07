@@ -169,8 +169,6 @@ public class ShellWriteThread implements VexusThread {
 								prevWrite = writeQueue; // Set previously written text to writeQueue
 								writeQueue = ""; // Clear write queue
 								
-								Main.jfxWinloader.triggerScrollUpdate();
-								
 								if (!noProtectVar) {
 									try {
 										if (!Main.javafxEnabled)
