@@ -19,6 +19,8 @@ public class CmdSearch {
 		case "cd":
 		case "chdir": ex(Console_ChangeDirectory.changeDirectory(params, null)); break;
 		case "alias": ex(Console_Alias.alias(params)); break;
+		case "ctest":
+		case "colortest": ex(Console_ColorTest.colorTest(params)); break;
 		
 		//System execution and debug
 		case "env":

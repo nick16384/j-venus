@@ -10,11 +10,18 @@ import java.util.Arrays;
 
 import javax.swing.text.BadLocationException;
 
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CaretNode;
+import org.fxmisc.richtext.InlineCssTextArea;
+import org.fxmisc.richtext.StyledTextArea;
+import org.fxmisc.richtext.model.StyledDocument;
+
 import awt.windowManager.WindowMain;
 import engine.Keyboard;
 import engine.sys;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.text.Text;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
@@ -22,13 +29,19 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextFlow;
 import javafx.scene.image.Image;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.css.Style;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import libraries.Err;
 import libraries.OpenLib;
 import libraries.VarLib;
@@ -57,26 +70,46 @@ public class JFxWinloader extends Application {
 		
 		try {
 			primaryStage.setTitle("J-Venus " + VarLib.getVersion());
-			Main.cmdLine = new TextArea();
-			Main.cmdLine.setWrapText(true);
-			Main.cmdLine.setText("SHELL INIT");
-			Main.cmdLine.setStyle(""
-					+ "-fx-control-inner-background:#000000;"
-					//+ " -fx-font-family: Terminus(TTF);"
-					//+ " -fx-font: 12pt Terminus(TTF);" //Font is set below
-					+ " -fx-highlight-fill: #00ff00;"
-					+ " -fx-highlight-text-fill: #000000;"
-					+ " -fx-text-fill: #00ff00; ");
-			sys.log("\n" + Main.cmdLine.getStyle());
-			Main.cmdLine.setFont(new Font("Terminus (TTF)", 18));
 			
-			int colorStart = 5;
+			Main.cmdLine = new InlineCssTextArea("SHELL INIT");
+			
+			Main.cmdLine.setWrapText(true);
+			Main.cmdLine.setBackground(new Background(
+					new BackgroundFill(Paint.valueOf("BLACK"), CornerRadii.EMPTY, Insets.EMPTY)));
+			
+			//TODO set cmdLine color style to lime (black is currently invisible) and
+			//TODO change cmdLine font to shell font
+			
+			Main.cmdLine.setStyle(".root {\n"
+					+ "-fx-font-family: \"Terminus (TTF)\";\n"
+					+ "-fx-font: 12pt \"Terminus (TTF)\";\n"
+					+ "-rtfx-caret-shape: block;\n"
+					+ "-rtfx-caret-color: red;\n"
+					+ "}\n");
+			sys.log("\n" + Main.cmdLine.getStyle());
+			Main.cmdLine.applyCss();
+			Main.cmdLine.requestFocus();
+			
+			// Caret / cursor configuration
+			CaretNode cn = new CaretNode("shellCaret", Main.cmdLine);
+			cn.setVisible(true);
+			cn.setBlinkRate(Duration.millis(500));
+			cn.setScaleX(8);
+			cn.setScaleY(0.8);
+			cn.translateXProperty().set(5); // Move right so it doesn't overlap with text
+			cn.setStroke(Color.LIME); // Set caret fill color
+			cn.toFront();
+			Main.cmdLine.addCaret(cn);
+			Main.cmdLine.displaceCaret(0);
+			
+			//Main.cmdLine.setFont(new Font("Terminus (TTF)", 18));
 			
 			//FIXME Fix ANSI colors for JavaFX
 			//TODO rename every "JavaDOS", "J-Vexus" and "J-Venus" part to SEMICOLONS
 			
-			Text txt = new Text("WUAST");
-			//Main.cmdLine.insertText(colorStart, "WUAST", Color.WHITE);
+	        //Main.cmdLine.setEffect(new GaussianBlur(0));
+	        Main.cmdLine.setCache(true);
+			
 			Image icon = null;
 			sys.log("JFX", 1,
 					"Icon path: " + VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "semicolons-icon.png");
@@ -99,25 +132,21 @@ public class JFxWinloader extends Application {
 				
 				if (event.getCode().equals(KeyCode.PAGE_UP)) {
 					sys.log("JFX", 1, "Increasing shell font size.");
-					Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() + 1));
-					// Remove last character
-					Main.cmdLine.setText(Main.cmdLine.getText().substring(0, Main.cmdLine.getText().length() - 1));
-					Main.cmdLine.positionCaret(Main.cmdLine.getText().length());
+					//Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
 				} else if (event.getCode().equals(KeyCode.PAGE_DOWN)) {
 					sys.log("JFX", 1, "Shrinking shell font size.");
-					Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
-					// Remove last character
-					Main.cmdLine.setText(Main.cmdLine.getText().substring(0, Main.cmdLine.getText().length() - 1));
-					Main.cmdLine.positionCaret(Main.cmdLine.getText().length());
+					//Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
+					//TODO show big number on screen for font size change
 				}
 				
 				//TODO Add support for command repeat when pressing "up" key
 			});
 			
 			//TODO change style to match a console
-
+			
 			StackPane root = new StackPane();
 			root.getChildren().add(Main.cmdLine);
+			root.getChildren().add(new VirtualizedScrollPane(Main.cmdLine));
 			primaryStage.setScene(new Scene(root, 900, 550));
 			primaryStage.show();
 			
@@ -129,11 +158,19 @@ public class JFxWinloader extends Application {
 		}
 	}
 	
-	public TextArea getCmdLine() {
+	public InlineCssTextArea getCmdLine() {
 		return Main.cmdLine;
 	}
 	
-	public void appendText(String text) {
+	public void triggerScrollUpdate() {
+		Platform.runLater(() -> {
+			Main.cmdLine.requestFollowCaret();
+			Main.cmdLine.displaceCaret(Main.cmdLine.getText().length());
+			Platform.requestNextPulse();
+		});
+	}
+	
+	public void appendText(String text, Color color) {
 		sys.log("JFX", 1, "Appending new text to cmdLine with " + text.length() + " characters.");
 		
 		if (sys.getActivePhase().equals("run") && Main.cmdLine != null) {
@@ -141,7 +178,17 @@ public class JFxWinloader extends Application {
 			Platform.requestNextPulse();
 			// Enqueue cmdLine write in JavaFX thread
 			Platform.runLater(() -> {
-				 Main.cmdLine.appendText(text);
+				try {
+					Main.cmdLine.appendText(text);
+					sys.log("JFX", 1, "Text write color hex: " + color.toString().substring(2, 8));
+					// Apply text color on new segment:
+					Main.cmdLine.setStyle(Main.cmdLine.getText().length() - text.length(),
+							Main.cmdLine.getText().length(), "-fx-fill: #"
+									+ color.toString().substring(2, 8) + ";");
+				} catch (Exception ex) {
+					sys.log("JFX", 2, "Writing text to cmdLine failed, probably because duplicate entries.");
+					//ex.printStackTrace();
+				}
 			});
 			Platform.requestNextPulse();
 			Main.cmdLine.setEditable(true);
@@ -150,8 +197,13 @@ public class JFxWinloader extends Application {
 		}
 	}
 	
+	/**
+	 * Clears Main.cmdLine (set text to "")
+	 */
 	public void clearCmdLine() {
-		Main.cmdLine.clear();
+		Platform.runLater(() -> {
+			Main.cmdLine.clear();
+		});
 	}
 	
 	/**
@@ -209,7 +261,7 @@ public class JFxWinloader extends Application {
 		Main.ThreadAllocMain.getSWT().updateShellStream();
 		//END UPDATE SHELL STREAM ==========================================================================
 		//Splitting WindowMain.cmdLine text into command
-		String[] lines = Main.cmdLine.textProperty().get().split("\n");
+		String[] lines = Main.cmdLine.getText().split("\n");
 		
 		String lastLine = lines[lines.length - 1];
 		
