@@ -21,8 +21,6 @@ public class Console_ColorTest {
 	}
 	
 	private static void runJFxTest() {
-		//FIXME fix incomplete shell output when running commands with more output.
-		// It has to do with SWT interrupts
 		
 		sys.shellPrintln(Color.decode(JFXANSI.B_Black.toString()) , "B_BLACK");
 		sys.shellPrintln(Color.decode(JFXANSI.B_Blue.toString()) , "B_BLUE");

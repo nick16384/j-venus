@@ -218,20 +218,23 @@ public class OpenLib {
 		//3: Non-critical error (program can continue but there may be other errors)
 		//4: Critical error (program must stop e.g. security issue or no sufficient permissions)
 		//5: Irreversible critical error(fatal) (Damages still persist after Vexus shutdown)
+		long runtime;
+		try { runtime = System.currentTimeMillis() - Main.ThreadAllocMain.getWDT().getTimeStart(); }
+		catch (NullPointerException npe) { runtime = -1; }
 		if (status == -1) {
-			System.out.println("[ " + VarLib.getDateTime(false) + ", -1/ERR, " + auth + " ]: " + message);
+			System.out.println("[ " + runtime + ", -1/ERR, " + auth + " ]: " + message);
 		} else if (status == 0) {
-			System.out.println("[ " + VarLib.getDateTime(false) + ", " + auth + " ]: " + message);
+			System.out.println("[ " + runtime + ", " + auth + " ]: " + message);
 		} else if (status == 1) {
-			System.out.println("[ " + VarLib.getDateTime(false) + ", " + "1/INFO, " + auth + " ]: " + message);
+			System.out.println("[ " + runtime + ", " + "1/INFO, " + auth + " ]: " + message);
 		} else if (status == 2) {
-			System.err.println("[ " + VarLib.getDateTime(false) + ", " + "2/WARN, " + auth + " ]: " + message);
+			System.err.println("[ " + runtime + ", " + "2/WARN, " + auth + " ]: " + message);
 		} else if (status == 3) {
-			System.err.println("[ " + VarLib.getDateTime(false) + ", " + "3/NONCRIT, " + auth + " ]: " + message);
+			System.err.println("[ " + runtime + ", " + "3/NONCRIT, " + auth + " ]: " + message);
 		} else if (status == 4) {
-			System.err.println("[ " + VarLib.getDateTime(false) + ", " + "4/CRIT, " + auth + " ]: " + message);
+			System.err.println("[ " + runtime + ", " + "4/CRIT, " + auth + " ]: " + message);
 		} else if (status == 5) {
-			System.err.println("[ " + VarLib.getDateTime(false) + ", " + "5/FATAL, " + auth +  " ]: " + message.toUpperCase());
+			System.err.println("[ " + runtime + ", " + "5/FATAL, " + auth +  " ]: " + message.toUpperCase());
 		}
 		
 		if (VarLib.consoleLogStream != null) {

@@ -29,6 +29,7 @@ import components.Command;
 import components.ProtectedTextComponent;
 import engine.AWTANSI;
 import engine.sys;
+import javafx.application.Platform;
 import libraries.OpenLib;
 import libraries.VarLib;
 import main.Main;
@@ -46,13 +47,14 @@ public class ShellWriteThread implements VexusThread {
 	public Scanner shellScanner = null;
 	private boolean noProtectVar = false; // Do not protect text after print
 	private String writeQueue = "";
+	private String writeQueueValidator = ""; // Use for validation of current writeQueue
 	private String prevWrite = ""; // Contains previously written text
 	private int CMDLINE_MAX_LINE_COUNT = 0;
-	//protected boolean interrupt = false;
+	// protected boolean interrupt = false;
 	private boolean suspend = false;
 	private Thread shellWriteThread;
 
-	// =========================================SHELLWRITETHREAD=========================================
+	// ========================================= SHELL WRITE THREAD =========================================
 	protected ShellWriteThread() {
 		shellWriteThread = new Thread(null, new Runnable() {
 			public final void run() {
@@ -67,16 +69,20 @@ public class ShellWriteThread implements VexusThread {
 					// Do nothing, until active phase is "run".
 				}
 				sys.log("ShellWriteThread", 1, "Active phase run detected.");
-				
+
 				while (main.Main.mainFrame == null && !main.Main.javafxEnabled)
-					try { Thread.sleep(500); } catch (InterruptedException ie) { ie.printStackTrace(); }
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException ie) {
+						ie.printStackTrace();
+					}
 				sys.log("ShellWriteThread", 1, "SWT is now ready.");
-				
+
 				// Check for JavaFX
 				if (main.Main.javafxEnabled)
 					sys.log("SWT", 2, "JavaFX is currently very unstable on ShellWriteThread.");
-				
-				//One-time-initialization for shell streams
+
+				// One-time-initialization for shell streams
 				try {
 					shellStream = new PipedOutputStream();
 					shellReader = new BufferedReader(new InputStreamReader(new PipedInputStream(shellStream)));
@@ -85,11 +91,11 @@ public class ShellWriteThread implements VexusThread {
 					ioe.printStackTrace();
 				}
 				updateShellStream();
-				
-				//Run if neither WDT's shutdown signal nor local suspend signal is active
+
+				// Run if neither WDT's shutdown signal nor local suspend signal is active
 				while (!Main.ThreadAllocMain.isShutdownSignalActive() && !suspend) {
 					try {
-						//Wait until thread gets InterruptedException
+						// Wait until thread gets InterruptedException
 						Thread.sleep(200);
 					} catch (InterruptedException ie) {
 						sys.log("SWT", 1, "Got interrupt, writing to shell.");
@@ -105,6 +111,8 @@ public class ShellWriteThread implements VexusThread {
 							// END UPDATE SHELL STREAM
 							// ==========================================================================
 							
+							writeQueueValidator = writeQueue;
+							
 							try {
 								CMDLINE_MAX_LINE_COUNT = Integer.parseInt(VarLib.getEnv("$CMDLINE_MAX_LINE_COUNT"));
 								sys.log("SHLWRT", 1, "Current cmdLine max. line count: " + CMDLINE_MAX_LINE_COUNT);
@@ -117,71 +125,85 @@ public class ShellWriteThread implements VexusThread {
 										+ "if that is the case or the error reoccurs.\n");
 								CMDLINE_MAX_LINE_COUNT = 26;
 							}
+							// Autoscroll
+							if (!Main.javafxEnabled)
+								autoscroll();
+							else
+								sys.log("SWT", 1, "Autoscroll unnecessary. JavaFX supports it by itself.");
+							// Autoscroll end
 
-							if (writeQueue != "" && !sys.getActivePhase().equals("error")) {
-
-								// Autoscroll
-								if (!Main.javafxEnabled)
-									autoscroll();
-								else
-									sys.log("SWT", 1, "Autoscroll unnecessary. JavaFX supports it by itself.");
-								// Autoscroll end
-
-								try {
-									// ================================================================
-									// Insert write queue (either JavaFX or AWT)
-									if (writeQueue.contains("\033[2J")) {
-										sys.log("SWT", 1, "ClearScreen ANSI character received.");
-										if (Main.javafxEnabled)
-											Main.jfxWinloader.clearCmdLine();
-										else
-											try { new Command("clear").start(); }
-											catch (IOException ioe) { ioe.printStackTrace(); }
-									} else {
-										if (Main.javafxEnabled)
-											new engine.JFXANSI(Main.jfxWinloader.getCmdLine()).appendANSI(writeQueue);
-										else
-											new engine.AWTANSI(Main.mainFrame.getCmdLine()).appendANSI(writeQueue);
-									}
-									
-									// ================================================================
-
-								} catch (BadLocationException ble) {
-									sys.log("SWT", 3, "Cannot write to cmdLine: BadLocationException");
-								} catch (NullPointerException npe) {
-									sys.log("SWT", 3, "Cannot write to cmdLine:"
-											+ " NullPointerException (main.mainFrame probably is null)");
-								}
-								try {
-									if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
-										Main.jfxWinloader.triggerScrollUpdate();
+							try {
+								// ================================================================
+								// Insert write queue (either JavaFX or AWT)
+								if (writeQueue.contains("\033[2J")) {
+									sys.log("SWT", 1, "ClearScreen ANSI character received.");
+									if (Main.javafxEnabled)
+										Main.jfxWinloader.clearCmdLine();
 									else
-										Main.mainFrame.getCmdLine()
-												.setCaretPosition(Main.mainFrame.getCmdLine().getText().length());
-								} catch (IllegalArgumentException iae) {
-									sys.log("SWT", 2, "Setting cursor to last position failed,"
-											+ "because the value was out of range.");
-								} catch (NullPointerException npe) {
-									sys.log("SWT", 2, "Setting cursor to last position failed,"
-											+ "because main.mainFrame is null.");
+										try {
+											new Command("clear").start();
+										} catch (IOException ioe) {
+											ioe.printStackTrace();
+										}
+								} else {
+									if (Main.javafxEnabled)
+										new engine.JFXANSI(Main.jfxWinloader.getCmdLine()).appendANSI(writeQueue);
+									else
+										new engine.AWTANSI(Main.mainFrame.getCmdLine()).appendANSI(writeQueue);
 								}
+								
+								// ================================================================
 
+							} catch (BadLocationException ble) {
+								sys.log("SWT", 3, "Cannot write to cmdLine: BadLocationException");
+							} catch (NullPointerException npe) {
+								sys.log("SWT", 3, "Cannot write to cmdLine:"
+										+ " NullPointerException (main.mainFrame probably is null)");
+							}
+							try {
+								if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
+									Main.jfxWinloader.triggerScrollUpdate();
+								else
+									Main.mainFrame.getCmdLine()
+											.setCaretPosition(Main.mainFrame.getCmdLine().getText().length());
+							} catch (IllegalArgumentException iae) {
+								sys.log("SWT", 2, "Setting cursor to last position failed,"
+										+ "because the value was out of range.");
+							} catch (NullPointerException npe) {
+								sys.log("SWT", 2,
+										"Setting cursor to last position failed, because main.mainFrame is null.");
+							}
+							
+							sys.log("WQ validator: " + writeQueueValidator);
+							sys.log("WQ: " + writeQueue);
+							
+							// Sleep to wait for shell write to finish
+							try { Thread.sleep(1000); } catch (InterruptedException iex) { iex.printStackTrace(); }
+							
+							//FIXME sometimes, dual output is possible, due to validation fails
+							if (writeQueueValidator.equals(writeQueue)
+									|| Main.jfxWinloader.getCmdLine().getText().contains(writeQueue)) {
 								prevWrite = writeQueue; // Set previously written text to writeQueue
 								writeQueue = ""; // Clear write queue
-								
-								if (!noProtectVar) {
-									try {
-										if (!Main.javafxEnabled)
-											new ProtectedTextComponent(Main.mainFrame.getCmdLine()).protectText(
-													Main.mainFrame.getCmdLine().getText().lastIndexOf(VarLib.getPrompt()),
-													Main.mainFrame.getCmdLine().getText().length() - 1);
-									} catch (NullPointerException npe) {
-										sys.log("SWT", 3, "Text could not be protected from user deletion,"
-												+ " probably because main.mainFrame is null.");
-									}
-								} else {
-									noProtectVar = false;
+							} else {
+								writeQueue = writeQueue.substring(writeQueueValidator.length());
+								prevWrite = writeQueue; // Set previously written text to writeQueue
+							}
+							writeQueueValidator = "";
+							sys.log("New WQ: " + writeQueue);
+
+							if (!noProtectVar) {
+								try {
+									if (!Main.javafxEnabled)
+										new ProtectedTextComponent(Main.mainFrame.getCmdLine()).protectText(
+												Main.mainFrame.getCmdLine().getText().lastIndexOf(VarLib.getPrompt()),
+												Main.mainFrame.getCmdLine().getText().length() - 1);
+								} catch (NullPointerException npe) {
+									sys.log("SWT", 3, "Text could not be protected from user deletion,"
+											+ " probably because main.mainFrame is null.");
 								}
+							} else {
+								noProtectVar = false;
 							}
 						}
 					}
@@ -190,9 +212,12 @@ public class ShellWriteThread implements VexusThread {
 					// System.out.println("loop");
 				}
 				sys.log("SWT", 1, "Closing streams...");
-				try { shellStream.close(); } catch (IOException ioe) { sys.log("SWT", 3, "Fail on shellStream."); }
-				try { shellReader.close(); } catch (IOException ioe) { sys.log("SWT", 3, "Fail on shellReader."); }
-				try { shellScanner.close(); } catch (Exception ex) { sys.log("SWT", 3, "Fail on shellScanner."); }
+				try { shellStream.close();}
+				catch (IOException ioe) { sys.log("SWT", 3, "Fail on shellStream."); }
+				try { shellReader.close(); }
+				catch (IOException ioe) { sys.log("SWT", 3, "Fail on shellReader."); }
+				try { shellScanner.close(); }
+				catch (Exception ex) { sys.log("SWT", 3, "Fail on shellScanner."); }
 				sys.log("SWT", 1, "Closing streams done.");
 
 				try {
@@ -213,6 +238,9 @@ public class ShellWriteThread implements VexusThread {
 		sys.log("MSG", 0, "SHELLWRITE: " + message.strip());
 		writeQueue += message;
 		shellWriteThread.interrupt();
+		
+		//FIXME SWT writes are doubled or do not appear sometimes (fix validation)
+		
 		// main.Main.cmdLine.repaint();
 		// main.Main.cmdLine.revalidate();
 	}
@@ -227,22 +255,26 @@ public class ShellWriteThread implements VexusThread {
 		writeQueue += message;
 		shellWriteThread.interrupt();
 	}
-	
+
 	@Override
 	public final void start() {
 		shellWriteThread.start();
 	}
-	
+
 	@Override
 	public final boolean isRunning() {
 		return shellWriteThread.isAlive();
 	}
-	
+
 	@Override
 	public final void suspend() {
 		sys.shellPrintln(AWTANSI.B_Yellow, "Suspending ShellWriteThread!");
 		sys.log("SWT", 2, "Suspending ShellWriteThread!");
-		try { Thread.sleep(150); } catch (InterruptedException ie) { ie.printStackTrace(); }
+		try {
+			Thread.sleep(150);
+		} catch (InterruptedException ie) {
+			ie.printStackTrace();
+		}
 		this.suspend = true;
 	}
 
@@ -333,7 +365,7 @@ public class ShellWriteThread implements VexusThread {
 	}
 
 	/**
-	 * Updates modules.ShellWriteThread.shellStream with content, the user entered. 
+	 * Updates modules.ShellWriteThread.shellStream with content, the user entered.
 	 * Should only be used, WHEN the user entered something. Otherwise, bugs and
 	 * exceptions may occur.
 	 */
@@ -345,11 +377,11 @@ public class ShellWriteThread implements VexusThread {
 			String cmdLineText = Main.mainFrame.getCmdLine().getText();
 			String lastLineText = cmdLineText.split("\n")[cmdLineText.split("\n").length - 1];
 			String prevWriteLastLine = prevWrite.split("\n")[prevWrite.split("\n").length - 1];
-			
+
 			// Remove any ANSI color code patterns
 			// Alternative REGEX if the one doesn't work: "\\d{1,2}(;\\d{1,2})?"
 			prevWriteLastLine = prevWriteLastLine.replaceAll("\u001B\\[[;\\d]*[ -/]*[@-~]", "");
-			
+
 			appendStr = lastLineText.substring(prevWriteLastLine.length());
 			appendStr = appendStr.trim();
 		} catch (IndexOutOfBoundsException ioobe) {
@@ -361,7 +393,10 @@ public class ShellWriteThread implements VexusThread {
 			sys.log("SWT:DEBUG", 1, "Appending new bytes to shellStream...");
 			shellStream.write(appendStr.getBytes());
 			shellStream.write("\n".getBytes());
-		} catch (IOException ioe) { sys.log("SWT", 3, "Writing data to shellStream failed."); ioe.printStackTrace(); }
+		} catch (IOException ioe) {
+			sys.log("SWT", 3, "Writing data to shellStream failed.");
+			ioe.printStackTrace();
+		}
 		sys.log("SHLWRT:DEBUG", 0, "Last line of previously written text: " + "\u001B[32m" + prevWrite + "\u001B[0m");
 		sys.log("SHLWRT:DEBUG", 0, "New user input: " + "\u001B[32m" + appendStr + "\u001B[0m");
 		try {
