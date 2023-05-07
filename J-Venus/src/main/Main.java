@@ -4,11 +4,15 @@ import java.lang.Exception;
 
 import javax.swing.JFrame;
 
+import org.fxmisc.richtext.InlineCssTextArea;
+import org.fxmisc.richtext.StyledTextArea;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 
 import engine.sys;
-import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import jfx.windowManager.JFxWinloader;
 import libraries.OpenLib;
 import libraries.VarLib;
@@ -20,7 +24,9 @@ public class Main extends JFrame {
 	public static boolean singleThreaded = false;
 	public static boolean javafxEnabled = false;
 	
-	public static TextArea cmdLine;
+	public static InlineCssTextArea cmdLine;
+	public static Font shellFont;
+	public static final Color DEFAULT_SHELL_COLOR = Color.LIME;
 	
 	public static ThreadAllocator ThreadAllocMain;
 	public static JFxWinloader jfxWinloader;

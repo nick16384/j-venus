@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.swing.text.StyledDocument;
 
+import org.reactfx.util.Either;
+
 import libraries.OpenLib;
 import main.Main;
 
@@ -56,6 +58,13 @@ public class sys {
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 * @param color
+	 * @param message
+	 * @param noProtect
+	 */
 	public static void shellPrint(Color color, String message, boolean... noProtect) {
 		if (main.Main.singleThreaded) {
 			Main.mainFrame.getCmdLine().setText(Main.mainFrame.getCmdLine().getText() + message);

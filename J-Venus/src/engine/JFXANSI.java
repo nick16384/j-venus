@@ -1,12 +1,13 @@
 package engine;
 
-import javax.swing.*;
-import javax.swing.text.*;
+import org.fxmisc.richtext.InlineCssTextArea;
+import org.fxmisc.richtext.StyledTextArea;
 
 import javafx.scene.control.TextArea;
 import main.Main;
 
-import java.awt.Color;
+//import java.awt.Color;
+import javafx.scene.paint.Color;
 
 /**
  * Code original from:
@@ -16,47 +17,43 @@ import java.awt.Color;
  * Modified version
  */
 
-public class JFXANSI extends JTextPane {
-	public static final Color D_Black   = Color.getHSBColor( 0.000f, 0.000f, 0.000f );
-	public static final Color D_Red     = Color.getHSBColor( 0.000f, 1.000f, 0.502f );
-	public static final Color D_Blue    = Color.getHSBColor( 0.667f, 1.000f, 0.502f );
-	public static final Color D_Magenta = Color.getHSBColor( 0.833f, 1.000f, 0.502f );
-	public static final Color D_Green   = Color.getHSBColor( 0.333f, 1.000f, 0.502f );
-	public static final Color D_Yellow  = Color.getHSBColor( 0.167f, 1.000f, 0.900f ); //last one was 0.502f
-	public static final Color D_Cyan    = Color.getHSBColor( 0.500f, 1.000f, 0.502f );
-	public static final Color D_White   = Color.getHSBColor( 0.000f, 0.000f, 1.000f ); //last one was 0.753f
-	public static final Color B_Black   = Color.getHSBColor( 0.000f, 0.000f, 0.502f );
-	public static final Color B_Red     = Color.getHSBColor( 0.000f, 1.000f, 1.000f );
-	public static final Color B_Blue    = Color.getHSBColor( 0.667f, 1.000f, 1.000f );
-	public static final Color B_Magenta = Color.getHSBColor( 0.833f, 1.000f, 1.000f );
-	public static final Color B_Green   = Color.getHSBColor( 0.333f, 1.000f, 1.000f );
-	public static final Color B_Yellow  = Color.getHSBColor( 0.167f, 1.000f, 1.000f );
-	public static final Color B_Cyan    = Color.getHSBColor( 0.500f, 1.000f, 1.000f );
-	public static final Color B_White   = Color.getHSBColor( 0.000f, 0.000f, 1.000f );
-	public static final Color cReset    = Color.getHSBColor( 0.000f, 0.000f, 1.000f );
-
-	public static final Color D_Orange  = Color.getHSBColor( 0.500f, 0.500f, 0.500f ); //Custom colors
-	public static final Color B_Orange  = Color.getHSBColor( 0.500f, 0.500f, 0.800f );
+public class JFXANSI {
+	public static final Color D_Black   = Color.rgb( 000, 000, 000, 0.0d );
+	public static final Color D_Red     = Color.rgb( 000, 255, 000, 0.5d );
+	public static final Color D_Blue    = Color.rgb( 000, 000, 160, 0.5d );
+	public static final Color D_Magenta = Color.rgb( 200, 000, 150, 0.5d );
+	public static final Color D_Green   = Color.rgb( 000, 255, 000, 0.5d );
+	public static final Color D_Yellow  = Color.rgb( 128, 128, 000, 0.9d ); //last one was 0.502f
+	public static final Color D_Cyan    = Color.rgb( 128, 032, 032, 0.5d );
+	public static final Color D_White   = Color.rgb( 255, 255, 255, 0.5d ); //last one was 0.753f
+	public static final Color B_Black   = Color.rgb( 000, 000, 000, 0.5d );
+	public static final Color B_Red     = Color.rgb( 255, 000, 000, 1.0d );
+	public static final Color B_Blue    = Color.rgb( 000, 000, 000, 1.0d );
+	public static final Color B_Magenta = Color.rgb( 200, 000, 150, 1.0d );
+	public static final Color B_Green   = Color.rgb( 000, 255, 000, 1.0d );
+	public static final Color B_Yellow  = Color.rgb( 255, 255, 000, 1.0d );
+	public static final Color B_Cyan    = Color.rgb( 32, 128, 180, 1.0d );
+	public static final Color B_White   = Color.rgb( 255, 255, 255, 1.0d );
+	public static final Color cReset    = Color.rgb( 000, 255, 000, 1.0d );
 	static Color colorCurrent    = cReset;
 	String remaining = "";
-	TextArea textArea = null;
+	InlineCssTextArea textArea = null;
 	String lastColorCode = ""; //The last requested color code for logging purposes.
 
 
-	public JFXANSI (TextArea textArea) {
+	public JFXANSI (InlineCssTextArea textArea) {
 		this.textArea = textArea;
 	}
 
-	public void append(Color c, String s) throws BadLocationException {
+	public void append(Color c, String s) {
 		if (sys.getActivePhase().equals("pre-init") || sys.getActivePhase().equals("init"))
 			return;
-		StyleContext sc = StyleContext.getDefaultStyleContext();
-		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+		
 		if (Main.cmdLine != null)
-			insertNewString(s, c, aset); //Private method
+			insertNewString(s, c); //Private method
 	}
 
-	public void appendANSI(String s) throws BadLocationException { // convert ANSI color codes first
+	public void appendANSI(String s) { // convert ANSI color codes first
 		int aPos = 0;   // current char position in addString
 		int aIndex = 0; // index of next Escape sequence
 		int mIndex = 0; // index of "m" terminating Escape sequence
@@ -176,25 +173,12 @@ public class JFXANSI extends JTextPane {
 	 * @param c
 	 * @param aset
 	 */
-	private void insertNewString(String s, Color c, AttributeSet aset) {
-		sys.log("JFXANSI", 2, "Appending text with JavaFX ANSI class. No color output currently supported.");
-		int len = textArea.lengthProperty().get(); 
-		try {Main.jfxWinloader.appendText(s);} 
+	private void insertNewString(String s, Color c) {
+		sys.log("JFXANSI", 2, "Appending text with JavaFX ANSI class. Color output is experimental.");
+		try { Main.jfxWinloader.appendText(s, c); } 
 		catch (Exception e) {
-			sys.log("ANSI_APPEND", 3, "BadLocationException while appending text.");
-			try {
-				for (int i = 0; i < 100; i++) {
-					append(c, s);
-					try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
-					if (textArea.getText().endsWith(s))
-						continue;
-					sys.log("ANSI_SHLWRT", 2, "Shell write verification failed on attempt No. " + i);
-					if (i >= 99)
-						sys.log("ANSI_SHLWRT", 3, "Tried to append text 100 times unsuccessfully.");
-				}
-			} catch (BadLocationException ble) {
-				sys.log("ANSI_APPEND", 3, "BadLocationException while appending text inside catch block.");
-			}
+			sys.log("JFXANSI", 3, "Shell text write failed. Stacktrace below:");
+			e.printStackTrace();
 		}
 	}
 }
