@@ -154,8 +154,7 @@ public class ShellWriteThread implements VexusThread {
 								}
 								try {
 									if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
-										Main.jfxWinloader.getCmdLine().selectPositionCaret(
-												Main.jfxWinloader.getCmdLine().lengthProperty().get());
+										Main.jfxWinloader.triggerScrollUpdate();
 									else
 										Main.mainFrame.getCmdLine()
 												.setCaretPosition(Main.mainFrame.getCmdLine().getText().length());
@@ -169,7 +168,9 @@ public class ShellWriteThread implements VexusThread {
 
 								prevWrite = writeQueue; // Set previously written text to writeQueue
 								writeQueue = ""; // Clear write queue
-
+								
+								Main.jfxWinloader.triggerScrollUpdate();
+								
 								if (!noProtectVar) {
 									try {
 										if (!Main.javafxEnabled)

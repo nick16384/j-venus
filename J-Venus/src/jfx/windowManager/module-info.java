@@ -11,8 +11,10 @@ module jfx.windowManager {
 	requires javafx.controls;
 	requires java.desktop;
 	requires java.compiler;
+	requires org.fxmisc.richtext;
+	requires org.fxmisc.flowless;
 
-	opens jfx.windowManager to javafx.graphics, java.desktop, javax.tools;
+	opens jfx.windowManager to javafx.graphics, java.desktop, javax.tools, org.fxmisc.richtext;
 
 	exports jfx.windowManager;
 }

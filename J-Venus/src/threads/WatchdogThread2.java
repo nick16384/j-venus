@@ -32,8 +32,8 @@ public class WatchdogThread2 implements VexusThread {
 							
 							try {
 								if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
-									Main.jfxWinloader.getCmdLine().selectPositionCaret(
-											Main.jfxWinloader.getCmdLine().lengthProperty().get());
+									sys.log("WDT2", 1, "Not setting caret to last position");
+									// set jfx caret to last pos
 								else
 									Main.mainFrame.getCmdLine()
 											.setCaretPosition(Main.mainFrame.getCmdLine().getText().length());
