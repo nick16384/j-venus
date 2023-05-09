@@ -112,7 +112,7 @@ public class JFXANSI {
 
 	public Color getANSIColor(String ANSIColor) {
 		if (!ANSIColor.equals("\u001B[0m") && !lastColorCode.equals(ANSIColor)) {
-			sys.log("ANSI_DEBUG", 0, "Requesting new ANSI color: " + ANSIColor + "===" + "\u001B[0m");
+			sys.log("JFXANSI_DEBUG", 0, "Requesting new ANSI color: " + ANSIColor + "===" + "\u001B[0m");
 			lastColorCode = ANSIColor;
 		}
 		if (ANSIColor.equals("\u001B[30m"))        { return D_Black; }
@@ -174,7 +174,6 @@ public class JFXANSI {
 	 * @param aset
 	 */
 	private void insertNewString(String s, Color c) {
-		sys.log("JFXANSI", 2, "Appending text with JavaFX ANSI class. Color output is experimental.");
 		try { Main.jfxWinloader.appendText(s, c); } 
 		catch (Exception e) {
 			sys.log("JFXANSI", 3, "Shell text write failed. Stacktrace below:");

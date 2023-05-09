@@ -47,7 +47,6 @@ public class ShellWriteThread implements VexusThread {
 	public Scanner shellScanner = null;
 	private boolean noProtectVar = false; // Do not protect text after print
 	private String writeQueue = "";
-	private String writeQueueValidator = ""; // Use for validation of current writeQueue
 	private String prevWrite = ""; // Contains previously written text
 	private int CMDLINE_MAX_LINE_COUNT = 0;
 	// protected boolean interrupt = false;
@@ -111,8 +110,6 @@ public class ShellWriteThread implements VexusThread {
 							// END UPDATE SHELL STREAM
 							// ==========================================================================
 							
-							writeQueueValidator = writeQueue;
-							
 							try {
 								CMDLINE_MAX_LINE_COUNT = Integer.parseInt(VarLib.getEnv("$CMDLINE_MAX_LINE_COUNT"));
 								sys.log("SHLWRT", 1, "Current cmdLine max. line count: " + CMDLINE_MAX_LINE_COUNT);
@@ -174,23 +171,7 @@ public class ShellWriteThread implements VexusThread {
 										"Setting cursor to last position failed, because main.mainFrame is null.");
 							}
 							
-							sys.log("WQ validator: " + writeQueueValidator);
-							sys.log("WQ: " + writeQueue);
-							
-							// Sleep to wait for shell write to finish
-							try { Thread.sleep(1000); } catch (InterruptedException iex) { iex.printStackTrace(); }
-							
-							//FIXME sometimes, dual output is possible, due to validation fails
-							if (writeQueueValidator.equals(writeQueue)
-									|| Main.jfxWinloader.getCmdLine().getText().contains(writeQueue)) {
-								prevWrite = writeQueue; // Set previously written text to writeQueue
-								writeQueue = ""; // Clear write queue
-							} else {
-								writeQueue = writeQueue.substring(writeQueueValidator.length());
-								prevWrite = writeQueue; // Set previously written text to writeQueue
-							}
-							writeQueueValidator = "";
-							sys.log("New WQ: " + writeQueue);
+							writeQueue = ""; // Clear write queue
 
 							if (!noProtectVar) {
 								try {
@@ -236,10 +217,9 @@ public class ShellWriteThread implements VexusThread {
 			noProtectVar = true;
 		}
 		sys.log("MSG", 0, "SHELLWRITE: " + message.strip());
+		while (shellWriteThread.isInterrupted()) { try { Thread.sleep(200); } catch (InterruptedException e) {} }
 		writeQueue += message;
 		shellWriteThread.interrupt();
-		
-		//FIXME SWT writes are doubled or do not appear sometimes (fix validation)
 		
 		// main.Main.cmdLine.repaint();
 		// main.Main.cmdLine.revalidate();
@@ -252,6 +232,7 @@ public class ShellWriteThread implements VexusThread {
 		message = AWTANSI.getANSIColorString(color) + message;
 		// Reset color at end, so log doesn't get messed up with colors:
 		sys.log("MSG", 0, "SHELLWRITE-ANSI: " + message.strip() + "\u001B[0m");
+		while (shellWriteThread.isInterrupted()) { try { Thread.sleep(50); } catch (InterruptedException e) {} }
 		writeQueue += message;
 		shellWriteThread.interrupt();
 	}
