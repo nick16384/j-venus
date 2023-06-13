@@ -58,6 +58,7 @@ public class Init {
 			System.out.println("\t--enable-deprecated \t Enable use of deprecated methods and classes.");
 			System.out.println("\t--no-check-install \t Don't check for installation files at startup (useful for portable versions).");
 			System.out.println("\t--javafx, --jfx \t Use experimental JavaFX GUI loader instead of AWT.");
+			System.out.println("\t--root-folder \t Set another root folder instead of the default defined one.");
 			System.exit(0);
 		}
 		if (vmArgs.contains("--single-threaded")) {

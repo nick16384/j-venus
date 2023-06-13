@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,9 +41,20 @@ public class OpenLib {
 		
 		if (VarLib.osName.equalsIgnoreCase("Linux")) { //If operating system is linux...
 			VarLib.fsRoot = "/";
-			VarLib.DfltDir = new File(VarLib.fsep + "etc" + VarLib.fsep + "venus");
-			/*VarLib.jDOSDefDir = new File(VarLib.fsep + "home" + VarLib.fsep + "theophil"
-					+ VarLib.fsep + "Desktop" + VarLib.fsep + "J-Vexus");*/
+			
+			// Check if another root folder was specified
+			// === SPECIAL ROOT FOLDER SPECIFIED ===
+			if (Arrays.asList(Main.argsMain).contains("--root-folder")
+					&& Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1] != null)
+				try {
+					VarLib.DfltDir
+						= new File(Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
+				} catch (Exception ex) { sys.log(""); ex.printStackTrace(); }
+			
+			if (!FileCheckUtils.isDir(VarLib.DfltDir))
+				VarLib.DfltDir = new File(VarLib.fsep + "etc" + VarLib.fsep + "venus");
+			// === SPECIAL ROOT FOLDER SPECIFIED END ===
+			
 			VarLib.TempDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "temp");
 			VarLib.BinDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "bin");
 			VarLib.CmdDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "commands");
@@ -52,6 +64,20 @@ public class OpenLib {
 					+ VarLib.fsep + "bin" + VarLib.fsep + "java");
 		} else if (VarLib.osName.contains("Windows")) { //If operating system is any Windows version...
 			VarLib.fsRoot = System.getenv("SYSTEMROOT") + "\\";
+			
+			// Check if another root folder was specified
+			// === SPECIAL ROOT FOLDER SPECIFIED ===
+			if (Arrays.asList(Main.argsMain).contains("--root-folder")
+					&& Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1] != null)
+				try {
+					VarLib.DfltDir
+						= new File(Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
+				} catch (Exception ex) { sys.log(""); ex.printStackTrace(); }
+			
+			if (!FileCheckUtils.isDir(VarLib.DfltDir))
+				VarLib.DfltDir = new File("C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "J-Venus");
+			// === SPECIAL ROOT FOLDER SPECIFIED END ===
+			
 			VarLib.DfltDir = new File("C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "J-Venus");
 			VarLib.TempDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "temp");
 			VarLib.BinDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "bin");
