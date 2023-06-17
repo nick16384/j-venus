@@ -43,8 +43,8 @@ class LowLevel {
 			sys.log("LOWLEVEL", 3, ": priority out of range (1 - 5)");
 			return;
 		}
-		StyledDocument doc = Main.mainFrame.getCmdLine().getStyledDocument();
-		Style style = Main.mainFrame.getCmdLine().addStyle("cmdLineStyle", null);
+		StyledDocument doc = Main.mainFrameAWT.getCmdLine().getStyledDocument();
+		Style style = Main.mainFrameAWT.getCmdLine().addStyle("cmdLineStyle", null);
 		
 		if (auth.equalsIgnoreCase("HIDDEN")) { //If authority wants to be hidden (e.g. during init)
 			if (priority == 1) {
@@ -99,9 +99,9 @@ class LowLevel {
 			
 		} else if (shellMode.equalsIgnoreCase("legacy")) {
 			LowLevel.shellMode = "legacy";
-			Main.mainFrame.getCmdLine().setFont(new Font("Perfect DOS VGA 437", Font.BOLD, 16));
+			Main.mainFrameAWT.getCmdLine().setFont(new Font("Perfect DOS VGA 437", Font.BOLD, 16));
 			VarLib.setPromptPattern("legacy>");
-			Main.mainFrame.getCmdLine().setText("");
+			Main.mainFrameAWT.getCmdLine().setText("");
 			shell_write(2, "LOWLEVEL", "Changed shell mode to legacy mode. \n");
 			shell_write(2, "LOWLEVEL", "This mode uses a limited set of available commands and has less \n");
 			shell_write(2, "LOWLEVEL", "resource impact. It is more like a debugging \n");
@@ -110,9 +110,9 @@ class LowLevel {
 			
 		} else {
 			LowLevel.shellMode = "normal";
-			Main.mainFrame.getCmdLine().setFont(new Font("Consolas", Font.BOLD, 16));
+			Main.mainFrameAWT.getCmdLine().setFont(new Font("Consolas", Font.BOLD, 16));
 			VarLib.setPromptPattern("default");
-			Main.mainFrame.getCmdLine().setText("");
+			Main.mainFrameAWT.getCmdLine().setText("");
 		}
 		//Native shell (non writable, like BSOD on Windows)
 		//Normal shell (normal shell, writable and normal command set)

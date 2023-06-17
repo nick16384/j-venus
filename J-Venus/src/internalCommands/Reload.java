@@ -15,7 +15,7 @@ public class Reload {
 			sys.log("RELOAD", 2, "Performing extended reload.");
 			//Perform restart
 			sys.log("RELOAD", 1, "Reloading J-Vexus...");
-			Main.mainFrame.getCmdLine().setText("");
+			Main.mainFrameAWT.getCmdLine().setText("");
 			OpenLib.initVars();
 			OpenLib.updateEnv("$$ALL");
 			OpenLib.verifyFiles();
@@ -24,7 +24,7 @@ public class Reload {
 		} else {
 			sys.log("RELOAD", 1, "Reloading J-Vexus...");
 			sys.setActivePhase("pre-init");
-			Main.mainFrame.getCmdLine().setText("");
+			Main.mainFrameAWT.getCmdLine().setText("");
 			sys.setActivePhase("init");
 			OpenLib.initVars();
 			OpenLib.updateEnv("$$ALL");

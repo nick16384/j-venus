@@ -69,7 +69,7 @@ public class ShellWriteThread implements VexusThread {
 				}
 				sys.log("ShellWriteThread", 1, "Active phase run detected.");
 
-				while (main.Main.mainFrame == null && !main.Main.javafxEnabled)
+				while (main.Main.mainFrameAWT == null && !main.Main.javafxEnabled)
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException ie) {
@@ -146,7 +146,7 @@ public class ShellWriteThread implements VexusThread {
 									if (Main.javafxEnabled)
 										new engine.JFXANSI(Main.jfxWinloader.getCmdLine()).appendANSI(writeQueue);
 									else
-										new engine.AWTANSI(Main.mainFrame.getCmdLine()).appendANSI(writeQueue);
+										new engine.AWTANSI(Main.mainFrameAWT.getCmdLine()).appendANSI(writeQueue);
 								}
 								
 								// ================================================================
@@ -161,8 +161,8 @@ public class ShellWriteThread implements VexusThread {
 								if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
 									Main.jfxWinloader.triggerScrollUpdate();
 								else
-									Main.mainFrame.getCmdLine()
-											.setCaretPosition(Main.mainFrame.getCmdLine().getText().length());
+									Main.mainFrameAWT.getCmdLine()
+											.setCaretPosition(Main.mainFrameAWT.getCmdLine().getText().length());
 							} catch (IllegalArgumentException iae) {
 								sys.log("SWT", 2, "Setting cursor to last position failed,"
 										+ "because the value was out of range.");
@@ -176,9 +176,9 @@ public class ShellWriteThread implements VexusThread {
 							if (!noProtectVar) {
 								try {
 									if (!Main.javafxEnabled)
-										new ProtectedTextComponent(Main.mainFrame.getCmdLine()).protectText(
-												Main.mainFrame.getCmdLine().getText().lastIndexOf(VarLib.getPrompt()),
-												Main.mainFrame.getCmdLine().getText().length() - 1);
+										new ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).protectText(
+												Main.mainFrameAWT.getCmdLine().getText().lastIndexOf(VarLib.getPrompt()),
+												Main.mainFrameAWT.getCmdLine().getText().length() - 1);
 								} catch (NullPointerException npe) {
 									sys.log("SWT", 3, "Text could not be protected from user deletion,"
 											+ " probably because main.mainFrame is null.");
@@ -264,18 +264,18 @@ public class ShellWriteThread implements VexusThread {
 	// Now (22.08) also working with ANSI colors (hopefully)
 	public final void scroll(int lineCount) {
 		// Unprotect text, removal otherwise won't work
-		new ProtectedTextComponent(Main.mainFrame.getCmdLine()).unprotectAllText();
+		new ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
 		sys.log("SCRL", 1, "Scrolling by " + lineCount + " line(s):");
 		if (lineCount > CMDLINE_MAX_LINE_COUNT) {
 			sys.log("SCRL", 1, "Warning: scroll value higher than max. line count. Expect errors.");
 		}
 
 		// Total characters to remove at the top
-		int removeChars = ordinalIndexOf(Main.mainFrame.getCmdLine().getText(), "\n", lineCount);
+		int removeChars = ordinalIndexOf(Main.mainFrameAWT.getCmdLine().getText(), "\n", lineCount);
 
 		// Remove certain number of characters (removeChars)
 		try {
-			Main.mainFrame.getCmdLine().getDocument().remove(0, removeChars + 1);
+			Main.mainFrameAWT.getCmdLine().getDocument().remove(0, removeChars + 1);
 		} catch (BadLocationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -326,8 +326,8 @@ public class ShellWriteThread implements VexusThread {
 	private void autoscroll() {
 		int writeQueueLineBreakCount = writeQueue.split("\n").length + 1;
 		int cmdLineLineBreakCount = 0;
-		if (Main.mainFrame != null) {
-			cmdLineLineBreakCount = Main.mainFrame.getCmdLine().getText().split("\n").length;
+		if (Main.mainFrameAWT != null) {
+			cmdLineLineBreakCount = Main.mainFrameAWT.getCmdLine().getText().split("\n").length;
 		}
 		int totalLineBreakCount = writeQueueLineBreakCount + cmdLineLineBreakCount;
 		int scrollByLines = totalLineBreakCount - CMDLINE_MAX_LINE_COUNT;
@@ -355,7 +355,7 @@ public class ShellWriteThread implements VexusThread {
 			return;
 		String appendStr = ""; // Newly added text from user if any
 		try {
-			String cmdLineText = Main.mainFrame.getCmdLine().getText();
+			String cmdLineText = Main.mainFrameAWT.getCmdLine().getText();
 			String lastLineText = cmdLineText.split("\n")[cmdLineText.split("\n").length - 1];
 			String prevWriteLastLine = prevWrite.split("\n")[prevWrite.split("\n").length - 1];
 

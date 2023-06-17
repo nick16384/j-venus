@@ -67,7 +67,7 @@ public final class WatchdogThread implements VexusThread {
 									+ "be missing and try to reinstall.");
 							break;
 						} else if (!Main.ThreadAllocMain.getSWT().isRunning()) {
-							Main.mainFrame.cmdLine.setText("Fatal error: ShellWriteThread not running, causing no more shell\n"
+							Main.mainFrameAWT.cmdLine.setText("Fatal error: ShellWriteThread not running, causing no more shell\n"
 									+ "output to be displayed. If this issue persists, try reinstalling.");
 							//This error message might not display due to SWT inactivity
 							stopWithError(1, 15000, "The Shell Write Thread is not running. This will most probably cause no\n"
@@ -207,8 +207,8 @@ public final class WatchdogThread implements VexusThread {
 	 * @param errMsg         Error message to display to the user
 	 */
 	protected static final void stopWithError(int exitCode, int waitBeforeStop, String errMsg) {
-		new components.ProtectedTextComponent(Main.mainFrame.getCmdLine()).unprotectAllText();
-		Main.mainFrame.getCmdLine().setText("");
+		new components.ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
+		Main.mainFrameAWT.getCmdLine().setText("");
 		sys.setActivePhase("error");
 		sys.setShellMode("native");
 		try { Thread.sleep(200); } catch (InterruptedException ie) { ie.printStackTrace(); }
@@ -221,7 +221,7 @@ public final class WatchdogThread implements VexusThread {
 				+ "Please contact me, if this error is reproducible and bugs you around (a lot):\n"
 				+ "https://theophil.pudelkern.com/\n"
 				+ "===============================================");
-		Main.mainFrame.getCmdLine().setEditable(false);
+		Main.mainFrameAWT.getCmdLine().setEditable(false);
 		sys.shellPrintln(AWTANSI.B_Cyan, "Log file is at: " + VarLib.getLogFile().getAbsolutePath());
 		if (waitBeforeStop > 100 && waitBeforeStop < 60000) {
 			sys.shellPrintln(AWTANSI.B_Green,

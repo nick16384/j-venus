@@ -86,7 +86,7 @@ public class CommandMain {
 			}
 			OpenLib.refreshDateTime();
 			OpenLib.cmdLinePrepare();
-			Main.mainFrame.getCmdLine().setEditable(true);
+			Main.mainFrameAWT.getCmdLine().setEditable(true);
 		} catch (SecurityException se) {
 			sys.log("EXECTERM", 4, "Could not terminate execution process.");
 		}
@@ -157,7 +157,7 @@ public class CommandMain {
 	
 	//===============================EXEC METHOD FOR THREADS=============================
 	private static String executeCommand() {
-		Main.mainFrame.getCmdLine().setEditable(false);
+		Main.mainFrameAWT.getCmdLine().setEditable(false);
 		//Replace all environment-variable-references with their values
 		ArrayList<String> allCmdElements = new ArrayList<>();
 		allCmdElements.add(command);
@@ -198,13 +198,13 @@ public class CommandMain {
 			sys.log("CMDMAIN", 0, "");
 			OpenLib.refreshDateTime();
 			OpenLib.cmdLinePrepare();
-			Main.mainFrame.getCmdLine().setEditable(true);
+			Main.mainFrameAWT.getCmdLine().setEditable(true);
 			return "";
 		} else if (sys.getActivePhase().equalsIgnoreCase("pre-init")) {
 			sys.log("CMDMAIN", 3, "JavaDOS is still in pre-init phase. Cannot execute commands.");
 			OpenLib.refreshDateTime();
 			OpenLib.cmdLinePrepare();
-			Main.mainFrame.getCmdLine().setEditable(true);
+			Main.mainFrameAWT.getCmdLine().setEditable(true);
 			return "PhaseNotRun";
 		}
 		
@@ -359,7 +359,7 @@ public class CommandMain {
 			if (params.get(0).equalsIgnoreCase("noErrorChecking")) {
 				OpenLib.refreshDateTime();
 				OpenLib.cmdLinePrepare();
-				Main.mainFrame.getCmdLine().setEditable(true);
+				Main.mainFrameAWT.getCmdLine().setEditable(true);
 				return "";
 			}
 		}
@@ -405,7 +405,7 @@ public class CommandMain {
 		if (!noPrompt) {
 			OpenLib.refreshDateTime();
 			OpenLib.cmdLinePrepare();
-			Main.mainFrame.getCmdLine().setEditable(true);
+			Main.mainFrameAWT.getCmdLine().setEditable(true);
 		} else {
 			noPrompt = false;
 		}

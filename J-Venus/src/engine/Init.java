@@ -21,7 +21,7 @@ import threads.CommandLoader;
 import threads.ThreadAllocator;
 
 /**
- * Contains all initialization code (e.g. preparing envvars).
+ * Contains all initialization code (e.g. preparing environment variables).
  * Moved from Main to here for better readability.
  * Info: Can only be executed when in pre-init phase
  * @author nick16384
