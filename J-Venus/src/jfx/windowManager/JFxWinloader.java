@@ -51,7 +51,7 @@ public class JFxWinloader extends Application {
 		try {
 			primaryStage.setTitle("S.E.M.I.C.O.L.O.N. Shell " + VarLib.getVersion());
 			
-			Main.cmdLine = new InlineCssTextArea("SHELL INIT");
+			Main.cmdLine = new PartlyEditableInlineCSSTextArea("SHELL INIT");
 			
 			Main.cmdLine.setWrapText(true);
 			Main.cmdLine.setBackground(new Background(
@@ -78,9 +78,22 @@ public class JFxWinloader extends Application {
 				
 				// Command execute and command repeat
 				if (event.getCode().equals(KeyCode.ENTER)) {
-		        	KeyEventHandlers.actionOnEnter();
+					try {
+						KeyEventHandlers.actionOnEnter();
+					} catch (Exception ex) {
+						sys.log("JFX", 3, "Exception in command extractor / formatter: "
+								+ "Probably the prompt was edited by the user.");
+						sys.shellPrint("Whatever you're trying, it's not funny!");
+						libraries.OpenLib.cmdLinePrepare();
+					}
 				} else if (event.getCode().equals(KeyCode.UP)) {
-					KeyEventHandlers.handleCommandRepeat();
+					try {
+						KeyEventHandlers.handleCommandRepeat();
+					} catch (Exception ex) {
+						sys.log("JFX", 3, "Command repeat encountered an exception. This is an internal undefined error.");
+						sys.shellPrint("You broke something. It's not healthy for your PC.");
+						libraries.OpenLib.cmdLinePrepare();
+					}
 				}
 				
 				if (event.getCode().equals(KeyCode.PAGE_UP)) {

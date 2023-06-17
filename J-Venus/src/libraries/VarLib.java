@@ -249,7 +249,7 @@ public class VarLib {
 		}
 		// According to the Document.getRootElements() doc, there will "typically"
 		// only be one root element.
-		Element root = Main.mainFrame.getCmdLine().getDocument().getDefaultRootElement();
+		Element root = Main.mainFrameAWT.getCmdLine().getDocument().getDefaultRootElement();
 		int len = root.getElementCount();
 		for (int i = 0; i < len; i++) {
 			if (root.getElement(i) == root /*thisElement*/ ) { //thisElement

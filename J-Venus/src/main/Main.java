@@ -14,6 +14,7 @@ import engine.sys;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import jfx.windowManager.JFxWinloader;
+import jfx.windowManager.PartlyEditableInlineCSSTextArea;
 import libraries.OpenLib;
 import libraries.VarLib;
 import threads.ThreadAllocator;
@@ -24,7 +25,7 @@ public class Main extends JFrame {
 	public static boolean singleThreaded = false;
 	public static boolean javafxEnabled = false;
 	
-	public static InlineCssTextArea cmdLine;
+	public static PartlyEditableInlineCSSTextArea cmdLine;
 	public static Font shellFont;
 	public static final Color DEFAULT_SHELL_COLOR = Color.LIME;
 	
@@ -80,29 +81,18 @@ public class Main extends JFrame {
 	public static LinkedList<String> commandHistory = new LinkedList<>();
 	public static int tabCountInRow = 0;
 	
-	public static awt.windowManager.WindowMain mainFrame;
-	public static Main main;
+	public static awt.windowManager.WindowMain mainFrameAWT;
 	
 	//========================================MAIN===========================================
-	public Main() {
-		//main = this;
-		
+	public static final void initAWTWindow() {
 		sys.log("MAIN", 1, "Creating new WindowMain object.");
-		mainFrame = new awt.windowManager.WindowMain("J-Vexus " + VarLib.getVersion());
+		mainFrameAWT = new awt.windowManager.WindowMain("J-Vexus " + VarLib.getVersion());
 		sys.log("MAIN", 1, "Attaching KeyListener to mainFrame.");
-		awt.windowManager.KeyListenerAttacher.attachKeyListener(mainFrame);
-		
-		//TODO fix a lot of cmdLine errors (new in windowManager, not in main.Main anymore)
-		//this.add(mainShellPanel);
-		//mainShellPanel.add(cmdLine);
+		awt.windowManager.KeyListenerAttacher.attachKeyListener(mainFrameAWT);
 	}
 	
 	public JFrame getMainWindow() {
-		return this.mainFrame;
-	}
-	
-	public Main getMain() {
-		return main;
+		return Main.mainFrameAWT;
 	}
 	
 	//Getting some stats about Venus

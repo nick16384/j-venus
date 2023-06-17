@@ -12,13 +12,13 @@ import main.Main;
 public class AWTWinload {
 	public static void awtWinload() {
 		sys.log("MAIN", 0, "Loading main AWT window...");
-		Main.main = new Main();
+		Main.initAWTWindow();
 		//try { Thread.sleep(2000); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		sys.log("MAIN", 1, "Done.");
 		sys.log("MAIN", 1, "Setting parameters for mainFrame (icon image, title)...");
 		//Set icon image for mainFrame
 		try {
-			Main.mainFrame.setIconImage(ImageIO.read(
+			Main.mainFrameAWT.setIconImage(ImageIO.read(
 					new File(VarLib.fsep + "etc" + VarLib.fsep +
 							"venus" + VarLib.fsep + "data" + VarLib.fsep + "venus-icon.png")));
 		} catch (IOException e) {
@@ -27,7 +27,7 @@ public class AWTWinload {
 					VarLib.fsep + "etc" + VarLib.fsep +
 					"venus" + VarLib.fsep + "data" + VarLib.fsep + "venus-icon.png");
 		}
-		Main.mainFrame.setName("J-Vexus " + VarLib.getVersion());
+		Main.mainFrameAWT.setName("J-Vexus " + VarLib.getVersion());
 		sys.log("MAIN", 0, "Done.");
 	}
 }

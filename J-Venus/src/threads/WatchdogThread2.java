@@ -35,8 +35,8 @@ public class WatchdogThread2 implements VexusThread {
 									sys.log("WDT2", 1, "Not setting caret to last position");
 									// set jfx caret to last pos
 								else
-									Main.mainFrame.getCmdLine()
-											.setCaretPosition(Main.mainFrame.getCmdLine().getText().length());
+									Main.mainFrameAWT.getCmdLine()
+											.setCaretPosition(Main.mainFrameAWT.getCmdLine().getText().length());
 							} catch (NullPointerException npe) {
 								sys.log("WDT2", 3, "Setting cursor to last text position threw an error. Main.mainFrame probably is null.");
 							} catch (IllegalArgumentException iae) {
@@ -49,8 +49,8 @@ public class WatchdogThread2 implements VexusThread {
 						
 						try {
 							if (!Main.javafxEnabled) {
-								Main.mainFrame.getCmdLine().setEditable(true);
-								new ProtectedTextComponent(Main.mainFrame.getCmdLine()).unprotectAllText();
+								Main.mainFrameAWT.getCmdLine().setEditable(true);
+								new ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
 							}
 						} catch (NullPointerException npe) {
 							npe.printStackTrace();
@@ -71,8 +71,8 @@ public class WatchdogThread2 implements VexusThread {
 					
 					try {
 						if (!Main.javafxEnabled) {
-							Main.mainFrame.getCmdLine().setEditable(true);
-							new ProtectedTextComponent(Main.mainFrame.getCmdLine()).unprotectAllText();
+							Main.mainFrameAWT.getCmdLine().setEditable(true);
+							new ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
 						}
 					} catch (NullPointerException npe) {
 						npe.printStackTrace();
