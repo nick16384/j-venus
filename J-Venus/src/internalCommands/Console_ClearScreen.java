@@ -13,9 +13,9 @@ public class Console_ClearScreen
 	  
 	  if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null) {
 		  Main.jfxWinloader.clearCmdLine();
-	  } else if (Main.mainFrame != null) {
-		  new components.ProtectedTextComponent(Main.mainFrame.getCmdLine()).unprotectAllText();
-		  Main.mainFrame.getCmdLine().setText("");
+	  } else if (Main.mainFrameAWT != null) {
+		  new components.ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
+		  Main.mainFrameAWT.getCmdLine().setText("");
 	  } else {
 		  sys.log("CLS", 3, "Clearing screen failed, because components are still null.");
 	  }

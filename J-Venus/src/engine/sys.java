@@ -39,7 +39,7 @@ public class sys {
 	 */
 	public static void shellPrint(int priority, String auth, String message, boolean... noProtect) {
 		if (main.Main.singleThreaded) {
-			Main.mainFrame.getCmdLine().setText(Main.mainFrame.getCmdLine().getText() + message);
+			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			if (priority == 0) { //Priority 0 / Just print, nothing important
 				Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
@@ -67,14 +67,14 @@ public class sys {
 	 */
 	public static void shellPrint(Color color, String message, boolean... noProtect) {
 		if (main.Main.singleThreaded) {
-			Main.mainFrame.getCmdLine().setText(Main.mainFrame.getCmdLine().getText() + message);
+			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			Main.ThreadAllocMain.getSWT().appendTextQueue(color, message, noProtect);
 		}
 	}
 	public static void shellPrintln(Color color, String message, boolean... noProtect) {
 		if (main.Main.singleThreaded) {
-			Main.mainFrame.getCmdLine().setText(Main.mainFrame.getCmdLine().getText() + message);
+			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			Main.ThreadAllocMain.getSWT().appendTextQueue(color, message + "\n", noProtect);
 		}
@@ -90,7 +90,7 @@ public class sys {
 	 * @param message
 	 */
 	public static void direct_shell_write(String message) {
-		Main.mainFrame.getCmdLine().setText(Main.mainFrame.getCmdLine().getText() + message);
+		Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 	}
 	//==========================================SHELLWRITE END========================================
 	//================================================================================================

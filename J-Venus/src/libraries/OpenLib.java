@@ -190,7 +190,7 @@ public class OpenLib {
 	
 	public static void cmdLinePrepare() {
 		if (!Main.javafxEnabled)
-			Main.mainFrame.getCmdLine().setEditable(false);
+			Main.mainFrameAWT.getCmdLine().setEditable(false);
 		if (sys.getActivePhase().equals("init")) {
 			
 			/*HighLevel.shellPrint(1, "HIDDEN", "J-Vexus Version: " + VarLib.VERSION
@@ -230,7 +230,7 @@ public class OpenLib {
 			sys.log("LIB", 4, "Although, it's just a beta version by now, so it's just like that :)");
 		}
 		if (!Main.javafxEnabled)
-			Main.mainFrame.getCmdLine().setEditable(true);
+			Main.mainFrameAWT.getCmdLine().setEditable(true);
 	}
 	public static void refreshDateTime() {
 		VarLib.dateTime = new SimpleDateFormat("yyyy.MM.dd|HH:mm:ss").format(Calendar.getInstance().getTime());
