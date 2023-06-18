@@ -137,6 +137,8 @@ public class PartiallyEditableInlineCSSTextArea extends InlineCssTextArea {
 			// The characters are painted in reverse order, because I assume, that
 			// the first character always has the color of that next to it. The API only allows two
 			// characters next to each other to be painted, which causes quite a mess here.
+			
+			// TODO fix this mess and find a way to paint a single character only
 			try {
 				sys.log(this.getText().length() + " : " + i + ": " + (i + 1 > this.getText().length() ? i - 1 : i)
 						+ " - " + (i + 1 > this.getText().length() ? i : i + 1));
