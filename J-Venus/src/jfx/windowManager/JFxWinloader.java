@@ -151,6 +151,7 @@ public class JFxWinloader extends Application {
 			Platform.runLater(() -> {
 				try {
 					Main.cmdLine.appendText(text);
+					Main.cmdLine.setReadOnlyTo(Main.cmdLine.getText().length());
 					sys.log("JFX", 1, "Text write color hex: (0x)" + color.toString().substring(2, 8));
 					// Apply text color on new segment:
 					Main.cmdLine.setStyle(Main.cmdLine.getText().length() - text.length(),
