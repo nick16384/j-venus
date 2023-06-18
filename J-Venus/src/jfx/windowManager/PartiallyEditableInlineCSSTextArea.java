@@ -139,7 +139,7 @@ public class PartiallyEditableInlineCSSTextArea extends InlineCssTextArea {
 			// characters next to each other to be painted, which causes quite a mess here.
 			try {
 				sys.log(this.getText().length() + " : " + i + ": " + (i + 1 > this.getText().length() ? i - 1 : i)
-						+ " - " + (i + 1 > styles.size() ? i : i + 1));
+						+ " - " + (i + 1 > this.getText().length() ? i : i + 1));
 				this.setStyle(i + 1 > this.getText().length() ? i - 1 : i,
 						  	  i + 1 > this.getText().length() ? i : i + 1,
 						  	  styles.get(styles.get(i + 1) == null ? i : i + 1));
