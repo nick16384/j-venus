@@ -1,5 +1,0 @@
-# JavaDOS startup script
-prompt default
-chEnv -add $PATH /etc/javados/bin/
-chEnv -add $ROOT /etc/javados/
-chEnv -add $DATA /etc/javados/data/
