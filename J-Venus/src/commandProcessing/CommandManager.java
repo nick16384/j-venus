@@ -29,11 +29,7 @@ public class CommandManager implements threads.VexusThread {
 	private String command;
 	private LinkedList<components.Command> cmdQueue;
 	public ArrayList<String> commandQueue; 
-	@Deprecated private ArrayList<String> options = new ArrayList<String>();
-	@Deprecated private Map<String, String> optionsWithValues = new HashMap<String, String>();
 	private ArrayList<String> params;
-	//For legacy support only, will be removed in the future
-	@Deprecated private Map<String, String> paramsWithValues = new HashMap<String, String>();
 	private Thread commandManagerThread;
 	
 	public CommandManager() {

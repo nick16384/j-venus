@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import libraries.OpenLib;
 
 
 public class File_CRS_LZSS

@@ -4,33 +4,20 @@ import java.awt.Color;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.Scanner;
 
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Utilities;
-
-import awt.windowManager.WindowMain;
 import components.Command;
 import components.ProtectedTextComponent;
 import engine.AWTANSI;
 import engine.sys;
-import javafx.application.Platform;
-import libraries.OpenLib;
 import libraries.VarLib;
 import main.Main;
 

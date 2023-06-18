@@ -1,13 +1,10 @@
 package engine;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import commandProcessing.EnvVarParser;
-import libraries.OpenLib;
 import components.Command;
 
 public class CommandParser {

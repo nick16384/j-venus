@@ -2,11 +2,8 @@ package commandProcessing;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -42,8 +39,6 @@ public class CommandMain {
 	private static LinkedList<components.Command> cmdQueue = new LinkedList<>();
 	private static components.Command commandObj = null;
 	public static ArrayList<String> commandQueue = new ArrayList<>(); 
-	private static ArrayList<String> options = new ArrayList<String>();
-	private static Map<String, String> optionsWithValues = new HashMap<String, String>();
 	private static ArrayList<String> params = new ArrayList<String>();
 	//For legacy support only, will be removed in the future
 	private static Map<String, String> paramsWithValues = new HashMap<String, String>();
@@ -119,7 +114,6 @@ public class CommandMain {
 			sys.log("CMDMAIN", 3, "Mapping of parameters to internal variables failed. Not executing.");
 			return "ParseError";
 		}
-		paramsWithValues = optionsWithValues;
 		if (params != null && params.contains("--silent")) { silentExecution = true; }
 		if (params != null && params.contains("--noPrompt")) { noPrompt = true; }
 		

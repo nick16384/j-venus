@@ -3,17 +3,10 @@ package internalCommands;
 import engine.AWTANSI;
 import engine.sys;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 import libraries.FileCheckUtils;
-import libraries.OpenLib;
 import libraries.VarLib;
 
 public class File_listDirectory {

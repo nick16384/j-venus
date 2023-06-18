@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import components.IntentionalVexusErrorException;
 import engine.AWTANSI;
 import engine.sys;
-import main.Main;
 
 public class System_Cause_Error_Termination {
 	public static String causeErrTerm (ArrayList<String> params) throws IntentionalVexusErrorException {

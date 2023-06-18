@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import engine.sys;
-import libraries.OpenLib;
 import libraries.VarLib;
 
 
@@ -32,7 +31,7 @@ public class Cipher_Encrypt {
       sys.log("ENCRYPT", 0, "Encryption with Shift2C started...");
       sys.log("ENCRYPT", 0, "Text to encrypt: " + plaintext);
       String key = "";
-      SecureRandom random = new SecureRandom();
+      //SecureRandom random = new SecureRandom();
       plaintext = plaintext.replaceAll(" ", "E");
       plaintext = plaintext.toUpperCase();
       
