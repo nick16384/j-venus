@@ -97,7 +97,7 @@ public class Main extends JFrame {
 	 * Current Venus runtime in milliseconds since program start (idle watchdog).
 	 * @return
 	 */
-	public long getRuntime() {
+	public static long getRuntime() {
 		return System.currentTimeMillis() - ThreadAllocMain.getWDT().getTimeStart();
 	}
 }

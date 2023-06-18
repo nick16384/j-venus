@@ -154,8 +154,8 @@ public class JFxWinloader extends Application {
 					sys.log("JFX", 1, "Text write color hex: (0x)" + color.toString().substring(2, 8));
 					// Apply text color on new segment:
 					Main.cmdLine.setStyle(Main.cmdLine.getText().length() - text.length(),
-							Main.cmdLine.getText().length(), "-fx-fill: #"
-									+ color.toString().substring(2, 8) + ";");
+										  Main.cmdLine.getText().length(),
+										  "-fx-fill: #" + color.toString().substring(2, 8) + ";");
 				} catch (Exception ex) {
 					sys.log("JFX", 2, "Writing text to cmdLine failed.");
 					ex.printStackTrace();
