@@ -2,13 +2,7 @@ package threads;
 
 import engine.AWTANSI;
 import engine.sys;
-import libraries.OpenLib;
-import libraries.VarLib;
 import main.Main;
-
-import java.util.Random;
-
-import javax.swing.text.BadLocationException;
 
 import components.ProtectedTextComponent;
 

@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
-import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 
 import engine.sys;
@@ -27,7 +26,7 @@ public class KeyListenerAttacher {
 	public static void attachKeyListener(WindowMain mainWindow) {
 		
 		//JTextPane WindowMain.cmdLine = mainWindow.getCmdLine();
-		mainWindow.cmdLine.addKeyListener(new KeyListener() {
+		WindowMain.cmdLine.addKeyListener(new KeyListener() {
 			
 			
 			//TODO Use global key event and add to "keyPress" variable so that SWT can more easily detect what was typed newly.

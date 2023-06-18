@@ -54,7 +54,7 @@ public class PartiallyEditableInlineCSSTextArea extends InlineCssTextArea {
 							sys.log("Read-only text was affected. Reverting.");
 							this.clear();
 							
-							this.appendText(textUntilWritable);
+							super.appendText(textUntilWritable);
 							
 							reapplyStyle(styles);
 							

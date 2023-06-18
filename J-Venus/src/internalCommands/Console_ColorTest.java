@@ -3,7 +3,6 @@ package internalCommands;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import engine.AWTANSI;
 import engine.JFXANSI;
 import engine.sys;
 import main.Main;

@@ -2,11 +2,8 @@ package components;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import engine.sys;
-import libraries.OpenLib;
 import main.Main;
 
 public class Command {

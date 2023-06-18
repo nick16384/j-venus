@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.tools.*;
 
 import engine.sys;
-import libraries.OpenLib;
 import libraries.VarLib;
 
 /**
