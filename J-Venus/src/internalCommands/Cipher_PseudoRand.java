@@ -30,7 +30,7 @@ public class Cipher_PseudoRand {
 				return "ParamErr_WrongType";
 			}
 		} else {
-			seed = (int) Main.main.getRuntime(); //May result in overflow which increases unpredictability
+			seed = (int) main.Main.getRuntime(); //May result in overflow which increases unpredictability
 		}
 		sys.shellPrintln(AWTANSI.B_Yellow, "Warning: This computation is unsafe for cryptographic use!\n");
 		sys.shellPrintln(AWTANSI.B_Cyan, "Seed: " + seed);
