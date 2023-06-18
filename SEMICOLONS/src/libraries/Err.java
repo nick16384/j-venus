@@ -74,7 +74,7 @@ public class Err {
 					"Could not create or write to dump file at '" + dumpFile.toFile().getAbsolutePath() + "'");
 			return;
 		}
-		sys.log("Dump file created at " + dumpFile.toFile().getAbsolutePath());
-		sys.shellPrintln(AWTANSI.D_Green, "Dump file created at " + dumpFile.toFile().getAbsolutePath());
+		sys.log("Stacktrace saved at " + dumpFile.toFile().getAbsolutePath());
+		sys.shellPrintln(AWTANSI.D_Green, "Stacktrace saved at " + dumpFile.toFile().getAbsolutePath());
 	}
 }
