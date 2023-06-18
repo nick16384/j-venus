@@ -8,20 +8,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.net.UnknownHostException;
-import java.nio.file.FileSystems;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.text.Element;
 
 import engine.AWTANSI;
 import engine.sys;
 import main.Main;
-import libraries.VarLib;
-import libraries.VarLib.*;
 
 public class OpenLib {
 	public static void initVars() {

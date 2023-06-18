@@ -4,9 +4,6 @@ import java.lang.Exception;
 
 import javax.swing.JFrame;
 
-import org.fxmisc.richtext.InlineCssTextArea;
-import org.fxmisc.richtext.CaretNode;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 

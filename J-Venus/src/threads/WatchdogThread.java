@@ -3,15 +3,10 @@ package threads;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
-import java.util.Set;
-
-import javax.swing.JTextPane;
-import javax.swing.text.BadLocationException;
 
 import awt.windowManager.WindowMain;
 import engine.AWTANSI;
 import engine.sys;
-import libraries.OpenLib;
 import libraries.VarLib;
 import main.Main;
 
@@ -67,7 +62,7 @@ public final class WatchdogThread implements VexusThread {
 									+ "be missing and try to reinstall.");
 							break;
 						} else if (!Main.ThreadAllocMain.getSWT().isRunning()) {
-							Main.mainFrameAWT.cmdLine.setText("Fatal error: ShellWriteThread not running, causing no more shell\n"
+							WindowMain.cmdLine.setText("Fatal error: ShellWriteThread not running, causing no more shell\n"
 									+ "output to be displayed. If this issue persists, try reinstalling.");
 							//This error message might not display due to SWT inactivity
 							stopWithError(1, 15000, "The Shell Write Thread is not running. This will most probably cause no\n"

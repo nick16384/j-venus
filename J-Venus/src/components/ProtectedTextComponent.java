@@ -1,9 +1,6 @@
 package components;
 
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.text.*;
 
 //Code from: https://tips4java.wordpress.com/2008/12/21/protected-text-component/
@@ -17,7 +14,6 @@ import javax.swing.text.*;
 public class ProtectedTextComponent
 {
 	private JTextComponent component;
-	private ProtectedHighlighter highlighter;
 	private ProtectedDocument document;
 
 	/**
@@ -40,10 +36,6 @@ public class ProtectedTextComponent
 		// Handles updates to the Document and caret movement
 
 		document = new ProtectedDocument(component);
-
-		//  Handles highlighting of the protected text
-
-		highlighter = new ProtectedHighlighter(component, color);
 	}
 
 	/**
@@ -97,6 +89,5 @@ public class ProtectedTextComponent
 		int end = lastElement.getEndOffset();
 
 		document.protect(start - 1, end - 1);
-		highlighter.addHighlight(start, end);
 	}
 }

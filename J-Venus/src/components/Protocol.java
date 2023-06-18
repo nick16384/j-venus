@@ -2,9 +2,7 @@ package components;
 
 import java.io.IOException;
 
-import commandProcessing.CommandMain;
 import engine.sys;
-import libraries.OpenLib;
 
 /**
  * Protocols are chains of commands intended for different uses and with additional properties.
@@ -16,7 +14,7 @@ public class Protocol {
 	private String name = "";
 	private int severity = 0;
 	private Command[] commands;
-	private String returnVal = "";
+	//private String returnVal = "";
 	public Protocol(String name, int severity, Command[] commands) {
 		this.name = name;
 		this.severity = severity;
@@ -45,7 +43,7 @@ public class Protocol {
 		else if (severity > 8) { sys.log("PRTCL", 2, "Severity is above specified max. level (8)"); }
 		
 		//Launch
-		int index = 0;
+		//int index = 0;
 		sys.log("PRTCL", 0, "Command to execute after each other:");
 		for (Command cmd : commands) { sys.log("PRTCL", 0, "> " + cmd.getFullCommand()); }
 		sys.log("PRTCL", 0, "Executing...");

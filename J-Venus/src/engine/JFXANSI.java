@@ -1,9 +1,6 @@
 package engine;
 
 import org.fxmisc.richtext.InlineCssTextArea;
-import org.fxmisc.richtext.StyledTextArea;
-
-import javafx.scene.control.TextArea;
 import main.Main;
 
 //import java.awt.Color;

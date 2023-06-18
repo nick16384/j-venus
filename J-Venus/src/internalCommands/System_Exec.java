@@ -2,7 +2,6 @@ package internalCommands;
 
 import engine.sys;
 import internalCommands.System_Exec;
-import main.Main;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,8 +11,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-
-import components.Command;
 
 public class System_Exec {
 	private static Process process;

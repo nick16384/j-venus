@@ -1,17 +1,9 @@
 package engine;
 
-import java.util.Map;
-
-import javax.swing.text.StyledDocument;
-
-import org.reactfx.util.Either;
-
 import libraries.OpenLib;
 import main.Main;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Contains relevant methods for logging and internal phases and modes

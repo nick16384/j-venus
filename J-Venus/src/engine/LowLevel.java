@@ -15,7 +15,6 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import libraries.OpenLib;
 import libraries.VarLib;
 import main.Main;
 

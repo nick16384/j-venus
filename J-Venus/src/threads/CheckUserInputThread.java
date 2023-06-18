@@ -2,8 +2,6 @@ package threads;
 
 import java.awt.event.KeyEvent;
 
-import org.w3c.dom.events.Event;
-
 import engine.AWTANSI;
 import engine.sys;
 import libraries.OpenLib;

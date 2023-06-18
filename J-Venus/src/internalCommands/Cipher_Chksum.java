@@ -4,7 +4,6 @@ import engine.sys;
 import internalCommands.Cipher_Chksum;
 import java.util.ArrayList;
 import java.util.Map;
-import libraries.OpenLib;
 
 
 
@@ -49,16 +48,16 @@ public class Cipher_Chksum
 
 
   
-  private static boolean skipMostOccurrenceCheck = false;
+  //private static boolean skipMostOccurrenceCheck = false;
   
   private static String lastSeed = "";
   private static char randomChar(String seed) {
     if (seed.isBlank()) {
       return '#';
     }
-    if (seed.equalsIgnoreCase(lastSeed)) {
+    /*if (seed.equalsIgnoreCase(lastSeed)) {
       skipMostOccurrenceCheck = true;
-    }
+    }*/
     seed = lastSeed;
     seed = seed.trim();
     char out = ' ';
