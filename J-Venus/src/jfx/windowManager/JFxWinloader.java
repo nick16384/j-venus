@@ -51,7 +51,7 @@ public class JFxWinloader extends Application {
 		try {
 			primaryStage.setTitle("S.E.M.I.C.O.L.O.N. Shell " + VarLib.getVersion());
 			
-			Main.cmdLine = new PartlyEditableInlineCSSTextArea("SHELL INIT");
+			Main.cmdLine = new PartiallyEditableInlineCSSTextArea("SHELL INIT");
 			
 			Main.cmdLine.setWrapText(true);
 			Main.cmdLine.setBackground(new Background(
@@ -159,6 +159,7 @@ public class JFxWinloader extends Application {
 									+ color.toString().substring(2, 8) + ";");
 				} catch (Exception ex) {
 					sys.log("JFX", 2, "Writing text to cmdLine failed.");
+					ex.printStackTrace();
 				}
 			});
 			Platform.requestNextPulse();
