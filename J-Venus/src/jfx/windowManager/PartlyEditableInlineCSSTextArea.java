@@ -39,13 +39,17 @@ public class PartlyEditableInlineCSSTextArea extends InlineCssTextArea {
 				// TODO add this to main class, otherwise there will be no effect
 				// FIXME message does not appear (thread is somehow still inactive)
 				
-				if (!this.getText().startsWith(textUntilWritable)) {
+				if (this.getText().length() < readOnlyToIndex) {
 					Platform.runLater(() -> {
 						Map<Integer, String> styles = new HashMap<Integer, String>();
 						styles = saveStyle();
 						
 						sys.log("Read-only text was affected. Reverting.");
 						this.clear();
+						
+						sys.log(textUntilWritable);
+						sys.log("Read only to index: " + readOnlyToIndex + ", Text length: " + currentShellText.length());
+						
 						this.appendText(textUntilWritable);
 						
 						reapplyStyle(styles);
@@ -89,7 +93,7 @@ public class PartlyEditableInlineCSSTextArea extends InlineCssTextArea {
 				&& newReadOnlyToIndex <= this.getLength()) {
 			readOnlyToIndex = newReadOnlyToIndex;
 		} else {
-			sys.log("CLASS:CSSTextArea", 3, "new read-only length index " + newReadOnlyToIndex + " out of bounds.");
+			sys.log("CLASS:CSSTextArea", 3, "New read-only length index " + newReadOnlyToIndex + " out of bounds.");
 		}
 	}
 	
@@ -104,9 +108,10 @@ public class PartlyEditableInlineCSSTextArea extends InlineCssTextArea {
 	}
 	
 	private void reapplyStyle(Map<Integer, String> styles) {
-		for (int i = 0; i < this.getText().length() - 1; i++) {
+		for (int i = 0; i < styles.size() - 1; i++) {
 			sys.log("Style loading progress: " + i + "/" + (this.getText().length() - 1));
-			this.setStyle(i > 0 ? i - 1 : i, i, styles.get(i));
+			this.setStyle(i, i + 1, styles.get(i));
+			while (!this.getStyleAtPosition(i).equals(styles.get(i))) {}
 		}
 	}
 }
