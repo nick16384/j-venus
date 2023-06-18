@@ -351,44 +351,48 @@ public class ShellWriteThread implements VexusThread {
 	 * exceptions may occur.
 	 */
 	public void updateShellStream() {
-		if (Main.javafxEnabled)
+		if (Main.javafxEnabled) {
+			// TODO add support for shell stream update with javafx
+			sys.log("SWT", 3, "Updating shell stream with JavaFX is currently unsupported.");
 			return;
-		String appendStr = ""; // Newly added text from user if any
-		try {
-			String cmdLineText = Main.mainFrameAWT.getCmdLine().getText();
-			String lastLineText = cmdLineText.split("\n")[cmdLineText.split("\n").length - 1];
-			String prevWriteLastLine = prevWrite.split("\n")[prevWrite.split("\n").length - 1];
-
-			// Remove any ANSI color code patterns
-			// Alternative REGEX if the one doesn't work: "\\d{1,2}(;\\d{1,2})?"
-			prevWriteLastLine = prevWriteLastLine.replaceAll("\u001B\\[[;\\d]*[ -/]*[@-~]", "");
-
-			appendStr = lastLineText.substring(prevWriteLastLine.length());
-			appendStr = appendStr.trim();
-		} catch (IndexOutOfBoundsException ioobe) {
-			appendStr = "";
-			sys.log("SHLWRT", 2, "No new user input.");
-			// ioobe.printStackTrace();
-		}
-		try {
-			sys.log("SWT:DEBUG", 1, "Appending new bytes to shellStream...");
-			shellStream.write(appendStr.getBytes());
-			shellStream.write("\n".getBytes());
-		} catch (IOException ioe) {
-			sys.log("SWT", 3, "Writing data to shellStream failed.");
-			ioe.printStackTrace();
-		}
-		sys.log("SHLWRT:DEBUG", 0, "Last line of previously written text: " + "\u001B[32m" + prevWrite + "\u001B[0m");
-		sys.log("SHLWRT:DEBUG", 0, "New user input: " + "\u001B[32m" + appendStr + "\u001B[0m");
-		try {
-			// Validate if stream data matches appendStr
-			if (shellReader.ready() && shellReader.readLine().equals(appendStr)) {
-				sys.log("SHLWRT:DEBUG", 0, "\u001B[32m stream data validated. \u001B[0m");
-			} else {
-				sys.log("SWT:DEBUG", 2, "\\u001B[1;33m stream data validation mismatch. \u001B[0m");
+		} else {
+			String appendStr = ""; // Newly added text from user if any
+			try {
+				String cmdLineText = Main.mainFrameAWT.getCmdLine().getText();
+				String lastLineText = cmdLineText.split("\n")[cmdLineText.split("\n").length - 1];
+				String prevWriteLastLine = prevWrite.split("\n")[prevWrite.split("\n").length - 1];
+				
+				// Remove any ANSI color code patterns
+				// Alternative REGEX if the one doesn't work: "\\d{1,2}(;\\d{1,2})?"
+				prevWriteLastLine = prevWriteLastLine.replaceAll("\u001B\\[[;\\d]*[ -/]*[@-~]", "");
+			
+				appendStr = lastLineText.substring(prevWriteLastLine.length());
+				appendStr = appendStr.trim();
+			} catch (IndexOutOfBoundsException ioobe) {
+				appendStr = "";
+				sys.log("SHLWRT", 2, "No new user input.");
+				// ioobe.printStackTrace();
 			}
-		} catch (IOException ioe) {
-			sys.log("SWT:DEBUG", 2, "\\u001B[1;33m stream data validation exception. \u001B[0m");
+			try {
+				sys.log("SWT:DEBUG", 1, "Appending new bytes to shellStream...");
+				shellStream.write(appendStr.getBytes());
+				shellStream.write("\n".getBytes());
+			} catch (IOException ioe) {
+				sys.log("SWT", 3, "Writing data to shellStream failed.");
+				ioe.printStackTrace();
+			}
+			sys.log("SHLWRT:DEBUG", 0, "Last line of previously written text: " + "\u001B[32m" + prevWrite + "\u001B[0m");
+			sys.log("SHLWRT:DEBUG", 0, "New user input: " + "\u001B[32m" + appendStr + "\u001B[0m");
+			try {
+				// Validate if stream data matches appendStr
+				if (shellReader.ready() && shellReader.readLine().equals(appendStr)) {
+					sys.log("SHLWRT:DEBUG", 0, "\u001B[32m stream data validated. \u001B[0m");
+				} else {
+					sys.log("SWT:DEBUG", 2, "\\u001B[1;33m stream data validation mismatch. \u001B[0m");
+				}
+			} catch (IOException ioe) {
+				sys.log("SWT:DEBUG", 2, "\\u001B[1;33m stream data validation exception. \u001B[0m");
+			}
 		}
 	}
 }

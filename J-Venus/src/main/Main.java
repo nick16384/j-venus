@@ -14,7 +14,7 @@ import engine.sys;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import jfx.windowManager.JFxWinloader;
-import jfx.windowManager.PartlyEditableInlineCSSTextArea;
+import jfx.windowManager.PartiallyEditableInlineCSSTextArea;
 import libraries.OpenLib;
 import libraries.VarLib;
 import threads.ThreadAllocator;
@@ -25,7 +25,7 @@ public class Main extends JFrame {
 	public static boolean singleThreaded = false;
 	public static boolean javafxEnabled = false;
 	
-	public static PartlyEditableInlineCSSTextArea cmdLine;
+	public static PartiallyEditableInlineCSSTextArea cmdLine;
 	public static Font shellFont;
 	public static final Color DEFAULT_SHELL_COLOR = Color.LIME;
 	
