@@ -12,6 +12,7 @@ import engine.sys;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -73,10 +74,11 @@ public class JFxWinloader extends Application {
 			
 			Main.cmdLine.relocate(0, 0);
 			
-			Main.cmdLine.setOnKeyPressed(event -> {
+			Main.cmdLine.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				
 				// Command execute and command repeat
 				if (event.getCode().equals(KeyCode.ENTER)) {
+					event.consume();
 					try {
 						KeyEventHandlers.actionOnEnter();
 					} catch (Exception ex) {
@@ -86,6 +88,7 @@ public class JFxWinloader extends Application {
 						libraries.OpenLib.cmdLinePrepare();
 					}
 				} else if (event.getCode().equals(KeyCode.UP)) {
+					event.consume();
 					try {
 						KeyEventHandlers.handleCommandRepeat();
 					} catch (Exception ex) {
@@ -104,13 +107,11 @@ public class JFxWinloader extends Application {
 					//TODO show big number on screen for font size change
 				}
 				
+				// Ignore text removal, if it would affect read-only text.
 				if (event.getCode().equals(KeyCode.BACK_SPACE)) {
-					//TODO find "protected" zone of last shell write (not user modified, and if backspace deleted
-					//that character, revert it.)
-					/*if (Main.cmdLine.caretPositionProperty().getValue() >
-					Arrays.stream(Main.cmdLine.getText().split("\n")).forEach((element) -> System.out.println(element))) {
-						Arrays.stream(Main.cmdLine.getText().split("\n")).forEach((element) -> System.out.println(element));
-					}*/
+					if (Main.cmdLine.getCaretPosition() <= Main.cmdLine.getReadOnlyToIndex()
+							|| !Main.cmdLine.getSelectedText().equals(""))
+					event.consume();
 				}
 			});
 			
