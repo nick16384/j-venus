@@ -48,7 +48,7 @@ semicolons/data/cmd_history_max_length\
 This project is still in very early development and currently **not** suitable for most applications.\
 You can use this shell for yourself and try / test it, but I won't guarantee anything is working or is usable to a certain degree.
 
-*For Windows users:*
+*For Windows users:*\
 The current main development is done on Linux and I am almost certain, that it won't work for you on Windows.
 
 As a final word, I'd like to say, that any constructive criticism, feedback or improvement is welcome and greatly appreciated (Implying that I don't get overwhelmed).
