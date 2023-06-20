@@ -42,6 +42,8 @@ public class FileCheckUtils {
 	
 	public static boolean isDir(File file) {
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (!exists(file))
 				return false;
 			else if (!file.isDirectory() || !file.getCanonicalFile().isDirectory())
@@ -61,6 +63,8 @@ public class FileCheckUtils {
 	public static boolean isDirStrict(File file) {
 		//If normal directory check returns true AND NIO directory check returns true
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (isDir(file) &&
 					(Files.isDirectory(file.toPath(), LinkOption.NOFOLLOW_LINKS)
 					|| Files.isDirectory(file.getCanonicalFile().toPath(), LinkOption.NOFOLLOW_LINKS))) {
@@ -77,6 +81,8 @@ public class FileCheckUtils {
 	
 	public static boolean isFile(File file) {
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (!exists(file))
 				return false;
 			else if (!file.isFile() || !file.getCanonicalFile().isFile())
@@ -96,6 +102,8 @@ public class FileCheckUtils {
 	public static boolean isFileStrict(File file) {
 		//If normal file check returns true AND NIO file check returns true
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (isDir(file) &&
 					(Files.isRegularFile(file.toPath(), LinkOption.NOFOLLOW_LINKS)
 					|| Files.isRegularFile(file.getCanonicalFile().toPath(), LinkOption.NOFOLLOW_LINKS))) {
@@ -115,6 +123,8 @@ public class FileCheckUtils {
 			//canRead(), canWrite(), and canExecute() cause problems on Windows
 			sys.log("FCU", 2, "Warning: The canRead() method may not work on Windows systems as desired.");
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (!exists(file))
 				return false;
 			else if (!Files.isReadable(file.toPath()) || !Files.isReadable(file.getCanonicalFile().toPath()))
@@ -132,6 +142,8 @@ public class FileCheckUtils {
 			//canRead(), canWrite(), and canExecute() cause problems on Windows
 			sys.log("FCU", 2, "Warning: The canWrite() method may not work on Windows systems as desired.");
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (!exists(file))
 				return false;
 			else if (!Files.isWritable(file.toPath()) || !Files.isWritable(file.getCanonicalFile().toPath()))
@@ -149,6 +161,8 @@ public class FileCheckUtils {
 			//canRead(), canWrite(), and canExecute() cause problems on Windows
 			sys.log("FCU", 2, "Warning: The canExecute() method may not work on Windows systems as desired.");
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (!exists(file))
 				return false;
 			else if (!Files.isExecutable(file.toPath()) || !Files.isExecutable(file.getCanonicalFile().toPath()))
@@ -163,6 +177,8 @@ public class FileCheckUtils {
 	
 	public static boolean isHidden(File file) {
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (!exists(file))
 				return false;
 			else if (!file.isHidden() || !file.getCanonicalFile().isHidden())
@@ -177,6 +193,8 @@ public class FileCheckUtils {
 	
 	public static boolean isRegularFile(File file) {
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (!exists(file))
 				return false;
 			else if (!isFile(file))
@@ -194,6 +212,8 @@ public class FileCheckUtils {
 	
 	public static boolean isSymlink(File file) {
 		try {
+			file = prefetchFile(file);
+			if (file == null) return DEFAULT;
 			if (!exists(file))
 				return false;
 			else if (file.getAbsolutePath().equals(file.getCanonicalPath()))
@@ -305,5 +325,47 @@ public class FileCheckUtils {
 		//TODO add FileCheckUtils functions to all internal commands, instead of their own implementation
 	}
 	
-	
+	/**
+	 * Converts "startFile" into the standardized file format.
+	 *  (Examples: "./tmp/sometextfile.txt" -> "/home/user/Downloads/tmp/sometextfile.txt" |
+	 *   "~/Desktop" -> "/home/user/Desktop/" | "/etc/semicolons/data" -> "/etc/semicolons/data/")
+	 * @param startFile
+	 * @return The same file with the standardized format, if "startFile" is valid; null otherwise.
+	 */
+	public static File prefetchFile(File startFile) {
+		if (!exists(startFile))
+			return null;
+		
+		String fileLocationString = startFile.getAbsolutePath();
+		
+		// TODO implement file format conversion (magic)
+		
+		// Replace leading dot with current / workspace location
+		if (fileLocationString.startsWith(".")) {
+			fileLocationString = fileLocationString.replaceFirst(".", VarLib.getCurrentDir());
+			sys.log("FCU", 1, "File prefetch: Replaced leading dot: " + fileLocationString);
+		}
+		
+		if (fileLocationString.startsWith("~")) {
+			fileLocationString = fileLocationString.replaceFirst("~", VarLib.getHomeDir().getAbsolutePath());
+			sys.log("FCU", 1, "File prefetch: Replaced leading \"~\" (home): " + fileLocationString);
+		}
+		
+		if (!fileLocationString.startsWith("/")
+				&& exists(new File(VarLib.getCurrentDir() + fileLocationString))) {
+			fileLocationString = VarLib.getCurrentDir() + VarLib.fsep + fileLocationString;
+			sys.log("FCU", 1, "File prefetch: Found file location inside workspace: " + fileLocationString);
+		}
+		
+		fileLocationString = fileLocationString.replaceAll("//", "/");
+		
+		sys.log("FCU", 0, "Final prefetch: " + fileLocationString);
+		
+		// TODO 1. Change Eclipse workspace variable, so dot is not automatically replaced by
+		// TODO 2. the eclipse workspace, when "new File(".")" is called. -> check via "ls home"
+		
+		// TODO add "prefetchFile()" to all internal commands using it.
+		
+		return new File(fileLocationString);
+	}
 }

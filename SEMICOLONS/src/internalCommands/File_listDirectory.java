@@ -22,9 +22,14 @@ public class File_listDirectory {
 		
 		//Preparation of "listDirName" and "listDir" variable
 		
-		if (LIB_Utils.checkValid(params) && FileCheckUtils.isDirStrict(new File(params.get(0)))) {
-			listDirName = params.get(0);
-			listDir = new File(params.get(0));
+		System.err.println("LIB_Utils valid check: " + LIB_Utils.checkValid(params));
+		System.err.println("FCU valid check: "
+				+ (LIB_Utils.checkValid(params) ? FileCheckUtils.isDir(new File(params.get(0))) : false));
+		System.err.println(new File(params.get(0)).getAbsolutePath());
+		
+		if (LIB_Utils.checkValid(params) && FileCheckUtils.isDir(new File(params.get(0)))) {
+			listDirName = FileCheckUtils.prefetchFile(new File(params.get(0))).toString();
+			listDir = FileCheckUtils.prefetchFile(new File(params.get(0)));
 		} else {
 			listDirName = VarLib.getCurrentDir();
 			listDir = new File(VarLib.getCurrentDir());

@@ -46,6 +46,7 @@ public class VarLib {
 	protected static File BinDir;
 	protected static File CmdDir;
 	protected static File DataDir;
+	protected static File HomeDir;
 	protected static File javaHome;
 	protected static File javaExec;
 	//Log file to save consoleLogStream to
@@ -73,6 +74,9 @@ public class VarLib {
 	}
 	public static File getDataDir() {
 		return DataDir;
+	}
+	public static File getHomeDir() {
+		return HomeDir;
 	}
 	public static File getLogFile() {
 		return logfile;

@@ -52,6 +52,7 @@ public class OpenLib {
 			VarLib.BinDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "bin");
 			VarLib.CmdDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "commands");
 			VarLib.DataDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "data");
+			VarLib.HomeDir = new File(System.getProperty("user.home"));
 			VarLib.path = "/";
 			VarLib.javaExec = new File(VarLib.getJavaHome().getAbsoluteFile()
 					+ VarLib.fsep + "bin" + VarLib.fsep + "java");
@@ -76,6 +77,7 @@ public class OpenLib {
 			VarLib.BinDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "bin");
 			VarLib.CmdDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "commands");
 			VarLib.DataDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "data");
+			VarLib.HomeDir = new File(System.getProperty("user.home"));
 			VarLib.path = System.getenv("SYSTEMROOT") + "\\";
 			VarLib.javaExec = new File(VarLib.getJavaHome().getAbsoluteFile()
 					+ VarLib.fsep + "bin" + VarLib.fsep + "java.exe");
