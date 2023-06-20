@@ -29,7 +29,7 @@ public class Main extends JFrame {
 	public static ThreadAllocator ThreadAllocMain;
 	public static JFxWinloader jfxWinloader;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 		//==================================== INIT ====================================
 		argsMain = args;
 		
