@@ -31,9 +31,9 @@ public class CheckInstall {
 			fsroot = VarLib.getFSRoot();
 		}
 		
-		File vxRoot = new File(fsroot + fs + "etc" + fs + "venus");
-		File vxBin = new File(fsroot + fs + "etc" + fs + "venus" + fs + "bin");
-		File vxData = new File(fsroot + fs + "etc" + fs + "venus" + fs + "data");
+		File vxRoot = new File(fsroot + fs + "etc" + fs + "semicolons");
+		File vxBin = new File(fsroot + fs + "etc" + fs + "semicolons" + fs + "bin");
+		File vxData = new File(fsroot + fs + "etc" + fs + "semicolons" + fs + "data");
 		
 		if (!Files.exists(vxRoot.toPath(), LinkOption.NOFOLLOW_LINKS)) {
 			fileErrors = vxRoot.getAbsolutePath();

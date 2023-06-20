@@ -304,4 +304,6 @@ public class FileCheckUtils {
 		
 		//TODO add FileCheckUtils functions to all internal commands, instead of their own implementation
 	}
+	
+	
 }

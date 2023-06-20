@@ -82,7 +82,8 @@ public class File_listDirectory {
 			finalListingDirs = finalListingDirs + dirName + "\n";
 			currentLineLength = 0;
 		}
-		sys.shellPrintln(AWTANSI.B_Green, finalListingDirs);
+		if (!finalListingDirs.isBlank())
+			sys.shellPrintln(AWTANSI.B_Green, finalListingDirs);
 		
 		//List files
 		for (String fileName : files) {
@@ -94,7 +95,8 @@ public class File_listDirectory {
 			finalListingFiles = finalListingFiles + fileName + "\n";
 			currentLineLength = 0;
 		}
-		sys.shellPrintln(AWTANSI.B_Yellow, finalListingFiles);
+		if (!finalListingFiles.isBlank())
+			sys.shellPrintln(AWTANSI.B_Yellow, finalListingFiles);
 		
 		//List every other unknown element
 		for (String unknownName : unknown) {
@@ -106,7 +108,8 @@ public class File_listDirectory {
 			finalListingUnknown = finalListingUnknown + unknownName + "\n";
 			currentLineLength = 0;
 		}
-		sys.shellPrint(AWTANSI.B_Red, finalListingUnknown);
+		if (!finalListingUnknown.isBlank())
+			sys.shellPrint(AWTANSI.B_Red, finalListingUnknown);
 
 		return null;
 	}

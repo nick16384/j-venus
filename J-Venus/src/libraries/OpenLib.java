@@ -45,7 +45,7 @@ public class OpenLib {
 				} catch (Exception ex) { sys.log(""); ex.printStackTrace(); }
 			
 			if (!FileCheckUtils.isDir(VarLib.DfltDir))
-				VarLib.DfltDir = new File(VarLib.fsep + "etc" + VarLib.fsep + "venus");
+				VarLib.DfltDir = new File(VarLib.fsep + "etc" + VarLib.fsep + "semicolons");
 			// === SPECIAL ROOT FOLDER SPECIFIED END ===
 			
 			VarLib.TempDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "temp");
@@ -68,10 +68,10 @@ public class OpenLib {
 				} catch (Exception ex) { sys.log(""); ex.printStackTrace(); }
 			
 			if (!FileCheckUtils.isDir(VarLib.DfltDir))
-				VarLib.DfltDir = new File("C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "J-Venus");
+				VarLib.DfltDir = new File("C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "SEMICOLONS");
 			// === SPECIAL ROOT FOLDER SPECIFIED END ===
 			
-			VarLib.DfltDir = new File("C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "J-Venus");
+			VarLib.DfltDir = new File("C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "SEMICOLONS");
 			VarLib.TempDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "temp");
 			VarLib.BinDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "bin");
 			VarLib.CmdDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "commands");
@@ -186,33 +186,11 @@ public class OpenLib {
 			Main.mainFrameAWT.getCmdLine().setEditable(false);
 		if (sys.getActivePhase().equals("init")) {
 			
-			/*HighLevel.shellPrint(1, "HIDDEN", "J-Vexus Version: " + VarLib.VERSION
-					+ " Warning: Beta Version, Problems may occur! \n");
-			HighLevel.shellPrint(1, "HIDDEN", "Copyright(C) 2021 - 2022 The J-Vexus Project. All rights reserved. \n");
-			HighLevel.shellPrint(1, "HIDDEN", "GNU General Public License v3. Created with Oracle Eclipse.\n");
-			HighLevel.shellPrint(1, "HIDDEN", "\n");
-			HighLevel.shellPrint(1, "HIDDEN", "General System information: \n");
-			HighLevel.shellPrint(1, "HIDDEN", "Running on: " + VarLib.osName + "\n");
-			HighLevel.shellPrint(1, "HIDDEN", "Set Install Folder: " + VarLib.DfltDir.getAbsolutePath() + "\n");
-			//HighLevel.shellPrint(1, "HIDDEN", "Set Log Folder: " + jDOSLogDir.getAbsolutePath() + "\n");
-			HighLevel.shellPrint(1, "HIDDEN", "\n");
-			HighLevel.shellPrint(1, "HIDDEN", "Running in shell mode. Type 'end-session' to return to linux. \n");
-			HighLevel.shellPrint(1, "HIDDEN", "\n");*/
 			sys.shellPrint(VarLib.getMOTD()); //Print message of the day, when in init phase
-			
 			VarLib.prompt = VarLib.getPromptWithPattern(VarLib.promptPattern);
 			sys.shellPrint(1, "HIDDEN", VarLib.prompt);
+			
 		} else if (sys.getActivePhase().equals("run")) {
-			//Legacy code
-			/*try {
-				if (!Main.cmdLine.getText().isBlank()) { //Just a big bunch of code to add an extra empty line(if not existent)
-					if (!Main.cmdLine.getText().split("\n")[Main.cmdLine.getText().split("\n").length - 1].isBlank()) { //You don't have to understand this
-						sys.shellPrint(1, "HIDDEN", "\n");
-					} else { logWrite("LIB", 2, "Is blank"); }
-				}
-			} catch (ArrayIndexOutOfBoundsException aioobe) {
-				logWrite("LIB", 2, "LIB: You shouldn't see this, but if so, an ArrayIndexOutOfBoundsException occured. This is referred as nope.");
-			} // End of the extra line adding*/
 			
 			VarLib.prompt = VarLib.getPromptWithPattern(VarLib.promptPattern);
 			sys.shellPrint(AWTANSI.B_Green, "\n" + VarLib.prompt);

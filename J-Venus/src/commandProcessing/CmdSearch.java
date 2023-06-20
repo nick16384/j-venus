@@ -9,6 +9,9 @@ public class CmdSearch {
 	private static String returnVal = "";
 	public static String findCommandAndExecute(String command, ArrayList<String> params) throws Exception {
 		command = command.trim();
+		
+		sys.shellPrint("\n");
+		
 		switch (command) {
 		//All commands derived from package internalCommands
 		//Console / shell commands
