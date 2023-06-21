@@ -1,4 +1,5 @@
 ## S.E.M.I.C.O.L.O.N.S.
+![The SEMICOLONS icon](https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png)
 or: \
 **S**uper \
 **E**nhanced \
@@ -9,7 +10,7 @@ or: \
 **L**inux-like \
 **O**S-independent \
 **N**ative-Java \
-**S**hell \
+**S**hell
 
 ## Installation
 ***Note: Currently, there is no installer available and the overall "installation" process is only roughly implemented. \
