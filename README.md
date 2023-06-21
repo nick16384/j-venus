@@ -1,5 +1,5 @@
 ## S.E.M.I.C.O.L.O.N.S.
-<img align="left" src="https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png">
+<img align="right" src="https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png">
 <!-- This text segment has to be HTML formatted, because it's right next to the image -->
 or: <br>
 <b>S</b>buper <br>
