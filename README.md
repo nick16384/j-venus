@@ -13,6 +13,12 @@ or: <br>
 <b>N</b>ative-Java <br>
 <b>S</b>hell
 
+## What is "S.E.M.I.C.O.L.O.N.S."?
+S.E.M.I.C.O.L.O.N.S. is a java shell project, which is planned to contain a lot of advanced and \
+helpful features. (Probably more than any "usual" shell). Reaching this point is far in the future \
+and I am programming just for fun, so don't wonder about the current pile of bugs, instabilities, \
+lack of compatibility and features, etc.
+
 ## Installation
 ***Note: Currently, there is no installer available and the overall "installation" process is only roughly implemented. \
 If you really want to install this "Earliest Access" Version, here is some useful data:*** \
@@ -45,6 +51,13 @@ semicolons/data/cmd_history_max_length\
 
 **If you want to use SEMICOLONS at another root directory than default, use the `--root-folder` parameter.**\
 **The default location is `/etc/semicolons/` on Linux, and `C:\Program Files\SEMICOLONS\` on Windows.**
+
+## A little bit of background for the project
+In 2021, I wanted to start and maintain a new (and bigger) Java project. \
+It would finally turn out, to be a shell / console with a lot of advanced feature ideas, \
+but development was (and still is) quite slow and unregular. During the development,
+S.E.M.I.C.O.L.O.N.S. started as a 
+<!-- Add a few bullet points for the rename history -->
 
 ## Final note
 This project is still in very early development and currently **not** suitable for most applications.\
