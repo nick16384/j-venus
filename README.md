@@ -1,5 +1,5 @@
 ## S.E.M.I.C.O.L.O.N.S.
-![The SEMICOLONS icon](https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png)
+<img align="left" src="https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png">
 or: \
 **S**uper \
 **E**nhanced \
