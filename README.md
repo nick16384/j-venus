@@ -1,16 +1,17 @@
 ## S.E.M.I.C.O.L.O.N.S.
 <img align="left" src="https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png">
+<!-- This text segment has to be HTML formatted, because it's right next to the image -->
 or: <br>
-**S**uper <br>
-**E**nhanced <br>
-**M**ultithreaded <br>
-**I**nteractive <br>
-(**C**onstantly) **C**rashing <br>
-**O**vercomplicated <br>
-**L**inux-like <br>
-**O**S-independent <br>
-**N**ative-Java <br>
-**S**hell
+<b>S</b>buper <br>
+<b>E</b>nhanced <br>
+<b>M</b>ultithreaded <br>
+<b>I</b>nteractive <br>
+(<b>C</b>onstantly) <b>C</b>rashing <br>
+<b>O</b>vercomplicated <br>
+<b>L</b>inux-like <br>
+<b>O</b>S-independent <br>
+<b>N</b>ative-Java <br>
+<b>S</b>hell
 
 ## Installation
 ***Note: Currently, there is no installer available and the overall "installation" process is only roughly implemented. \
