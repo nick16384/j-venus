@@ -2,7 +2,7 @@
 <img align="right" src="https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png">
 <!-- This text segment has to be HTML formatted, because it's right next to the image -->
 or: <br>
-<b>S</b>buper <br>
+<b>S</b>uper <br>
 <b>E</b>nhanced <br>
 <b>M</b>ultithreaded <br>
 <b>I</b>nteractive <br>
@@ -41,8 +41,8 @@ semicolons/data/semicolons-icon.[anyImageFormat]: An image used as the app icon 
 \
 **_Files that are deprecated and due for removal:_\
 semicolons/data/cmd_history_max_length\
--> Likely implemented into another file or hardcoded\
-\
+-> Likely implemented into another file or hardcoded
+
 **If you want to use SEMICOLONS at another root directory than default, use the `--root-folder` parameter.**\
 **The default location is `/etc/semicolons/` on Linux, and `C:\Program Files\SEMICOLONS\` on Windows.**
 
