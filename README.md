@@ -1,15 +1,15 @@
 ## S.E.M.I.C.O.L.O.N.S.
 <img align="left" src="https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png">
-or: \
-**S**uper \
-**E**nhanced \
-**M**ultithreaded \
-**I**nteractive \
-(**C**onstantly) **C**rashing \
-**O**vercomplicated \
-**L**inux-like \
-**O**S-independent \
-**N**ative-Java \
+or: <br>
+**S**uper <br>
+**E**nhanced <br>
+**M**ultithreaded <br>
+**I**nteractive <br>
+(**C**onstantly) **C**rashing <br>
+**O**vercomplicated <br>
+**L**inux-like <br>
+**O**S-independent <br>
+**N**ative-Java <br>
 **S**hell
 
 ## Installation
