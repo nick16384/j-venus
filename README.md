@@ -52,12 +52,29 @@ semicolons/data/cmd_history_max_length\
 **If you want to use SEMICOLONS at another root directory than default, use the `--root-folder` parameter.**\
 **The default location is `/etc/semicolons/` on Linux, and `C:\Program Files\SEMICOLONS\` on Windows.**
 
+
+## Current development status:
+The following list lists all current issues and features to be implemented.
+Be aware, that it might not be fully up to date, because this list isn't updated daily.
+- [x] \[Feature] I did something
+- [ ] \[Bug/Issue] I didn't do a second thing
+
 ## A little bit of background for the project
 In 2021, I wanted to start and maintain a new (and bigger) Java project. \
 It would finally turn out, to be a shell / console with a lot of advanced feature ideas, \
-but development was (and still is) quite slow and unregular. During the development,
-S.E.M.I.C.O.L.O.N.S. started as a 
-<!-- Add a few bullet points for the rename history -->
+but development was (and still is) quite slow and unregular. During the development, \
+S.E.M.I.C.O.L.O.N.S. started as a tiny, bugged, unstable and alomost-unable-to-do-anything-shell, \
+which was lost later due to improper backups and accidental deletion. \
+Since the project was rebuilt from scratch (it was worth it, the 0.1 version was a huge mess), it \
+now had a completely different command structure, more stability and moved on being developed. \
+Aaaand there is another point I don't want to forget: S.E.M.I.C.O.L.O.N.S. had undergone a lot of \
+renames to now. These include the following 4:
+```
+1. JDOS (Java Disk Operating System -> DOS was derived from Microsoft and more meant like "command line") [2020 - mid 2022]
+2. J-Vexus (Ja-Va EXtensible Universal Shell) [mid 2022 - late mid 2022]
+3. J-Venus (JaVa Extensible [The 'n' was never defined] Universal Shell) [late mid 2022 - early 2023]
+4. SEMICOLONS (See above for abbreviation) [early 2023 - now] (Current)
+```
 
 ## Final note
 This project is still in very early development and currently **not** suitable for most applications.\
