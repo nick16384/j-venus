@@ -56,8 +56,24 @@ semicolons/data/cmd_history_max_length\
 ## Current development status:
 The following list lists all current issues and features to be implemented.
 Be aware, that it might not be fully up to date, because this list isn't updated daily.
-- [x] \[Feature] I did something
-- [ ] \[Bug/Issue] I didn't do a second thing
+- [ ] ⛔ \[Feature] Add "undo" command for file operation (after e.g. accidental file deletion)
+- [ ] ⛔ \[Feature] Add support for command interaction (Bi-directional streams)
+- [ ] 🔁 \[Feature] Live syntax highlighting, as user types (JavaFX only, if.)
+- [x] ✔️ \[Bug/Issue] Make command executable, even if caret is on the middle of it
+- [x] ✔️ \[Bug/Issue] Don't allow shell text to be edited by the user
+- [ ] ⛔ \[Feature] Bi-Directional Network communication (User types and the other shell on another machine sees it)
+- [ ] ⛔ \[Feature] Slight transparency for window on systems, that support it
+- [ ] 🔁 \[Feature] Add keyboard shortcuts (e.g. CTRL + C for SIGTERM)
+
+**Legend**: \
+✔️ = Fully implemented and functional \
+✅ = Implemented / fixed, but to be tested \
+🔁 = Currently being addressed \
+⛔ = Currently not implemented / fixed \
+*Special:* \
+🔶 = Cancelled (Too complex or Java API doesn't support it) \
+⬜ = Unknown (Bug/Issue not accepted / validated yet)
+
 
 ## A little bit of background for the project
 In 2021, I wanted to start and maintain a new (and bigger) Java project. \
