@@ -198,16 +198,15 @@ public class VarLib {
 			engine.sys.shellPrint(3, "VARLIB", "Cannot set an envV with value 'null', when in RUN phase.\n");
 		}
 		
-		sys.log("VARLIB", 1, "Adding new envV '" + key + "' -> '" + val + "'");
+		String envMsgOut = "New environment variable '" + key + "' -> '" + val + "' : ";
 		env.put(key, val);
 		
-		sys.log("VARLIB", 1, "Finished adding envV, validating...");
 		if (getEnv(key) != null && getEnv(key).equals(val)) {
-			sys.log("VARLIB", 1, "Validation succeeded: " + key + ", " + getEnv(key));
+			envMsgOut += "SUCCESS";
 			if (!sys.getActivePhase().equals("init"))
 				sys.shellPrint(AWTANSI.B_Green, "Success: " + key + " -> " + val + "\n");
 		} else {
-			sys.log("VARLIB", 3, "Validation failed; " + val + " != " + getEnv(key));
+			envMsgOut += "FAIL";
 			if (!sys.getActivePhase().equals("init")) {
 				sys.shellPrint(AWTANSI.B_Yellow, "Could not create envV. Information below:\n");
 				sys.shellPrint("Created variable, but validation failed \\/\n"
@@ -217,6 +216,7 @@ public class VarLib {
 				sys.shellPrint(AWTANSI.B_Magenta, "Try 'env' to see, if your envV exists or try again.\n");
 			}
 		}
+		sys.log("VARLIB", 1, envMsgOut);
 	}
 	
 	//TODO fix "max env size not existing" error
@@ -304,6 +304,6 @@ public class VarLib {
 	}
 	
 	public static String getMOTD () {
-		return motd;
+		return motd.isBlank() ? "MOTD is empty\n" : motd;
 	}
 }
