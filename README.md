@@ -1,7 +1,10 @@
 ## S.E.M.I.C.O.L.O.N.S.
+An advanced Java written shell / console for any operating system.
+
+## What does the abbreviation mean?
 <img align="right" src="https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png">
 <!-- This text segment has to be HTML formatted, because it's right next to the image -->
-or: <br>
+Well, <br>
 <b>S</b>uper <br>
 <b>E</b>nhanced <br>
 <b>M</b>ultithreaded <br>
