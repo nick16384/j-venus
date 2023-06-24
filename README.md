@@ -59,14 +59,15 @@ semicolons/data/cmd_history_max_length\
 ## Current development status:
 The following list lists all current issues and features to be implemented.
 Be aware, that it might not be fully up to date, because this list isn't updated daily.
-- [ ] ⛔ \[Feature] Add "undo" command for file operation (after e.g. accidental file deletion)
-- [ ] ⛔ \[Feature] Add support for command interaction (Bi-directional streams)
-- [ ] 🔁 \[Feature] Live syntax highlighting, as user types (JavaFX only, if.)
-- [x] ✔️ \[Bug/Issue] Make command executable, even if caret is on the middle of it
-- [x] ✔️ \[Bug/Issue] Don't allow shell text to be edited by the user
-- [ ] ⛔ \[Feature] Bi-Directional Network communication (User types and the other shell on another machine sees it)
-- [ ] ⛔ \[Feature] Slight transparency for window on systems, that support it
-- [ ] 🔁 \[Feature] Add keyboard shortcuts (e.g. CTRL + C for SIGTERM)
+- [ ] 1. ⛔ \[Feature] Add "undo" command for file operation (after e.g. accidental file deletion)
+- [ ] 2. ⛔ \[Feature] Add support for command interaction (Bi-directional streams)
+- [ ] 3. 🔁 \[Feature] Live syntax highlighting, as user types (JavaFX only, if.)
+- [x] 4. ✔️ \[Bug/Issue] Make command executable, even if caret is on the middle of it
+- [x] 5. ✔️ \[Bug/Issue] Don't allow shell text to be edited by the user
+- [ ] 6. ⛔ \[Feature] Bi-Directional Network communication (User types and the other shell on another machine sees it)
+- [ ] 7. ⛔ \[Feature] Slight transparency for window on systems, that support it
+- [ ] 8. 🔁 \[Feature] Add keyboard shortcuts (e.g. CTRL + C for SIGTERM)
+- [ ] 9. 🔁 \[Feature] Add CLI support (don't launch another window)
 
 **Legend**: \
 ✔️ = Fully implemented and functional \
