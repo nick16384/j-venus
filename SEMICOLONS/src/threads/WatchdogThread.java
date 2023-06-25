@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import awt.windowManager.WindowMain;
 import engine.AWTANSI;
 import engine.sys;
+import javafx.application.Platform;
 import libraries.VarLib;
 import main.Main;
 
@@ -202,25 +203,34 @@ public final class WatchdogThread implements VexusThread {
 	 * @param errMsg         Error message to display to the user
 	 */
 	protected static final void stopWithError(int exitCode, int waitBeforeStop, String errMsg) {
-		new components.ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
-		Main.mainFrameAWT.getCmdLine().setText("");
+		try { Thread.sleep(1000); } catch (InterruptedException ie) { ie.printStackTrace(); }
+		if (Main.javafxEnabled) {
+			Platform.runLater(() -> { Main.cmdLine.clear(); });
+		} else {
+			new components.ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
+			Main.mainFrameAWT.getCmdLine().setText("");
+		}
 		sys.setActivePhase("error");
 		sys.setShellMode("native");
 		try { Thread.sleep(200); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		sys.log("[WDT]", 4, errMsg);
-		sys.shellPrintln(AWTANSI.B_Yellow,
-				"\n\n===============================================\n"
-				+ "There was an operation-critical error and execution cannot proceed.\n\n"
-				+ errMsg + "\n\n"
-				+ "I'm very sorry for that, but Vexus is in beta and things like this happen all the time.\n"
-				+ "Please contact me, if this error is reproducible and bugs you around (a lot):\n"
-				+ "https://theophil.pudelkern.com/\n"
-				+ "===============================================");
-		Main.mainFrameAWT.getCmdLine().setEditable(false);
+		Platform.runLater(() -> {
+			sys.shellPrintln(AWTANSI.B_Yellow,
+					"\n\n===============================================\n"
+							+ "There was an operation-critical error and execution cannot proceed.\n\n"
+							+ errMsg + "\n\n"
+							+ "I'm very sorry for that, but Vexus is in beta and things like this happen all the time.\n"
+							+ "Please contact me, if this error is reproducible and bugs you around (a lot):\n"
+							+ "https://theophil.pudelkern.com/\n"
+							+ "===============================================");
+		});
+		if (!Main.javafxEnabled) { Main.mainFrameAWT.getCmdLine().setEditable(false); }
 		sys.shellPrintln(AWTANSI.B_Cyan, "Log file is at: " + VarLib.getLogFile().getAbsolutePath());
 		if (waitBeforeStop > 100 && waitBeforeStop < 60000) {
+			Platform.runLater(() -> {
 			sys.shellPrintln(AWTANSI.B_Green,
 					"This JVM will be suspended in " + Double.toString(waitBeforeStop / 1000) + " seconds.");
+			});
 			try {
 				Thread.sleep(waitBeforeStop);
 			} catch (InterruptedException ie) {
@@ -229,7 +239,9 @@ public final class WatchdogThread implements VexusThread {
 		} else {
 			sys.log("WTT", 3, "Can't wait less than 100 or more than 60,000 milliseconds until VM suspension.");
 			sys.log("WTT", 3, "Defaulting to 10 seconds.");
-			sys.shellPrintln(AWTANSI.B_Green, "This JVM will be suspended in 10 seconds.");
+			Platform.runLater(() -> {
+				sys.shellPrintln(AWTANSI.B_Green, "This JVM will be suspended in 10 seconds.");
+			});
 			try {
 				Thread.sleep(waitBeforeStop);
 			} catch (InterruptedException ie) {

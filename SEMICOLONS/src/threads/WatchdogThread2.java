@@ -14,15 +14,13 @@ public class WatchdogThread2 implements VexusThread {
 			public void run() {
 				Thread.currentThread().setPriority(4); //1 is MIN_PRIORITY, 10 is MAX_PRIORITY
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(5000);
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
 				}
 				while (true) {
 					if (sys.getActivePhase().equals("run")) {
 						if (Main.ThreadAllocMain.isWDTActive()) {
-							/*sys.shellPrintln(AWTANSI.B_Green, "Init success!");
-							OpenLib.cmdLinePrepare();*/
 							
 							try {
 								if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
@@ -35,6 +33,11 @@ public class WatchdogThread2 implements VexusThread {
 								sys.log("WDT2", 3, "Setting cursor to last text position threw an error. Main.mainFrame probably is null.");
 							} catch (IllegalArgumentException iae) {
 								sys.log("WDT2", 3, "Setting cursor to last text position threw an error, because the set position was out of range.");
+							}
+							
+							if (Main.javafxEnabled && Main.cmdLine.getText().equals("SHELL INIT")) {
+								System.err.println("What have I done to you?!");
+								WatchdogThread.stopWithError(1, 15000, "The shell didn't initialize properly. Try again.");
 							}
 						} else {
 							sys.shellPrint(AWTANSI.B_Yellow, "Init fail.\n");
