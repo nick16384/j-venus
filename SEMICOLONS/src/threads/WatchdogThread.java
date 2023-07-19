@@ -144,8 +144,7 @@ public final class WatchdogThread implements VexusThread {
 				//====================================== CHECKING END ======================================
 
 				long activeTime = System.currentTimeMillis() - timeStart;
-				sys.log("STOPPING", 0, "Vexus active time: " + activeTime + "ms");
-				sys.log("STOPPING", 0, "Saving log file to: /var/J-Vexus_logs/ ");
+				sys.log("STOPPING", 0, "SEMICOLONS active time: " + activeTime + "ms");
 
 				// String logFilePath = "/var/J-Vexus_logs/" + "logfile1.txt";
 
@@ -219,9 +218,9 @@ public final class WatchdogThread implements VexusThread {
 					"\n\n===============================================\n"
 							+ "There was an operation-critical error and execution cannot proceed.\n\n"
 							+ errMsg + "\n\n"
-							+ "I'm very sorry for that, but Vexus is in beta and things like this happen all the time.\n"
-							+ "Please contact me, if this error is reproducible and bugs you around (a lot):\n"
-							+ "https://theophil.pudelkern.com/\n"
+							+ "I'm very sorry for that, but SEMICOLONS is in beta and things like this happen all the time.\n"
+							+ "If you're familiar with github and this error is reproducible, please open a new issue under:\n"
+							+ "https://github.com/nick16384/semicolons\n"
 							+ "===============================================");
 		});
 		if (!Main.javafxEnabled) { Main.mainFrameAWT.getCmdLine().setEditable(false); }
