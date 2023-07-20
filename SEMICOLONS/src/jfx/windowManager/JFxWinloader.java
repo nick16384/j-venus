@@ -204,7 +204,7 @@ public class JFxWinloader extends Application {
 				+ "	-fx-translate-x: 4;\n"
 				+ "}";
 		
-		if (!libraries.FileCheckUtils.exists(cssFile)) {
+		if (!filesystem.FileCheckUtils.exists(cssFile)) {
 			try {
 				sys.log("JFX:CSS", 1, "External CSS stylesheet does not exist. Creating default file.");
 				cssFile.createNewFile();

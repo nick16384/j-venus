@@ -2,11 +2,12 @@ package internalCommands;
 
 import engine.AWTANSI;
 import engine.sys;
+import filesystem.FileCheckUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-import libraries.FileCheckUtils;
 import libraries.VarLib;
 
 public class File_listDirectory {
