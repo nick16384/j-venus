@@ -15,6 +15,7 @@ import javax.swing.text.Element;
 
 import engine.AWTANSI;
 import engine.sys;
+import filesystem.VirtualizedLocation;
 import main.Main;
 
 public class VarLib {
@@ -41,11 +42,11 @@ public class VarLib {
 	public final static String fsep = FileSystems.getDefault().getSeparator();
 	protected static String osName = "UnknownOS";
 	protected static Map<String, File> extCommands = new HashMap<>();
-	protected static File DfltDir;
-	protected static File TempDir;
-	protected static File BinDir;
-	protected static File CmdDir;
-	protected static File DataDir;
+	protected static VirtualizedLocation RootDir;
+	protected static VirtualizedLocation TempDir;
+	protected static VirtualizedLocation BinDir;
+	protected static VirtualizedLocation CmdDir;
+	protected static VirtualizedLocation DataDir;
 	protected static File HomeDir;
 	protected static File javaHome;
 	protected static File javaExec;
@@ -60,19 +61,19 @@ public class VarLib {
 	public static String getCurrentDir() {
 		return path;
 	}
-	public static File getDefaultDir() {
-		return DfltDir;
+	public static VirtualizedLocation getRootDir() {
+		return RootDir;
 	}
-	public static File getTempDir() {
+	public static VirtualizedLocation getTempDir() {
 		return TempDir;
 	}
-	public static File getBinDir() {
+	public static VirtualizedLocation getBinDir() {
 		return BinDir;
 	}
-	public static File getCmdDir() {
+	public static VirtualizedLocation getCmdDir() {
 		return CmdDir;
 	}
-	public static File getDataDir() {
+	public static VirtualizedLocation getDataDir() {
 		return DataDir;
 	}
 	public static File getHomeDir() {

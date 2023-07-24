@@ -150,7 +150,9 @@ public final class WatchdogThread implements VexusThread {
 
 				sys.log("WATCHDOG", 0, "Threads stopping...");
 				if (Main.javafxEnabled && Main.ThreadAllocMain.getJFXT().isGUIActive()) Main.jfxWinloader.stop();
-				System.exit(exitCode);
+
+				Main.restartVMIfSupported();
+				//System.exit(exitCode);
 			}
 		}, "WDT");
 	}

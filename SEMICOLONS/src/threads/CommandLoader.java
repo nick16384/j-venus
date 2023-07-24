@@ -38,8 +38,8 @@ public class CommandLoader {
 	@Deprecated
 	public static Map<String, File> loadCommands() throws IOException {
 		Map<String, File> extCommands = new HashMap<>();
-		File configFileSource = new File(VarLib.getDefaultDir() + VarLib.fsep + "commands.cfg");
-		File commandSource = new File(VarLib.getDefaultDir() + VarLib.fsep + "commands");
+		File configFileSource = new File(VarLib.getRootDir() + VarLib.fsep + "commands.cfg");
+		File commandSource = new File(VarLib.getRootDir() + VarLib.fsep + "commands");
 		
 		if (alreadyExecuted) {
 			sys.log("LDEXTCMDS", 2, "External commands already loaded. Cannot proceed.");
@@ -90,7 +90,7 @@ public class CommandLoader {
         	}
         	//Reading command by command and creating temporary files containing the code
         	for (File command : commands) {
-        		File commandTempPath = new File(VarLib.getDefaultDir().toString() + VarLib.fsep + "temp" + VarLib.fsep + command.getName().trim().replace(".jdexe", ".java"));
+        		File commandTempPath = new File(VarLib.getRootDir().toString() + VarLib.fsep + "temp" + VarLib.fsep + command.getName().trim().replace(".jdexe", ".java"));
         		command = new File(command.toString().trim().replaceAll("\n", ""));
         		sys.log("LDEXTCMDS", 0, "Processing command: " +  command);
         		String commandContent = Files.readString(command.toPath());
@@ -150,8 +150,8 @@ public class CommandLoader {
         	sys.log("LDEXTCMDS", 0, "LDCMDS: Compilation completed successfully.");
         }
         
-        Files.copy(Paths.get(VarLib.getDefaultDir() + VarLib.fsep + "temp" + VarLib.fsep + "*.class"), 
-    			Paths.get(VarLib.getDefaultDir() + VarLib.fsep + "bin"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(Paths.get(VarLib.getRootDir() + VarLib.fsep + "temp" + VarLib.fsep + "*.class"), 
+    			Paths.get(VarLib.getRootDir() + VarLib.fsep + "bin"), StandardCopyOption.REPLACE_EXISTING);
         
         sys.log("LDEXTCMDS", 0, "Compiling done.");
         sys.log("LDEXTCMDS", 0, "Deleting temporary files...");

@@ -15,6 +15,7 @@ import java.util.Calendar;
 import engine.AWTANSI;
 import engine.sys;
 import filesystem.FileCheckUtils;
+import filesystem.VirtualizedLocation;
 import main.Main;
 
 public class OpenLib {
@@ -41,18 +42,23 @@ public class OpenLib {
 			if (Arrays.asList(Main.argsMain).contains("--root-folder")
 					&& Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1] != null)
 				try {
-					VarLib.DfltDir
-						= new File(Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
+					VarLib.RootDir
+						= new VirtualizedLocation(
+								Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
 				} catch (Exception ex) { sys.log(""); ex.printStackTrace(); }
 			
-			if (!FileCheckUtils.isDir(VarLib.DfltDir))
-				VarLib.DfltDir = new File(VarLib.fsep + "etc" + VarLib.fsep + "semicolons");
+			if (!FileCheckUtils.isDir(VarLib.RootDir.getActualFile()))
+				VarLib.RootDir = new VirtualizedLocation(VarLib.fsep + "etc" + VarLib.fsep + "semicolons");
 			// === SPECIAL ROOT FOLDER SPECIFIED END ===
 			
-			VarLib.TempDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "temp");
-			VarLib.BinDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "bin");
-			VarLib.CmdDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "commands");
-			VarLib.DataDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "data");
+			VarLib.TempDir = new VirtualizedLocation(
+								VarLib.RootDir.getAbsolutePath() + VarLib.fsep + "temp");
+			VarLib.BinDir = new VirtualizedLocation(
+								VarLib.RootDir.getAbsolutePath() + VarLib.fsep + "bin");
+			VarLib.CmdDir = new VirtualizedLocation(
+								VarLib.RootDir.getAbsolutePath() + VarLib.fsep + "commands");
+			VarLib.DataDir = new VirtualizedLocation(
+								VarLib.RootDir.getAbsolutePath() + VarLib.fsep + "data");
 			VarLib.HomeDir = new File(System.getProperty("user.home"));
 			VarLib.path = "/";
 			VarLib.javaExec = new File(VarLib.getJavaHome().getAbsoluteFile()
@@ -65,19 +71,26 @@ public class OpenLib {
 			if (Arrays.asList(Main.argsMain).contains("--root-folder")
 					&& Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1] != null)
 				try {
-					VarLib.DfltDir
-						= new File(Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
+					VarLib.RootDir
+						= new VirtualizedLocation(
+								Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
 				} catch (Exception ex) { sys.log(""); ex.printStackTrace(); }
 			
-			if (!FileCheckUtils.isDir(VarLib.DfltDir))
-				VarLib.DfltDir = new File("C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "SEMICOLONS");
+			if (!FileCheckUtils.isDir(VarLib.RootDir.getActualFile()))
+				VarLib.RootDir = new VirtualizedLocation(
+									"C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "SEMICOLONS");
 			// === SPECIAL ROOT FOLDER SPECIFIED END ===
 			
-			VarLib.DfltDir = new File("C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "SEMICOLONS");
-			VarLib.TempDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "temp");
-			VarLib.BinDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "bin");
-			VarLib.CmdDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "commands");
-			VarLib.DataDir = new File(VarLib.DfltDir.getAbsolutePath() + VarLib.fsep + "data");
+			VarLib.RootDir = new VirtualizedLocation(
+								"C:" + VarLib.fsep + "Program Files" + VarLib.fsep + "SEMICOLONS");
+			VarLib.TempDir = new VirtualizedLocation(
+								VarLib.RootDir.getAbsolutePath() + VarLib.fsep + "temp");
+			VarLib.BinDir = new VirtualizedLocation(
+								VarLib.RootDir.getAbsolutePath() + VarLib.fsep + "bin");
+			VarLib.CmdDir = new VirtualizedLocation(
+								VarLib.RootDir.getAbsolutePath() + VarLib.fsep + "commands");
+			VarLib.DataDir = new VirtualizedLocation(
+								VarLib.RootDir.getAbsolutePath() + VarLib.fsep + "data");
 			VarLib.HomeDir = new File(System.getProperty("user.home"));
 			VarLib.path = System.getenv("SYSTEMROOT") + "\\";
 			VarLib.javaExec = new File(VarLib.getJavaHome().getAbsoluteFile()
@@ -85,7 +98,9 @@ public class OpenLib {
 		}
 		//Define log file, and create log stream
 		String logfileName = VarLib.getDateTime(true).replace("|", "_") + ".log";
-		VarLib.logfile = new File(VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "logs" + VarLib.fsep + logfileName);
+		VarLib.logfile = new File(
+				VarLib.getDataDir().getAbsolutePath() 
+				+ VarLib.fsep + "logs" + VarLib.fsep + logfileName);
 		try { VarLib.consoleLogStream = new PrintStream(VarLib.getLogFile()); }
 		catch (FileNotFoundException fnfe) { System.err.println("Log file could not be created under $ROOT/data/logs"); }
 		catch (NullPointerException npe) { System.err.println("NullPointerException while creating log stream."); }
@@ -110,7 +125,7 @@ public class OpenLib {
 		VarLib.addEnv("$FSROOT", VarLib.getFSRoot());
 		VarLib.addEnv("$USERNAME", VarLib.username);
 		VarLib.addEnv("$HOSTNAME", VarLib.hostname);
-		VarLib.addEnv("$VENUS_ROOT", VarLib.getDefaultDir().getAbsolutePath());
+		VarLib.addEnv("$VENUS_ROOT", VarLib.getRootDir().getAbsolutePath());
 		VarLib.addEnv("$VENUS_TMP", VarLib.getTempDir().getAbsolutePath());
 		VarLib.addEnv("$VENUS_BIN", VarLib.getBinDir().getAbsolutePath());
 		VarLib.addEnv("$VENUS_CMD", VarLib.getCmdDir().getAbsolutePath());
@@ -135,7 +150,7 @@ public class OpenLib {
 			VarLib.changeEnv("$FSROOT", VarLib.getFSRoot());
 			VarLib.changeEnv("$USERNAME", VarLib.username);
 			VarLib.changeEnv("$HOSTNAME", VarLib.hostname);
-			VarLib.changeEnv("$VENUS_ROOT", VarLib.getDefaultDir().getAbsolutePath());
+			VarLib.changeEnv("$VENUS_ROOT", VarLib.getRootDir().getAbsolutePath());
 			VarLib.changeEnv("$VENUS_TMP", VarLib.getTempDir().getAbsolutePath());
 			VarLib.changeEnv("$VENUS_BIN", VarLib.getBinDir().getAbsolutePath());
 			VarLib.changeEnv("$VENUS_CMD", VarLib.getCmdDir().getAbsolutePath());
@@ -157,7 +172,7 @@ public class OpenLib {
 			} else if (envName.equals("$HOSTNAME")) {
 				VarLib.changeEnv("$HOSTNAME", VarLib.hostname);
 			} else if (envName.equals("$JDOS_ROOT")) {
-				VarLib.changeEnv("$VENUS_ROOT", VarLib.getDefaultDir().getAbsolutePath());
+				VarLib.changeEnv("$VENUS_ROOT", VarLib.getRootDir().getAbsolutePath());
 			} else if (envName.equals("$JDOS_TMP")) {
 				VarLib.changeEnv("$VENUS_TMP", VarLib.getTempDir().getAbsolutePath());
 			} else if (envName.equals("$JDOS_BIN")) {

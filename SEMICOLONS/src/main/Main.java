@@ -1,11 +1,13 @@
 package main;
 
+import java.io.IOException;
 import java.lang.Exception;
 
 import javax.swing.JFrame;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.concurrent.CompletableFuture;
 
 import engine.sys;
 import javafx.scene.paint.Color;
@@ -32,6 +34,15 @@ public class Main extends JFrame {
 	public static void main(String[] args) {
 		//==================================== INIT ====================================
 		argsMain = args;
+		sys.log("MAIN", 1, "Commandline used for this VM (if empty, probably running on Windows):\n"
+				+ ProcessHandle.current().info().commandLine().get());
+		sys.log("MAIN", 1, "Parent(s) launch info:");
+		int stackedParentsCount = printProcessParentsInfo(ProcessHandle.current(), 0);
+		sys.log("MAIN", 1, "Stacked parents: " + stackedParentsCount);
+		if (stackedParentsCount > 20) {
+			sys.log("MAIN", 4, "This JVM instance has restarted itself too often. Shutting down.");
+			System.exit(1);
+		}
 		
 		System.out.println("[NoLog] Verifying installation files...");
 		if (Arrays.asList(args).contains("--no-check-install")) {
@@ -99,5 +110,27 @@ public class Main extends JFrame {
 	 */
 	public static long getRuntime() {
 		return System.currentTimeMillis() - ThreadAllocMain.getWDT().getTimeStart();
+	}
+	
+	public static void restartVMIfSupported() {
+		sys.log("Trying JVM restart.");
+		ProcessHandle.current().info().commandLine().ifPresentOrElse(
+				(cmdLineArg) -> { try { Runtime.getRuntime().exec(cmdLineArg.split(" ")); System.exit(0); }
+				catch (IOException ioe) { ioe.printStackTrace(); }},
+				() -> { sys.log("VM restart not supported. Probably on Windows."); });
+	}
+	
+	/**
+	 * Recursive function to print info about all JVM process parents.
+	 * @param process
+	 * @param stackCount The times the function has called itself (Or how many parents it has.)
+	 */
+	private static int printProcessParentsInfo(ProcessHandle process, int stackCount) {
+		if (process.parent().isPresent()) {
+			sys.log(process.parent().get().info().commandLine().get());
+		}
+		return process.parent().isPresent()
+				? printProcessParentsInfo(process.parent().get(), stackCount + 1)
+				: stackCount;
 	}
 }
