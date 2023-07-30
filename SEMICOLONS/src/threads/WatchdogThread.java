@@ -35,7 +35,7 @@ public final class WatchdogThread implements VexusThread {
 				Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
 
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(10000);
 				} catch (InterruptedException ie) {
 					sys.log("WATCHDOG", 3, "Watchdog startup sleep has been interrupted.");
 				}
@@ -116,7 +116,7 @@ public final class WatchdogThread implements VexusThread {
 						
 						//Internal state and phase checking
 						if (!(sys.getActivePhase().equalsIgnoreCase("run"))) {
-							stopWithError(1, 15000, "After 5 seconds of waiting, the system still doesn't seem to have fully\n"
+							stopWithError(1, 15000, "After 10 seconds of waiting, the system still doesn't seem to have fully\n"
 									+ "finished initializing. That could be, either because an internal state caused\n"
 									+ "some kind of change, that disallowed setting the current phase to required mode 'run',\n"
 									+ "or this Java process could not allocate enough resources to finish startup early enough.\n"
@@ -150,7 +150,9 @@ public final class WatchdogThread implements VexusThread {
 
 				sys.log("WATCHDOG", 0, "Threads stopping...");
 				if (Main.javafxEnabled && Main.ThreadAllocMain.getJFXT().isGUIActive()) Main.jfxWinloader.stop();
-				System.exit(exitCode);
+
+				Main.restartVMIfSupported();
+				//System.exit(exitCode);
 			}
 		}, "WDT");
 	}

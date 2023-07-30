@@ -36,7 +36,7 @@ public class Cipher_Decrypt
        Map<String, String> invertedShiftOrder = new HashMap<>();
        Map<String, String> invertedShiftOrderAfter = new HashMap<>();
        sys.log("DECRYPT", 0, "Reading SHIFTLIST.txt to assign shift order"); 
-       try { shiftlist = Files.readString((new File(String.valueOf(VarLib.getDefaultDir().toString()) + "\\Program Sources\\Shift2C\\SHIFTLIST.txt")).toPath()); }
+       try { shiftlist = Files.readString((new File(String.valueOf(VarLib.getRootDir().toString()) + "\\Program Sources\\Shift2C\\SHIFTLIST.txt")).toPath()); }
        catch (IOException ioe) { sys.log("DECRYPT", 0, "Error reading SHIFTLIST.txt, aborting"); return null; }
         shiftlist = shiftlist.trim();
        String[] splittedShiftlist = shiftlist.split("\\<endNorm\\>"); byte b1; int i; String[] arrayOfString1;
@@ -83,7 +83,7 @@ public class Cipher_Decrypt
          sys.log("DECRYPT", 0, "Outputxt: " + plaintext);
        }
        sys.log("DECRYPT", 0, "Saving file to 'decOut.txt'");
-       File outFile = new File(String.valueOf(VarLib.getDefaultDir().toString()) + "\\Program Sources\\Shift2C\\decOut.txt"); 
+       File outFile = new File(String.valueOf(VarLib.getRootDir().toString()) + "\\Program Sources\\Shift2C\\decOut.txt"); 
        try { outFile.createNewFile(); } catch (IOException ioe) { sys.log("DECRYPT", 0, "Could not create decryption output file."); }
         try { Files.writeString(outFile.toPath(), ciphertext, new OpenOption[] { StandardOpenOption.APPEND }); }
        catch (IOException ioe) { sys.log("DECRYPT", 0, "Could not write to decryption output file."); }
