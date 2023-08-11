@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import engine.sys;
-import libraries.OpenLib;
-import libraries.VarLib;
+import libraries.VariableInitializion;
+import libraries.Global;
 
 public class System_ChangeEnvironment {
 	public static String changeEnv(ArrayList<String> params, Map<String, String> paramsWithValues) {
 		if ((params.size() == 3) && (params.get(0).equalsIgnoreCase("-add"))) {
-			if (VarLib.getEnv(params.get(1)) == null) { //If it doesn't already exist
+			if (Global.getEnv(params.get(1)) == null) { //If it doesn't already exist
 				sys.shellPrint(0, "HIDDEN", "Adding new environment variable: " + params.get(1)
 						+ "\nwith value: " + params.get(2) + "\n");
-				VarLib.addEnv(params.get(1), params.get(2));
+				Global.addEnv(params.get(1), params.get(2));
 			} else {
 				sys.shellPrint(3, "HIDDEN", "Key " + params.get(1) + " already exists.\n"
 						+ "Cannot add two same keys.\n"
@@ -21,11 +21,11 @@ public class System_ChangeEnvironment {
 			}
 			
 		} else if ((params.size() == 3) && (params.get(0).equalsIgnoreCase("-modify"))) {
-			if (VarLib.getEnv(params.get(1)) != null) { //Only execute if the value already exists
+			if (Global.getEnv(params.get(1)) != null) { //Only execute if the value already exists
 				sys.shellPrint(0, "HIDDEN", "Modifying variable: " + params.get(1)
-					+ "\nOld value: " + VarLib.getEnv(params.get(1))
+					+ "\nOld value: " + Global.getEnv(params.get(1))
 					+ "\nNew value: " + params.get(2));
-				VarLib.changeEnv(params.get(1), params.get(2));
+				Global.changeEnv(params.get(1), params.get(2));
 			} else {
 				sys.shellPrint(0, "HIDDEN", "Environment variable '" + params.get(1) + "'\n"
 						+ "does not exist, so it cannot be modified.\n"
@@ -34,12 +34,12 @@ public class System_ChangeEnvironment {
 			
 			
 		} else if ((params.size() >= 1) && (params.get(0).equalsIgnoreCase("-update"))) {
-			if ((params.size() == 2) && (VarLib.getEnv(params.get(1)) != null)) {
+			if ((params.size() == 2) && (Global.getEnv(params.get(1)) != null)) {
 				sys.shellPrint(1, "HIDDEN", "Updating '" + params.get(1) + "'\n");
-				OpenLib.updateEnv(params.get(1));
+				VariableInitializion.updateEnv(params.get(1));
 			} else {
 				sys.shellPrint(1, "HIDDEN", "Updating all variables.\n");
-				OpenLib.updateEnv("$$ALL");
+				VariableInitializion.updateEnv("$$ALL");
 			}
 			
 		} else {

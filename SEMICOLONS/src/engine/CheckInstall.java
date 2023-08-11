@@ -4,7 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 
-import libraries.VarLib;
+import libraries.Global;
 
 public class CheckInstall {
 	/**
@@ -22,13 +22,13 @@ public class CheckInstall {
 		String fs; //file separator
 		String fsroot; //File system root
 		
-		if (!sys.getActivePhase().equals("run")) {
+		if (!Global.getCurrentPhase().equals(Runphase.RUN)) {
 			//Set default values
 			fs = "/";
 			fsroot = "/";
 		} else {
-			fs = VarLib.fsep;
-			fsroot = VarLib.getFSRoot();
+			fs = Global.fsep;
+			fsroot = Global.getFSRoot();
 		}
 		
 		File vxRoot = new File(fsroot + fs + "etc" + fs + "semicolons");

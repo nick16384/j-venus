@@ -2,7 +2,7 @@ package threads;
 
 import commandProcessing.CommandManager;
 import engine.sys;
-import jfx.windowManager.JFxGUIThread;
+import jfxcomponents.JFxGUIThread;
 
 /**
  * This class is responsible for managing threads. (not AWT ones!)

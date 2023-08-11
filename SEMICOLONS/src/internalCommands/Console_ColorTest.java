@@ -3,8 +3,8 @@ package internalCommands;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import engine.JFXANSI;
 import engine.sys;
+import jfxcomponents.JFXANSI;
 import main.Main;
 
 public class Console_ColorTest {

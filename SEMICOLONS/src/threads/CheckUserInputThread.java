@@ -2,12 +2,12 @@ package threads;
 
 import java.awt.event.KeyEvent;
 
-import engine.AWTANSI;
+import awtcomponents.AWTANSI;
 import engine.sys;
-import libraries.OpenLib;
+import libraries.VariableInitializion;
 import main.Main;
 
-public class CheckUserInputThread implements VexusThread {
+public class CheckUserInputThread implements InternalThread {
 	private boolean suspend = false;
 	private Thread checkUserInputThread;
 	
@@ -35,7 +35,7 @@ public class CheckUserInputThread implements VexusThread {
 							if (Main.ThreadAllocMain.getCMGR().isCommandRunning())
 								Main.ThreadAllocMain.getCMGR().killCurrent();
 							else
-								OpenLib.cmdLinePrepare();
+								VariableInitializion.cmdLinePrepare();
 						}
 					}
 				}

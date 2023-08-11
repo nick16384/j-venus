@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import engine.AWTANSI;
+import awtcomponents.AWTANSI;
 import engine.sys;
 import libraries.Err;
-import libraries.OpenLib;
-import libraries.VarLib;
+import libraries.VariableInitializion;
+import libraries.Global;
 import main.Main;
 
 /**
@@ -79,8 +79,8 @@ public class CommandMain {
 					execProc.destroyForcibly();
 				}
 			}
-			OpenLib.refreshDateTime();
-			OpenLib.cmdLinePrepare();
+			VariableInitializion.refreshDateTime();
+			VariableInitializion.cmdLinePrepare();
 			Main.mainFrameAWT.getCmdLine().setEditable(true);
 		} catch (SecurityException se) {
 			sys.log("EXECTERM", 4, "Could not terminate execution process.");
@@ -162,9 +162,9 @@ public class CommandMain {
 			if (prm.contains("$")) {
 				String env = "$" + prm.split("\\$", 2)[1].split(" ")[0];
 				sys.log("CMDMAIN", 1, "Searching for environment variable '" + env + "'");
-				if (VarLib.getEnv(env) != null) {
-					sys.log("CMDMAIN", 1, "Found! " + env + " -> " + VarLib.getEnv(env));
-					prm = prm.replace(env, VarLib.getEnv(env));
+				if (Global.getEnv(env) != null) {
+					sys.log("CMDMAIN", 1, "Found! " + env + " -> " + Global.getEnv(env));
+					prm = prm.replace(env, Global.getEnv(env));
 				} else if (env.equals("$$NULL")) {
 					sys.log("CMDMAIN", 2, "Found, but trying to break stuff: $$NULL\n");
 					prm = null;
@@ -190,14 +190,14 @@ public class CommandMain {
 		if (command.isBlank()) {
 			sys.log("CMDMAIN", 2, "Command is empty");
 			sys.log("CMDMAIN", 0, "");
-			OpenLib.refreshDateTime();
-			OpenLib.cmdLinePrepare();
+			VariableInitializion.refreshDateTime();
+			VariableInitializion.cmdLinePrepare();
 			Main.mainFrameAWT.getCmdLine().setEditable(true);
 			return "";
 		} else if (sys.getActivePhase().equalsIgnoreCase("pre-init")) {
 			sys.log("CMDMAIN", 3, "JavaDOS is still in pre-init phase. Cannot execute commands.");
-			OpenLib.refreshDateTime();
-			OpenLib.cmdLinePrepare();
+			VariableInitializion.refreshDateTime();
+			VariableInitializion.cmdLinePrepare();
 			Main.mainFrameAWT.getCmdLine().setEditable(true);
 			return "PhaseNotRun";
 		}
@@ -276,37 +276,37 @@ public class CommandMain {
 					//==================================EXT. COMMAND SYNTAX CHECK====================================
 					if (new File(commandObj.getCommand()).isFile()) {
 						sys.shellPrintln(AWTANSI.B_Blue, "Extern : fullPath");
-						execProcBuild = new ProcessBuilder(VarLib.getJavaExec().getAbsolutePath(),
+						execProcBuild = new ProcessBuilder(Global.getJavaExec().getAbsolutePath(),
 								"-jar", commandObj.getFullCommand());
 					} else if (new File(commandObj.getCommand() + ".jar").isFile()) {
 						sys.shellPrintln(AWTANSI.B_Blue, "Extern : fullPathWithoutJar");
 						if (commandObj.getFullCommand().contains(" ")) {
 							sys.shellPrintln(AWTANSI.B_Blue, "Extern : fullPathWithoutJar : params");
-							execProcBuild = new ProcessBuilder(VarLib.getJavaExec().getAbsolutePath(),
+							execProcBuild = new ProcessBuilder(Global.getJavaExec().getAbsolutePath(),
 									"-jar", commandObj.getFullCommand().replaceFirst(" ", ".jar "));
 						} else {
 							sys.shellPrintln(AWTANSI.B_Blue, "Extern : fullPathWithoutJar : noParams");
-							execProcBuild = new ProcessBuilder(VarLib.getJavaExec().getAbsolutePath(),
+							execProcBuild = new ProcessBuilder(Global.getJavaExec().getAbsolutePath(),
 									"-jar", commandObj.getFullCommand() + ".jar");
 						}
-					} else if (new File(VarLib.getCmdDir().getAbsolutePath() + VarLib.fsep
+					} else if (new File(Global.getCmdDir().getAbsolutePath() + Global.fsep
 							+ commandObj.getCommand()).isFile()) {
 						sys.shellPrintln(AWTANSI.B_Blue, "Extern : noPath");
-						execProcBuild = new ProcessBuilder(VarLib.getJavaExec().getAbsolutePath(),
-								"-jar", VarLib.getCmdDir().getAbsolutePath() + VarLib.fsep + commandObj.getFullCommand());
-					} else if (new File(VarLib.getCmdDir().getAbsolutePath() + VarLib.fsep
+						execProcBuild = new ProcessBuilder(Global.getJavaExec().getAbsolutePath(),
+								"-jar", Global.getCmdDir().getAbsolutePath() + Global.fsep + commandObj.getFullCommand());
+					} else if (new File(Global.getCmdDir().getAbsolutePath() + Global.fsep
 							+ commandObj.getCommand() + ".jar").isFile()) {
 						sys.shellPrintln(AWTANSI.B_Blue, "Extern : noPathWithoutJar");
 						if (commandObj.getFullCommand().contains(" ")) {
 							sys.shellPrintln(AWTANSI.B_Blue, "Extern : noPathWithoutJar : params");
-							execProcBuild = new ProcessBuilder(VarLib.getJavaExec().getAbsolutePath(),
-									"-jar", VarLib.getCmdDir().getAbsolutePath()
-									+ VarLib.fsep + commandObj.getFullCommand().replaceFirst(" ", ".jar "));
+							execProcBuild = new ProcessBuilder(Global.getJavaExec().getAbsolutePath(),
+									"-jar", Global.getCmdDir().getAbsolutePath()
+									+ Global.fsep + commandObj.getFullCommand().replaceFirst(" ", ".jar "));
 						} else {
 							sys.shellPrintln(AWTANSI.B_Blue, "Extern : noPathWithoutJar : noParams");
-							execProcBuild = new ProcessBuilder(VarLib.getJavaExec().getAbsolutePath(),
-									"-jar", VarLib.getCmdDir().getAbsolutePath()
-									+ VarLib.fsep + commandObj.getFullCommand() + ".jar");
+							execProcBuild = new ProcessBuilder(Global.getJavaExec().getAbsolutePath(),
+									"-jar", Global.getCmdDir().getAbsolutePath()
+									+ Global.fsep + commandObj.getFullCommand() + ".jar");
 						}
 					} else {
 						commandType = "system";
@@ -351,8 +351,8 @@ public class CommandMain {
 		//===================================ERROR RESOLVING=====================================
 		if ((params != null) && (params.size() >= 1) && (params.get(0) != null)) {
 			if (params.get(0).equalsIgnoreCase("noErrorChecking")) {
-				OpenLib.refreshDateTime();
-				OpenLib.cmdLinePrepare();
+				VariableInitializion.refreshDateTime();
+				VariableInitializion.cmdLinePrepare();
 				Main.mainFrameAWT.getCmdLine().setEditable(true);
 				return "";
 			}
@@ -397,8 +397,8 @@ public class CommandMain {
 		//====================================FINALIZATION=======================================
 		if (silentExecution == true) { silentExecution = false; }
 		if (!noPrompt) {
-			OpenLib.refreshDateTime();
-			OpenLib.cmdLinePrepare();
+			VariableInitializion.refreshDateTime();
+			VariableInitializion.cmdLinePrepare();
 			Main.mainFrameAWT.getCmdLine().setEditable(true);
 		} else {
 			noPrompt = false;

@@ -1,12 +1,14 @@
 package threads;
 
-import engine.AWTANSI;
+import engine.Runphase;
 import engine.sys;
+import libraries.Global;
 import main.Main;
-
+import awtcomponents.AWTANSI;
 import components.ProtectedTextComponent;
+import components.Shell;
 
-public class WatchdogThread2 implements VexusThread {
+public class WatchdogThread2 implements InternalThread {
 	private Thread watchdogThread2;
 
 	protected WatchdogThread2() {
@@ -19,7 +21,7 @@ public class WatchdogThread2 implements VexusThread {
 					ie.printStackTrace();
 				}
 				while (true) {
-					if (sys.getActivePhase().equals("run")) {
+					if (Global.getCurrentPhase().equals(Runphase.RUN)) {
 						if (Main.ThreadAllocMain.isWDTActive()) {
 							
 							try {
@@ -40,8 +42,8 @@ public class WatchdogThread2 implements VexusThread {
 								WatchdogThread.stopWithError(1, 15000, "The shell didn't initialize properly. Try again.");
 							}
 						} else {
-							sys.shellPrint(AWTANSI.B_Yellow, "Init fail.\n");
-							sys.setActivePhase("err");
+							Shell.print(AWTANSI.B_Yellow, "Init fail.\n");
+							Global.setErrorRunphase();;
 						}
 						
 						try {

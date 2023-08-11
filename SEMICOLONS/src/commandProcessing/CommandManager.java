@@ -6,16 +6,17 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import awtcomponents.AWTANSI;
 import components.Command;
-import engine.AWTANSI;
+import components.Shell;
 import engine.sys;
 import internalCommands.System_Exec;
 import libraries.Err;
 import libraries.ErrCodes;
-import libraries.OpenLib;
+import libraries.VariableInitializion;
 import main.Main;
 
-public class CommandManager implements threads.VexusThread {
+public class CommandManager implements threads.InternalThread {
 	//
 	//-> Successfully executed commands return null.
 	private Map<Command, String> returnValues;
@@ -64,11 +65,6 @@ public class CommandManager implements threads.VexusThread {
 							command = null;
 						}
 						
-						if (!sys.getCurrentShellMode().equals("normal")) {
-							returnValues.put(cmdCurrent, "ShellModeNonNormal");
-							command = null;
-						}
-						
 						//EXECUTE COMMAND =======================================
 						isCommandRunning = true;
 						try {
@@ -86,17 +82,17 @@ public class CommandManager implements threads.VexusThread {
 						
 						//ERROR CHECKING =======================================
 						if (returnValues.get(cmdCurrent) != null) {
-							sys.shellPrint("\"" + cmdCurrent.getCommand() + "\": ");
+							Shell.print("\"" + cmdCurrent.getCommand() + "\": ");
 							if (ErrCodes.getErrDesc(returnValues.get(cmdCurrent)) == null) {
 								//Unknown error
 								sys.log("Command error not found in main.ErrCodes: " + returnValues.get(cmdCurrent));
-								sys.shellPrint(AWTANSI.B_Red, "Unknown error (not specified in main.ErrCodes): "
+								Shell.print(AWTANSI.B_Red, "Unknown error (not specified in main.ErrCodes): "
 								+ returnValues.get(cmdCurrent));
 							} else {
 								//Known error
 								sys.log("CMDMGR", 1, "Command error found in main.ErrCodes: " + returnValues.get(cmdCurrent));
 								sys.log("CMDMGR", 1, "Error description: " + ErrCodes.getErrDesc(returnValues.get(cmdCurrent)));
-								sys.shellPrintln(ErrCodes.valueOf(returnValues.get(cmdCurrent)) + " : "
+								Shell.println(ErrCodes.valueOf(returnValues.get(cmdCurrent)) + " : "
 										+ ErrCodes.getErrDesc(returnValues.get(cmdCurrent)));
 							}
 						}
@@ -180,7 +176,7 @@ public class CommandManager implements threads.VexusThread {
 		//Wait 500ms for any text printing to finish -> CmdLine will scroll to last line eventually
 		try { Thread.sleep(100); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		if (!noPrompt) {
-			OpenLib.cmdLinePrepare();
+			VariableInitializion.cmdLinePrepare();
 		}
 	}
 	

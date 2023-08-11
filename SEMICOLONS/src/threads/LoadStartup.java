@@ -9,8 +9,8 @@ import engine.sys;
 
 public class LoadStartup {
 	public static boolean loadAndExecute() throws IOException {
-		final File startupFile = new File(libraries.VarLib.getDataDir().getAbsolutePath()
-				+ libraries.VarLib.fsep + "startup.jscr");
+		final File startupFile = new File(libraries.Global.getDataDir().getAbsolutePath()
+				+ libraries.Global.fsep + "startup.jscr");
 		String startupFileString = "";
 		
 		

@@ -14,11 +14,15 @@ import java.util.Scanner;
 
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
+
+import awtcomponents.AWTANSI;
 import components.Command;
 import components.ProtectedTextComponent;
-import engine.AWTANSI;
+import components.Shell;
+import engine.Runphase;
 import engine.sys;
-import libraries.VarLib;
+import libraries.Env;
+import libraries.Global;
 import main.Main;
 
 /**
@@ -28,7 +32,7 @@ import main.Main;
  * @author nick16384
  *
  */
-public class ShellWriteThread implements VexusThread {
+public class ShellWriteThread implements InternalThread {
 	public PipedOutputStream shellStream = null;
 	public BufferedReader shellReader = null;
 	public Scanner shellScanner = null;
@@ -46,7 +50,8 @@ public class ShellWriteThread implements VexusThread {
 			public final void run() {
 				// TODO fix NullPointerException with mainFrame and NoClassDefFoundError in
 				// VarLib
-				while (sys.getActivePhase().equals("pre-init") || sys.getActivePhase().equals("init")) {
+				while (Global.getCurrentPhase().equals(Runphase.PREINIT)
+						|| Global.getCurrentPhase().equals(Runphase.INIT)) {
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException ie) {
@@ -98,12 +103,12 @@ public class ShellWriteThread implements VexusThread {
 							// ==========================================================================
 							
 							try {
-								CMDLINE_MAX_LINE_COUNT = Integer.parseInt(VarLib.getEnv("$CMDLINE_MAX_LINE_COUNT"));
+								CMDLINE_MAX_LINE_COUNT = Integer.parseInt(Env.getEnv("$CMDLINE_MAX_LINE_COUNT"));
 								sys.log("SHLWRT", 1, "Current cmdLine max. line count: " + CMDLINE_MAX_LINE_COUNT);
 							} catch (NumberFormatException nfe) {
 								sys.log("WRITE", 2, "Could not parse $CMDLINE_MAX_LINE_COUNT:"
 										+ " NumberFormatException. Using default value: 26");
-								sys.shellPrint(2, "WRITE", "Could not parse $CMDLINE_MAX_LINE_COUNT.\n"
+								Shell.print(2, "WRITE", "Could not parse $CMDLINE_MAX_LINE_COUNT.\n"
 										+ "Please check, whether $CMDLINE_MAX_LINE_COUNT contains characters and also run\n"
 										+ "'chEnv -update $CMDLINE_MAX_LINE_COUNT'"
 										+ "if that is the case or the error reoccurs.\n");
@@ -131,9 +136,12 @@ public class ShellWriteThread implements VexusThread {
 										}
 								} else {
 									if (Main.javafxEnabled)
-										new engine.JFXANSI(Main.jfxWinloader.getCmdLine()).appendANSI(writeQueue);
+										jfxcomponents.JFXANSI.appendANSI(
+												Main.jfxWinloader.getCmdLine(),
+												writeQueue);
 									else
-										new engine.AWTANSI(Main.mainFrameAWT.getCmdLine()).appendANSI(writeQueue);
+										awtcomponents.AWTANSI.appendANSI(Main.mainFrameAWT.getCmdLine(),
+												writeQueue);
 								}
 								
 								// ================================================================
@@ -164,7 +172,8 @@ public class ShellWriteThread implements VexusThread {
 								try {
 									if (!Main.javafxEnabled)
 										new ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).protectText(
-												Main.mainFrameAWT.getCmdLine().getText().lastIndexOf(VarLib.getPrompt()),
+												Main.mainFrameAWT.getCmdLine().getText().lastIndexOf(
+														Shell.getPrompt()),
 												Main.mainFrameAWT.getCmdLine().getText().length() - 1);
 								} catch (NullPointerException npe) {
 									sys.log("SWT", 3, "Text could not be protected from user deletion,"
@@ -236,7 +245,7 @@ public class ShellWriteThread implements VexusThread {
 
 	@Override
 	public final void suspend() {
-		sys.shellPrintln(AWTANSI.B_Yellow, "Suspending ShellWriteThread!");
+		Shell.println(AWTANSI.B_Yellow, "Suspending ShellWriteThread!");
 		sys.log("SWT", 2, "Suspending ShellWriteThread!");
 		try {
 			Thread.sleep(150);

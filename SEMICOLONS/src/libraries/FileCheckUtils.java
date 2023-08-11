@@ -119,7 +119,7 @@ public class FileCheckUtils {
 	}
 	
 	public static boolean canRead(File file) {
-		if (VarLib.getOSName().equals("Windows"))
+		if (Global.getOSName().equals("Windows"))
 			//canRead(), canWrite(), and canExecute() cause problems on Windows
 			sys.log("FCU", 2, "Warning: The canRead() method may not work on Windows systems as desired.");
 		try {
@@ -138,7 +138,7 @@ public class FileCheckUtils {
 	}
 	
 	public static boolean canWrite(File file) {
-		if (VarLib.getOSName().equals("Windows"))
+		if (Global.getOSName().equals("Windows"))
 			//canRead(), canWrite(), and canExecute() cause problems on Windows
 			sys.log("FCU", 2, "Warning: The canWrite() method may not work on Windows systems as desired.");
 		try {
@@ -157,7 +157,7 @@ public class FileCheckUtils {
 	}
 	
 	public static boolean canExecute(File file) {
-		if (VarLib.getOSName().equals("Windows"))
+		if (Global.getOSName().equals("Windows"))
 			//canRead(), canWrite(), and canExecute() cause problems on Windows
 			sys.log("FCU", 2, "Warning: The canExecute() method may not work on Windows systems as desired.");
 		try {
@@ -271,7 +271,7 @@ public class FileCheckUtils {
 			String permStr = ""; //Final permission string (e.g. rwxr-x--x)
 			
 			//If OS is Linux, POSIXFileAttributes help get the format.
-			if (libraries.VarLib.getOSName().equals("Linux")) {
+			if (libraries.Global.getOSName().equals("Linux")) {
 				//Get POSIX file attributes and convert them to a string
 			    PosixFileAttributeView posixView = Files.getFileAttributeView(file.toPath(), PosixFileAttributeView.class);
 			    String permStrTempSrc = posixView.readAttributes().permissions().toString();
@@ -342,18 +342,18 @@ public class FileCheckUtils {
 		
 		// Replace leading dot with current / workspace location
 		if (fileLocationString.startsWith(".")) {
-			fileLocationString = fileLocationString.replaceFirst(".", VarLib.getCurrentDir());
+			fileLocationString = fileLocationString.replaceFirst(".", Global.getCurrentDir());
 			sys.log("FCU", 1, "File prefetch: Replaced leading dot: " + fileLocationString);
 		}
 		
 		if (fileLocationString.startsWith("~")) {
-			fileLocationString = fileLocationString.replaceFirst("~", VarLib.getHomeDir().getAbsolutePath());
+			fileLocationString = fileLocationString.replaceFirst("~", Global.getHomeDir().getAbsolutePath());
 			sys.log("FCU", 1, "File prefetch: Replaced leading \"~\" (home): " + fileLocationString);
 		}
 		
 		if (!fileLocationString.startsWith("/")
-				&& exists(new File(VarLib.getCurrentDir() + fileLocationString))) {
-			fileLocationString = VarLib.getCurrentDir() + VarLib.fsep + fileLocationString;
+				&& exists(new File(Global.getCurrentDir() + fileLocationString))) {
+			fileLocationString = Global.getCurrentDir() + Global.fsep + fileLocationString;
 			sys.log("FCU", 1, "File prefetch: Found file location inside workspace: " + fileLocationString);
 		}
 		

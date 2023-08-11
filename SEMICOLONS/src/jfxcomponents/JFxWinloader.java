@@ -1,4 +1,4 @@
-package jfx.windowManager;
+package jfxcomponents;
 
 import java.io.IOException;
 import java.io.File;
@@ -24,7 +24,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
-import libraries.VarLib;
+import libraries.Global;
 import main.Main;
 
 public class JFxWinloader extends Application {
@@ -49,7 +49,7 @@ public class JFxWinloader extends Application {
 		sys.log("JFX", 1, "Loading JavaFX window :)");
 		
 		try {
-			primaryStage.setTitle("S.E.M.I.C.O.L.O.N. Shell " + VarLib.getVersion());
+			primaryStage.setTitle("S.E.M.I.C.O.L.O.N. Shell " + Global.getVersion());
 			
 			Main.cmdLine = new PartiallyEditableInlineCSSTextArea("SHELL INIT");
 			
@@ -65,9 +65,9 @@ public class JFxWinloader extends Application {
 			
 			Image icon = null;
 			sys.log("JFX", 1,
-					"Icon path: " + VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "semicolons-icon.png");
+					"Icon path: " + Global.getDataDir().getAbsolutePath() + Global.fsep + "semicolons-icon.png");
 			try { icon = new Image(
-					"file:" + VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "semicolons-icon.png"); }
+					"file:" + Global.getDataDir().getAbsolutePath() + Global.fsep + "semicolons-icon.png"); }
 			catch (Exception ex) { ex.printStackTrace(); }
 			primaryStage.getIcons().add(icon);
 			
@@ -85,7 +85,7 @@ public class JFxWinloader extends Application {
 						sys.log("JFX", 3, "Exception in command extractor / formatter: "
 								+ "Probably the prompt was edited by the user.");
 						sys.shellPrint("Whatever you're trying, it's not funny!");
-						libraries.OpenLib.cmdLinePrepare();
+						libraries.VariableInitializion.cmdLinePrepare();
 					}
 				} else if (event.getCode().equals(KeyCode.UP)) {
 					event.consume();
@@ -94,7 +94,7 @@ public class JFxWinloader extends Application {
 					} catch (Exception ex) {
 						sys.log("JFX", 3, "Command repeat encountered an exception. This is an internal undefined error.");
 						sys.shellPrint("You broke something. It's not healthy for your PC.");
-						libraries.OpenLib.cmdLinePrepare();
+						libraries.VariableInitializion.cmdLinePrepare();
 					}
 				}
 				
@@ -178,8 +178,8 @@ public class JFxWinloader extends Application {
 	}
 	
 	private void configureCssStylesheet(Scene scene) {
-		File cssFile = new File(VarLib.getDataDir() + VarLib.fsep
-				+ "consoleStyle" + VarLib.fsep + "default-stylesheet.css");
+		File cssFile = new File(Global.getDataDir() + Global.fsep
+				+ "consoleStyle" + Global.fsep + "default-stylesheet.css");
 		
 		createCssStylesheetFileIfNotExisting(cssFile);
 		scene.getStylesheets().clear();

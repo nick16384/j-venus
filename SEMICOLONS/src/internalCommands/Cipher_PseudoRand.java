@@ -2,7 +2,7 @@ package internalCommands;
 
 import java.util.ArrayList;
 
-import engine.AWTANSI;
+import awtcomponents.AWTANSI;
 import engine.sys;
 import main.Main;
 

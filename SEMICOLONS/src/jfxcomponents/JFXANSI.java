@@ -1,8 +1,14 @@
-package engine;
+package jfxcomponents;
 
-import javax.swing.*;
-import javax.swing.text.*;
-import java.awt.Color;
+import org.fxmisc.richtext.InlineCssTextArea;
+
+import engine.Runphase;
+import engine.sys;
+import main.Main;
+
+//import java.awt.Color;
+import javafx.scene.paint.Color;
+import libraries.Global;
 
 /**
  * Code original from:
@@ -12,46 +18,38 @@ import java.awt.Color;
  * Modified version
  */
 
-public class AWTANSI extends JTextPane {
-	public static final Color D_Black   = Color.getHSBColor( 0.000f, 0.000f, 0.000f );
-	public static final Color D_Red     = Color.getHSBColor( 0.000f, 1.000f, 0.502f );
-	public static final Color D_Blue    = Color.getHSBColor( 0.667f, 1.000f, 0.502f );
-	public static final Color D_Magenta = Color.getHSBColor( 0.833f, 1.000f, 0.502f );
-	public static final Color D_Green   = Color.getHSBColor( 0.333f, 1.000f, 0.502f );
-	public static final Color D_Yellow  = Color.getHSBColor( 0.167f, 1.000f, 0.900f ); //last one was 0.502f
-	public static final Color D_Cyan    = Color.getHSBColor( 0.500f, 1.000f, 0.502f );
-	public static final Color D_White   = Color.getHSBColor( 0.000f, 0.000f, 1.000f ); //last one was 0.753f
-	public static final Color B_Black   = Color.getHSBColor( 0.000f, 0.000f, 0.502f );
-	public static final Color B_Red     = Color.getHSBColor( 0.000f, 1.000f, 1.000f );
-	public static final Color B_Blue    = Color.getHSBColor( 0.667f, 1.000f, 1.000f );
-	public static final Color B_Magenta = Color.getHSBColor( 0.833f, 1.000f, 1.000f );
-	public static final Color B_Green   = Color.getHSBColor( 0.333f, 1.000f, 1.000f );
-	public static final Color B_Yellow  = Color.getHSBColor( 0.167f, 1.000f, 1.000f );
-	public static final Color B_Cyan    = Color.getHSBColor( 0.500f, 1.000f, 1.000f );
-	public static final Color B_White   = Color.getHSBColor( 0.000f, 0.000f, 1.000f );
-	public static final Color cReset    = Color.getHSBColor( 0.000f, 0.000f, 1.000f );
-
-	public static final Color D_Orange  = Color.getHSBColor( 0.500f, 0.500f, 0.500f ); //Custom colors
-	public static final Color B_Orange  = Color.getHSBColor( 0.500f, 0.500f, 0.800f );
+public class JFXANSI {
+	public static final Color D_Black   = Color.rgb( 000, 000, 000, 0.0d );
+	public static final Color D_Red     = Color.rgb( 000, 255, 000, 0.5d );
+	public static final Color D_Blue    = Color.rgb( 000, 000, 160, 0.5d );
+	public static final Color D_Magenta = Color.rgb( 200, 000, 150, 0.5d );
+	public static final Color D_Green   = Color.rgb( 000, 255, 000, 0.5d );
+	public static final Color D_Yellow  = Color.rgb( 128, 128, 000, 0.9d ); //last one was 0.502f
+	public static final Color D_Cyan    = Color.rgb( 128, 032, 032, 0.5d );
+	public static final Color D_White   = Color.rgb( 255, 255, 255, 0.5d ); //last one was 0.753f
+	public static final Color B_Black   = Color.rgb( 000, 000, 000, 0.5d );
+	public static final Color B_Red     = Color.rgb( 255, 000, 000, 1.0d );
+	public static final Color B_Blue    = Color.rgb( 000, 000, 000, 1.0d );
+	public static final Color B_Magenta = Color.rgb( 200, 000, 150, 1.0d );
+	public static final Color B_Green   = Color.rgb( 000, 255, 000, 1.0d );
+	public static final Color B_Yellow  = Color.rgb( 255, 255, 000, 1.0d );
+	public static final Color B_Cyan    = Color.rgb( 32, 128, 180, 1.0d );
+	public static final Color B_White   = Color.rgb( 255, 255, 255, 1.0d );
+	public static final Color cReset    = Color.rgb( 000, 255, 000, 1.0d );
 	static Color colorCurrent    = cReset;
-	String remaining = "";
-	JTextPane pane = null;
-	String lastColorCode = ""; //The last requested color code for logging purposes.
+	private static String remaining = "";
+	private static String lastColorCode = ""; //The last requested color code for logging purposes.
 
-
-	public AWTANSI (JTextPane pane) {
-		this.pane = pane;
-	}
-
-	public void append(Color c, String s) throws BadLocationException {
-		if (sys.getActivePhase().equals("init") || sys.getActivePhase().equals("init"))
+	public static void append(Color c, String s) {
+		if (Global.getCurrentPhase().equals(Runphase.PREINIT)
+				|| Global.getCurrentPhase().equals(Runphase.INIT))
 			return;
-		StyleContext sc = StyleContext.getDefaultStyleContext();
-		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
-		insertNewString(s, c, aset); //Private method
+		
+		if (Main.cmdLine != null)
+			insertNewString(s, c); //Private method
 	}
 
-	public void appendANSI(String s) throws BadLocationException { // convert ANSI color codes first
+	public static void appendANSI(InlineCssTextArea textArea, String s) { // convert ANSI color codes first
 		int aPos = 0;   // current char position in addString
 		int aIndex = 0; // index of next Escape sequence
 		int mIndex = 0; // index of "m" terminating Escape sequence
@@ -108,9 +106,9 @@ public class AWTANSI extends JTextPane {
 		}
 	}
 
-	public Color getANSIColor(String ANSIColor) {
+	public static Color getANSIColor(String ANSIColor) {
 		if (!ANSIColor.equals("\u001B[0m") && !lastColorCode.equals(ANSIColor)) {
-			sys.log("ANSI_DEBUG", 0, "Requesting new ANSI color: " + ANSIColor + "===" + "\u001B[0m");
+			sys.log("JFXANSI_DEBUG", 0, "Requesting new ANSI color: " + ANSIColor + "===" + "\u001B[0m");
 			lastColorCode = ANSIColor;
 		}
 		if (ANSIColor.equals("\u001B[30m"))        { return D_Black; }
@@ -171,29 +169,11 @@ public class AWTANSI extends JTextPane {
 	 * @param c
 	 * @param aset
 	 */
-	private void insertNewString(String s, Color c, AttributeSet aset) {
-		Runnable appendTextRun = new Runnable() {
-			public void run() {
-				int len = pane.getDocument().getLength(); 
-				try {pane.getDocument().insertString(len, s, aset);} 
-				catch (Exception e) {
-					sys.log("ANSI_APPEND", 3, "BadLocationException while appending text.");
-					try {
-						for (int i = 0; i < 100; i++) {
-							append(c, s);
-							try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
-							if (pane.getText().endsWith(s))
-								continue;
-							sys.log("ANSI_SHLWRT", 2, "Shell write verification failed on attempt No. " + i);
-							if (i >= 99)
-								sys.log("ANSI_SHLWRT", 3, "Tried to append text 100 times unsuccessfully.");
-						}
-					} catch (BadLocationException ble) {
-						sys.log("ANSI_APPEND", 3, "BadLocationException while appending text inside catch block.");
-					}
-				}
-			}
-		};
-		SwingUtilities.invokeLater(appendTextRun);
+	private static void insertNewString(String s, Color c) {
+		try { Main.jfxWinloader.appendText(s, c); } 
+		catch (Exception e) {
+			sys.log("JFXANSI", 3, "Shell text write failed. Stacktrace below:");
+			e.printStackTrace();
+		}
 	}
 }

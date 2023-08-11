@@ -1,4 +1,4 @@
-package awt.windowManager;
+package awtcomponents;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -13,8 +13,8 @@ import javax.swing.text.BadLocationException;
 
 import engine.sys;
 import libraries.Err;
-import libraries.OpenLib;
-import libraries.VarLib;
+import libraries.VariableInitializion;
+import libraries.Global;
 import main.Main;
 
 /**
@@ -51,18 +51,18 @@ public class KeyListenerAttacher {
 					String lastLine2 = lines2[lines2.length - 1];
 					//if (lastLine) //check lastline multiple prompts
 					
-					System.err.println("VarLib prompt: " + VarLib.getPrompt());
+					System.err.println("VarLib prompt: " + Global.getPrompt());
 					System.err.println("Last line length: " + lastLine.length());
 					System.err.println("Last line content: " + lastLine);
 					System.err.println("Last line 2 length: " + lastLine2.length());
 					System.err.println("Last line 2 content: " + lastLine2);
-					System.err.println("Prompt length: " + VarLib.getPrompt().length());
+					System.err.println("Prompt length: " + Global.getPrompt().length());
 					
 					//Extract full command from last line (Remove prompt)
 					//Dev. note: VarLib.getPrompt() contains ANSI excapes, but cmdLine.getText() doesn't, so
 					//all ANSI escape chars had to be cleared out by the regex shown.
 					String fullCommand = lastLine.substring(
-							VarLib.getPrompt().replaceAll("\u001B\\[[\\d;]*[^\\d;]","").length(), lastLine.length());
+							Global.getPrompt().replaceAll("\u001B\\[[\\d;]*[^\\d;]","").length(), lastLine.length());
 					
 					//if (fullCommand.contains(VarLib.getPrompt())) { fullCommand = fullCommand.split("\\$ ")[1]; }
 					if (!fullCommand.isBlank()) {
@@ -98,18 +98,18 @@ public class KeyListenerAttacher {
 						main.Main.commandHistory.add(fullCommand);
 						try {
 							String history = Files.readString(Paths.get(
-									VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "cmd_history"));
+									Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"));
 							int max_history_size = Integer.parseInt(Files.readString(Paths.get(
-									VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "cmd_history_max_length")).trim());
+									Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history_max_length")).trim());
 							//Remove first entry of history until size of entries is below count in cmd_history_max_length
 							while (history.split("\n").length > max_history_size) {
 								Files.writeString(Paths.get(
-										VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "cmd_history"),
+										Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"),
 										history.replaceFirst(history.split("\n")[0], ""),
 										StandardOpenOption.WRITE);
 							}
 							Files.writeString(Paths.get(
-									VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "cmd_history"),
+									Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"),
 									fullCommand + "\n", StandardOpenOption.APPEND);
 						} catch (IOException ioe) {
 							sys.log("MAIN", 2, "IOException while writing to cmd history.");
@@ -119,7 +119,7 @@ public class KeyListenerAttacher {
 						}
 						//============================END ADD FULLCMD TO HISTORY==============================
 					} else {
-						OpenLib.cmdLinePrepare();
+						VariableInitializion.cmdLinePrepare();
 					}
 				} else if (e.getKeyChar() == KeyEvent.VK_TAB) {
 					//========================================COMMAND REPEAT============================================
@@ -135,12 +135,12 @@ public class KeyListenerAttacher {
 					} catch (NullPointerException npe) {
 						sys.log("KLA", 3, "Command repeat error: main.mainFrame is null.");
 					}
-					OpenLib.cmdLinePrepare();
+					VariableInitializion.cmdLinePrepare();
 					main.Main.commandHistory.clear();
 					try {
 						//Add all entries of cmd_history to LinkedList main.Main.commandHistory
 						main.Main.commandHistory.addAll(Arrays.asList(Files.readString(Paths.get(
-								VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "cmd_history")).split("\n")));
+								Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history")).split("\n")));
 					} catch (IOException ioe) {
 						//TODO edit command history and TAB repeating further
 						sys.log("MAIN", 3, "CMD History read fail. main.Main.commandHistory<LinkedList> is empty now.");

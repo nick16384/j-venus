@@ -5,29 +5,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import engine.AWTANSI;
+import awtcomponents.AWTANSI;
 import engine.sys;
-import libraries.OpenLib;
-import libraries.VarLib;
+import libraries.VariableInitializion;
+import libraries.Global;
 
 public class Console_ChangeDirectory {
 	public static String changeDirectory(ArrayList<String> params, Map<String, String> paramsWithValues) {
 		if (params == null || params.size() == 0) {
 			sys.log("CHDIR", 2, "No parameters provided, changing to root directory.");
-			VarLib.setCurrentDir((new File(VarLib.getFSRoot())).getAbsolutePath());
+			Global.setCurrentDir((new File(Global.getFSRoot())).getAbsolutePath());
 		} else if (params.get(0).equals("..")) {
 			sys.log("CHDIR", 1, "Going up one layer.");
-			VarLib.setCurrentDir(
-					(new File(VarLib.getCurrentDir().replace(VarLib.getCurrentDir().split(VarLib.fsep)[1], "")))
+			Global.setCurrentDir(
+					(new File(Global.getCurrentDir().replace(Global.getCurrentDir().split(Global.fsep)[1], "")))
 							.getAbsolutePath());
 
-		} else if ((new File(VarLib.getCurrentDir() + VarLib.fsep + params.get(0))).isDirectory()) {
+		} else if ((new File(Global.getCurrentDir() + Global.fsep + params.get(0))).isDirectory()) {
 			sys.log("CHDIR", 1, "CD'ing into directory of current directory.");
-			VarLib.setCurrentDir(
-					(new File(VarLib.getCurrentDir() + VarLib.fsep + (String) params.get(0))).getAbsolutePath());
+			Global.setCurrentDir(
+					(new File(Global.getCurrentDir() + Global.fsep + (String) params.get(0))).getAbsolutePath());
 		} else if ((new File(params.get(0))).isDirectory()) {
 			sys.log("CHDIR", 1, "Changing directory to absolute path.");
-			VarLib.setCurrentDir((new File(params.get(0))).getAbsolutePath());
+			Global.setCurrentDir((new File(params.get(0))).getAbsolutePath());
 		} else {
 			try {
 				
@@ -35,14 +35,14 @@ public class Console_ChangeDirectory {
 						&& !(new File(params.get(0)).exists())
 						|| !(new File(params.get(0)).getCanonicalFile().exists())) {
 					
-					if (!(new File(VarLib.getCurrentDir() + VarLib.fsep + params.get(0)).isDirectory())
-							|| !(new File(VarLib.getCurrentDir() + VarLib.fsep + params.get(0)).getCanonicalFile().isDirectory())) {
-						if (VarLib.getCurrentDir().equals(VarLib.fsep))
+					if (!(new File(Global.getCurrentDir() + Global.fsep + params.get(0)).isDirectory())
+							|| !(new File(Global.getCurrentDir() + Global.fsep + params.get(0)).getCanonicalFile().isDirectory())) {
+						if (Global.getCurrentDir().equals(Global.fsep))
 							sys.log("LSDIR", 1, "Found a path break inside current dir: \n"
-									+ checkPathBreak(VarLib.getCurrentDir() + params.get(0)) + " does not exist.");
+									+ checkPathBreak(Global.getCurrentDir() + params.get(0)) + " does not exist.");
 						else
 							sys.log("LSDIR", 1, "Found a path break inside current dir: \n"
-									+ checkPathBreak(VarLib.getCurrentDir() + VarLib.fsep + params.get(0)) + " does not exist.");
+									+ checkPathBreak(Global.getCurrentDir() + Global.fsep + params.get(0)) + " does not exist.");
 					} else {
 						sys.log("LSDIR", 1, "Found a path break: " + checkPathBreak(params.get(0)) + " does not exist.");
 					}
@@ -54,7 +54,7 @@ public class Console_ChangeDirectory {
 		}
 
 		sys.log("CHDIR", 1, "Updating the $PATH variable.");
-		OpenLib.updateEnv("$PATH");
+		VariableInitializion.updateEnv("$PATH");
 		return null;
 	}
 	
@@ -68,14 +68,14 @@ public class Console_ChangeDirectory {
 	private static String checkPathBreak(String location) {
 		try {
 			sys.log("LSDIR", 2, "Provided directory doesn't exist. Trying to figure out, where the tree brakes.");
-			String addedBrackets = VarLib.getFSRoot();
-			for (String bracket : location.split(VarLib.fsep)) {
+			String addedBrackets = Global.getFSRoot();
+			for (String bracket : location.split(Global.fsep)) {
 				
 				//TODO Check if this folder is really a folder and only then print path breaks
 				if ((new File(addedBrackets).exists() || new File(addedBrackets).getCanonicalFile().exists())
 						&& new File(addedBrackets).isDirectory() || new File(addedBrackets).getCanonicalFile().isDirectory()) {
-					if (!bracket.equals(VarLib.getFSRoot()))
-						addedBrackets = addedBrackets.concat(bracket + VarLib.fsep);
+					if (!bracket.equals(Global.getFSRoot()))
+						addedBrackets = addedBrackets.concat(bracket + Global.fsep);
 				} else {
 					sys.shellPrintln(AWTANSI.B_Yellow, "Can't change into the folder:");
 					sys.shellPrintln(AWTANSI.B_Green, location);

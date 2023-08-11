@@ -1,6 +1,10 @@
 package engine;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.net.UnknownHostException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -11,8 +15,8 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import commandProcessing.CommandMain;
-import libraries.OpenLib;
-import libraries.VarLib;
+import libraries.Env;
+import libraries.Global;
 import main.Main;
 import threads.CommandLoader;
 import threads.ThreadAllocator;
@@ -33,7 +37,7 @@ public class Init {
 	 * @return Whether initialization was successful or not (true or false)
 	 */
 	public static boolean init(String[] vmArgsArray) {
-		if (!sys.getActivePhase().equals("pre-init")) {
+		if (!Global.getCurrentPhase().equals(Runphase.PREINIT)) {
 			sys.log("INIT", 3, "Init already done. Cannot do twice or more.\n");
 			sys.log("INIT", 1, "If you want to force reinitialization, set the current phase to \"pre-init\".");
 			return false;
@@ -44,7 +48,7 @@ public class Init {
 		
 		if (vmArgs.contains("--help") || vmArgs.contains("-h")) {
 			//Display help page and exit with code 0
-			System.out.println("J-Venus version " + VarLib.getVersion());
+			System.out.println("J-Venus version " + Global.getVersion());
 			System.out.println("Usage: venus [OPTION...] [STARTDIR]");
 			System.out.println("Info: [STARTDIR] not implemented yet.");
 			System.out.println("See list below for all arguments:\n");
@@ -78,19 +82,21 @@ public class Init {
 			e.printStackTrace();
 		}
 		
-		sys.setActivePhase("init");
+		Global.nextRunphase(); // Init
 		//TODO patch motd file not found and fix a few formatting errors (extra \n, etc.)
-		System.out.print(VarLib.getMOTD());
+		System.out.print(Global.getMOTD());
 		System.out.println("");
 		System.out.println("Loading internal variables...");
-		OpenLib.initVars();
+		
+		libraries.VariableInitializion.initializeAll();
+		
 		sys.log("MAIN", 0, "Done.");
 		sys.log("MAIN", 1, "Warning: Log is currently very verbose due to debugging reasons.");
 		sys.log("MAIN", 1, "Will be reduced within alpha versions.");
 		if (vmArgs.contains("--enable-deprecated")) {
 			//Load legacy external commands
 			sys.log("MAIN", 0, "{Deprecated} Loading external commands...");
-			try { VarLib.setExtCommands(CommandLoader.loadCommands()); }
+			try { Global.setExtCommands(CommandLoader.loadCommands()); }
 			catch (AccessDeniedException ade) { sys.log("MAIN", 2, "Access to the destination file is denied."); }
 			catch (NoSuchFileException nsfe) { sys.log("MAIN", 2, "External commands not found."); }
 			catch (IOException ioe) {
@@ -109,12 +115,12 @@ public class Init {
 			ioe.printStackTrace();
 		}
 		sys.log("MAIN", 1, "Reinitializing environment...");
-		OpenLib.updateEnv("$$ALL");
+		Env.updateEnv("$$ALL");
 		sys.log("MAIN", 1, "Done.");
 		sys.log("MAIN", 1, "Backing up cmd_history to cmd_history_bak...");
 		try {
-			Files.writeString(Paths.get(VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "cmd_history_bak"),
-					Files.readString(Paths.get(VarLib.getDataDir().getAbsolutePath() + VarLib.fsep + "cmd_history")),
+			Files.writeString(Paths.get(Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history_bak"),
+					Files.readString(Paths.get(Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history")),
 					StandardOpenOption.SYNC);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();

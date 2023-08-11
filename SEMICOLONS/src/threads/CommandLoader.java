@@ -12,7 +12,7 @@ import java.util.Map;
 import javax.tools.*;
 
 import engine.sys;
-import libraries.VarLib;
+import libraries.Global;
 
 /**
  * Legacy class: Has been replaced by direct JAR execution in CommandMain,
@@ -38,8 +38,8 @@ public class CommandLoader {
 	@Deprecated
 	public static Map<String, File> loadCommands() throws IOException {
 		Map<String, File> extCommands = new HashMap<>();
-		File configFileSource = new File(VarLib.getDefaultDir() + VarLib.fsep + "commands.cfg");
-		File commandSource = new File(VarLib.getDefaultDir() + VarLib.fsep + "commands");
+		File configFileSource = new File(Global.getDefaultDir() + Global.fsep + "commands.cfg");
+		File commandSource = new File(Global.getDefaultDir() + Global.fsep + "commands");
 		
 		if (alreadyExecuted) {
 			sys.log("LDEXTCMDS", 2, "External commands already loaded. Cannot proceed.");
@@ -67,7 +67,7 @@ public class CommandLoader {
         	//Iterating over elements to split
         	for (String value : splittedCFGFile) {
         		extCommands.put(value.split(">")[0], new File(value.split(">")[1]
-        				.replace("ROOT/commands/", VarLib.getCmdDir().getAbsolutePath() + VarLib.fsep)));
+        				.replace("ROOT/commands/", Global.getCmdDir().getAbsolutePath() + Global.fsep)));
         		sys.log("LDEXTCMDS", 0, "Loaded value: " + value);
         	}
         } else {
@@ -90,7 +90,7 @@ public class CommandLoader {
         	}
         	//Reading command by command and creating temporary files containing the code
         	for (File command : commands) {
-        		File commandTempPath = new File(VarLib.getDefaultDir().toString() + VarLib.fsep + "temp" + VarLib.fsep + command.getName().trim().replace(".jdexe", ".java"));
+        		File commandTempPath = new File(Global.getDefaultDir().toString() + Global.fsep + "temp" + Global.fsep + command.getName().trim().replace(".jdexe", ".java"));
         		command = new File(command.toString().trim().replaceAll("\n", ""));
         		sys.log("LDEXTCMDS", 0, "Processing command: " +  command);
         		String commandContent = Files.readString(command.toPath());
@@ -120,10 +120,10 @@ public class CommandLoader {
         sys.log("LDEXTCMDS", 0, "Compiling commands...");
         String javaCompilerLocation = "";
         
-        if (VarLib.getOSName().equalsIgnoreCase("Windows")) {
-        	javaCompilerLocation = VarLib.getJavaHome() + VarLib.fsep + "bin" + VarLib.fsep + "javac.exe";
-        } else if (VarLib.getOSName().equalsIgnoreCase("Linux")) {
-        	javaCompilerLocation = VarLib.getJavaHome() + VarLib.fsep + "bin" + VarLib.fsep + "javac";
+        if (Global.getOSName().equalsIgnoreCase("Windows")) {
+        	javaCompilerLocation = Global.getJavaHome() + Global.fsep + "bin" + Global.fsep + "javac.exe";
+        } else if (Global.getOSName().equalsIgnoreCase("Linux")) {
+        	javaCompilerLocation = Global.getJavaHome() + Global.fsep + "bin" + Global.fsep + "javac";
         }
         
         //TODO Fix compiling not working
@@ -137,9 +137,9 @@ public class CommandLoader {
         int compilationResult = 1;
         
         //Compiling each file in JavaDOS/temp/
-        for (String commandTempFile : VarLib.getTempDir().list()) {
-        	compilationResult = compiler.run(null, null, null, VarLib.getTempDir() + VarLib.fsep + commandTempFile);
-        	Files.copy(Paths.get(commandTempFile), VarLib.getBinDir().toPath(), StandardCopyOption.REPLACE_EXISTING);
+        for (String commandTempFile : Global.getTempDir().list()) {
+        	compilationResult = compiler.run(null, null, null, Global.getTempDir() + Global.fsep + commandTempFile);
+        	Files.copy(Paths.get(commandTempFile), Global.getBinDir().toPath(), StandardCopyOption.REPLACE_EXISTING);
         	//TODO Fix copy not working ^^^^
         }
         
@@ -150,17 +150,17 @@ public class CommandLoader {
         	sys.log("LDEXTCMDS", 0, "LDCMDS: Compilation completed successfully.");
         }
         
-        Files.copy(Paths.get(VarLib.getDefaultDir() + VarLib.fsep + "temp" + VarLib.fsep + "*.class"), 
-    			Paths.get(VarLib.getDefaultDir() + VarLib.fsep + "bin"), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(Paths.get(Global.getDefaultDir() + Global.fsep + "temp" + Global.fsep + "*.class"), 
+    			Paths.get(Global.getDefaultDir() + Global.fsep + "bin"), StandardCopyOption.REPLACE_EXISTING);
         
         sys.log("LDEXTCMDS", 0, "Compiling done.");
         sys.log("LDEXTCMDS", 0, "Deleting temporary files...");
-        File[] allTempFiles = VarLib.getTempDir().listFiles();
+        File[] allTempFiles = Global.getTempDir().listFiles();
         for (File file : allTempFiles) {
         	Files.delete(file.toPath());
         }
-        if (VarLib.getTempDir().list().length == 0) { sys.log("LDEXTCMDS", 0, "Successfully deleted all temporary files."); }
-        File[] binFiles = VarLib.getTempDir().listFiles();
+        if (Global.getTempDir().list().length == 0) { sys.log("LDEXTCMDS", 0, "Successfully deleted all temporary files."); }
+        File[] binFiles = Global.getTempDir().listFiles();
         //TODO Assign compiled commands to Map extCommands
         if ((binFiles.length <= 0) && (!extCommands.isEmpty())) {
         	int index = 0;

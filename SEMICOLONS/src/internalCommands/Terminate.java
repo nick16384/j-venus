@@ -3,9 +3,9 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
-import engine.AWTANSI;
+import awtcomponents.AWTANSI;
 import engine.sys;
-import libraries.VarLib;
+import libraries.Global;
 import main.Main;
 
 public class Terminate {
@@ -18,7 +18,7 @@ public class Terminate {
 			if (Main.ThreadAllocMain.isWDTActive()) {
 				sys.log("TERMINATE", 1, "Sending shutdown signal to global Thread Allocator...");
 				sys.shellPrintln(AWTANSI.B_Blue, "Exiting...");
-				VarLib.setPromptPattern("$-");
+				Global.setPromptPattern("$-");
 				Main.ThreadAllocMain.shutdownVexus(0);
 			} else {
 				sys.log("TERMINATE", 3, "Watchdog Thread not started! If this problem persists, please reinstall!");

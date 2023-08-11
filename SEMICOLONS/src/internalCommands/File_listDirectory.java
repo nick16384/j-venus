@@ -1,13 +1,13 @@
 package internalCommands;
 
-import engine.AWTANSI;
 import engine.sys;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
+import awtcomponents.AWTANSI;
 import libraries.FileCheckUtils;
-import libraries.VarLib;
+import libraries.Global;
 
 public class File_listDirectory {
 	public static String listDirectory(ArrayList<String> params, Map<String, String> paramsWithValues) {
@@ -31,8 +31,8 @@ public class File_listDirectory {
 			listDirName = FileCheckUtils.prefetchFile(new File(params.get(0))).toString();
 			listDir = FileCheckUtils.prefetchFile(new File(params.get(0)));
 		} else {
-			listDirName = VarLib.getCurrentDir();
-			listDir = new File(VarLib.getCurrentDir());
+			listDirName = Global.getCurrentDir();
+			listDir = new File(Global.getCurrentDir());
 		}
 		sys.log("LSDIR", 0, "Listing directory: '" + listDirName + "'");
 		

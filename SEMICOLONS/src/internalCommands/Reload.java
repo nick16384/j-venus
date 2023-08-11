@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import engine.sys;
-import libraries.OpenLib;
+import libraries.VariableInitializion;
 import main.Main;
 
 public class Reload {
@@ -16,20 +16,20 @@ public class Reload {
 			//Perform restart
 			sys.log("RELOAD", 1, "Reloading J-Vexus...");
 			Main.mainFrameAWT.getCmdLine().setText("");
-			OpenLib.initVars();
-			OpenLib.updateEnv("$$ALL");
-			OpenLib.verifyFiles();
-			OpenLib.refreshDateTime();
-			OpenLib.cmdLinePrepare();
+			VariableInitializion.initVars();
+			VariableInitializion.updateEnv("$$ALL");
+			VariableInitializion.verifyFiles();
+			VariableInitializion.refreshDateTime();
+			VariableInitializion.cmdLinePrepare();
 		} else {
 			sys.log("RELOAD", 1, "Reloading J-Vexus...");
 			sys.setActivePhase("pre-init");
 			Main.mainFrameAWT.getCmdLine().setText("");
 			sys.setActivePhase("init");
-			OpenLib.initVars();
-			OpenLib.updateEnv("$$ALL");
-			OpenLib.refreshDateTime();
-			OpenLib.cmdLinePrepare();
+			VariableInitializion.initVars();
+			VariableInitializion.updateEnv("$$ALL");
+			VariableInitializion.refreshDateTime();
+			VariableInitializion.cmdLinePrepare();
 		}
 		
 		return null;

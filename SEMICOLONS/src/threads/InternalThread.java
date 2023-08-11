@@ -1,6 +1,6 @@
 package threads;
 
-public interface VexusThread {
+public interface InternalThread {
 	
 	public final Thread thread = new Thread();
 	

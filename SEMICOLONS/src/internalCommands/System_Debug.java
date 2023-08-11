@@ -3,10 +3,10 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
+import awtcomponents.AWTANSI;
 import engine.sys;
-import libraries.VarLib;
+import libraries.Global;
 import main.Main;
-import engine.AWTANSI;
 
 /**
  * prints debug information e.g. execThread status, Threads, Variables, etc.
@@ -22,17 +22,17 @@ public class System_Debug {
 		sys.shellPrint(AWTANSI.D_Cyan, "JVM Process PID: " + ProcessHandle.current().pid() + "\n");
 		sys.shellPrint(AWTANSI.D_Cyan, "Directories:\n");
 		sys.shellPrint(AWTANSI.D_Yellow,
-		  "\tCurrent        : " + VarLib.getCurrentDir() + "\n"
-		+ "\tVexus root     : " + VarLib.getDefaultDir().getAbsolutePath() + "\n"
-		+ "\tVexus data     : " + VarLib.getDataDir().getAbsolutePath() + "\n"
-		+ "\tVexus binary   : " + VarLib.getBinDir().getAbsolutePath() + "\n"
-		+ "\tVexus temporary: " + VarLib.getTempDir().getAbsolutePath() + "\n"
-		+ "\tFilesystem root: " + VarLib.getFSRoot() + "\n"
-		+ "\tJava Home      : " + VarLib.getJavaHome().getAbsolutePath() + "\n");
+		  "\tCurrent        : " + Global.getCurrentDir() + "\n"
+		+ "\tVexus root     : " + Global.getDefaultDir().getAbsolutePath() + "\n"
+		+ "\tVexus data     : " + Global.getDataDir().getAbsolutePath() + "\n"
+		+ "\tVexus binary   : " + Global.getBinDir().getAbsolutePath() + "\n"
+		+ "\tVexus temporary: " + Global.getTempDir().getAbsolutePath() + "\n"
+		+ "\tFilesystem root: " + Global.getFSRoot() + "\n"
+		+ "\tJava Home      : " + Global.getJavaHome().getAbsolutePath() + "\n");
 		sys.shellPrint(AWTANSI.D_Cyan, "Other files:\n");
 		sys.shellPrint(AWTANSI.D_Yellow,
-				  "\tJava executable: " + VarLib.getJavaExec().getAbsolutePath() + "\n"
-				+ "\tLog file       : " + VarLib.getLogFile().getAbsolutePath() + "\n");
+				  "\tJava executable: " + Global.getJavaExec().getAbsolutePath() + "\n"
+				+ "\tLog file       : " + Global.getLogFile().getAbsolutePath() + "\n");
 		sys.shellPrint(AWTANSI.D_Cyan, "J-Vexus Status:\n");
 		sys.shellPrint(AWTANSI.D_Yellow, "\tRunning phase: ");
 		if (sys.getActivePhase().equals("run"))

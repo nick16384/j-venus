@@ -1,7 +1,7 @@
 package commandProcessing;
 
 import engine.sys;
-import libraries.VarLib;
+import libraries.Global;
 
 public class EnvVarParser {
 	
@@ -21,9 +21,9 @@ public class EnvVarParser {
 		while (in.contains("$")) {
 			currentToken = in.split("\\$")[1].split(" ")[0];
 			
-			replacement = VarLib.getEnv("$" + currentToken);
+			replacement = Global.getEnv("$" + currentToken);
 			if (replacement == null)
-				replacement = VarLib.getEnv("$$" + currentToken);
+				replacement = Global.getEnv("$$" + currentToken);
 			if (replacement == null)
 				replacement = currentToken;
 			

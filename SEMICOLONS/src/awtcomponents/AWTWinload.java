@@ -1,4 +1,4 @@
-package awt.windowManager;
+package awtcomponents;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import engine.sys;
-import libraries.VarLib;
+import libraries.Global;
 import main.Main;
 
 public class AWTWinload {
@@ -19,15 +19,15 @@ public class AWTWinload {
 		//Set icon image for mainFrame
 		try {
 			Main.mainFrameAWT.setIconImage(ImageIO.read(
-					new File(VarLib.fsep + "etc" + VarLib.fsep +
-							"venus" + VarLib.fsep + "data" + VarLib.fsep + "venus-icon.png")));
+					new File(Global.fsep + "etc" + Global.fsep +
+							"venus" + Global.fsep + "data" + Global.fsep + "venus-icon.png")));
 		} catch (IOException e) {
 			sys.log("MAIN", 3, "Could not set icon image. The file probably doesn't exist or is not a supported image file.");
 			sys.log("MAIN", 3, "Icon path: " +
-					VarLib.fsep + "etc" + VarLib.fsep +
-					"venus" + VarLib.fsep + "data" + VarLib.fsep + "venus-icon.png");
+					Global.fsep + "etc" + Global.fsep +
+					"venus" + Global.fsep + "data" + Global.fsep + "venus-icon.png");
 		}
-		Main.mainFrameAWT.setName("J-Vexus " + VarLib.getVersion());
+		Main.mainFrameAWT.setName("J-Vexus " + Global.getVersion());
 		sys.log("MAIN", 0, "Done.");
 	}
 }

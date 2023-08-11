@@ -1,4 +1,4 @@
-package jfx.windowManager;
+package jfxcomponents;
 
 import java.util.Map;
 import java.util.HashMap;

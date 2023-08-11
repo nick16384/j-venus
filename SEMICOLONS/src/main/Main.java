@@ -4,16 +4,18 @@ import java.lang.Exception;
 
 import javax.swing.JFrame;
 
+import components.Shell;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 
 import engine.sys;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import jfx.windowManager.JFxWinloader;
-import jfx.windowManager.PartiallyEditableInlineCSSTextArea;
-import libraries.OpenLib;
-import libraries.VarLib;
+import jfxcomponents.JFxWinloader;
+import jfxcomponents.PartiallyEditableInlineCSSTextArea;
+import libraries.VariableInitializion;
+import libraries.Global;
 import threads.ThreadAllocator;
 
 public class Main extends JFrame {
@@ -49,8 +51,11 @@ public class Main extends JFrame {
 		
 		engine.Init.init(args);
 		
-		if (Arrays.asList(args).contains("--javafx") || Arrays.asList(args).contains("--jfx")) {
-			sys.log("MAIN", 1, "Using experimental JavaFX window loader.");
+		if (Arrays.asList(args).contains("--awt")) {
+			sys.log("MAIN", 1, "Using deprecated AWT window loader.");
+			awtcomponents.AWTWinload.awtWinload();
+		} else {
+			sys.log("MAIN", 1, "Using default JavaFX window loader.");
 			try {
 				jfxWinloader = new JFxWinloader();
 				//TODO load GUI in thread
@@ -58,34 +63,30 @@ public class Main extends JFrame {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else {
-			sys.log("MAIN", 1, "Starting with default AWT window loader.");
-			awt.windowManager.AWTWinload.awtWinload();
 		}
 		
 		if (ThreadAllocMain.getJFXT().isGUIActive())
 			jfxWinloader.clearCmdLine();
 		
-		sys.setActivePhase("run");
+		Global.nextRunphase();
 		try { new components.Command("clear --noPrompt").start(); } catch (Exception ex) { ex.printStackTrace(); }
 		try { Thread.sleep(200); } catch (InterruptedException ie) { ie.printStackTrace(); }
-		sys.setActivePhase("init");
-		OpenLib.cmdLinePrepare();
-		sys.setActivePhase("run");
+		Shell.showPrompt();
+		Global.nextRunphase();
 		
 		//==================================== INIT END ====================================
 	}
 	public static LinkedList<String> commandHistory = new LinkedList<>();
 	public static int tabCountInRow = 0;
 	
-	public static awt.windowManager.WindowMain mainFrameAWT;
+	public static awtcomponents.WindowMain mainFrameAWT;
 	
 	//========================================MAIN===========================================
 	public static final void initAWTWindow() {
 		sys.log("MAIN", 1, "Creating new WindowMain object.");
-		mainFrameAWT = new awt.windowManager.WindowMain("J-Vexus " + VarLib.getVersion());
+		mainFrameAWT = new awtcomponents.WindowMain("J-Vexus " + Global.getVersion());
 		sys.log("MAIN", 1, "Attaching KeyListener to mainFrame.");
-		awt.windowManager.KeyListenerAttacher.attachKeyListener(mainFrameAWT);
+		awtcomponents.KeyListenerAttacher.attachKeyListener(mainFrameAWT);
 	}
 	
 	public JFrame getMainWindow() {

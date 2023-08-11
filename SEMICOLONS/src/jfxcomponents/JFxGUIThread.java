@@ -1,10 +1,10 @@
-package jfx.windowManager;
+package jfxcomponents;
 
 import engine.sys;
 import main.Main;
-import threads.VexusThread;
+import threads.InternalThread;
 
-public class JFxGUIThread implements VexusThread {
+public class JFxGUIThread implements InternalThread {
 	private Thread jfxGUIThread;
 	private boolean isGUIActive;
 	

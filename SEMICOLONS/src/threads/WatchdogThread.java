@@ -4,14 +4,16 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 
-import awt.windowManager.WindowMain;
-import engine.AWTANSI;
+import awtcomponents.AWTANSI;
+import awtcomponents.WindowMain;
+import components.Shell;
+import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
-import libraries.VarLib;
+import libraries.Global;
 import main.Main;
 
-public final class WatchdogThread implements VexusThread {
+public final class WatchdogThread implements InternalThread {
 	protected boolean shutdownSignal;
 	private int exitCode;
 	private long timeStart;
@@ -41,7 +43,7 @@ public final class WatchdogThread implements VexusThread {
 				}
 				sys.log("WATCHDOG", 0, "Watchdog idle now.");
 
-				while (sys.getActivePhase().equals("init")) {
+				while (Global.getCurrentPhase().equals(Runphase.INIT)) {
 					// wait for phase to change to "run"
 				}
 
@@ -51,7 +53,7 @@ public final class WatchdogThread implements VexusThread {
 					//====================================== CHECKING ======================================
 					
 					try {
-						if (sys.getActivePhase().equals("stop")) {
+						if (Global.getCurrentPhase().equals(Runphase.STOP)) {
 							break;
 						}
 						
@@ -72,7 +74,7 @@ public final class WatchdogThread implements VexusThread {
 									+ "and because of this, we have to shutdown. Try reinstalling, if this issue persists.");
 							break;
 						} else if (!Main.ThreadAllocMain.getCUIT().isRunning() && !nonCriticalAlreadyDisplayed) {
-							sys.shellPrintln(AWTANSI.B_Yellow, "Warning: the internal \"User Input Detection Thread\" has stopped,\n"
+							Shell.println(AWTANSI.B_Yellow, "Warning: the internal \"User Input Detection Thread\" has stopped,\n"
 									+ "and therefore, some control signals like CTRL + C may not work anymore.\n"
 									+ "This is not a critical error, but might indicate a problem and you should try to restart.\n"
 									+ "If that does not get rid of the problem, consider reinstalling.");
@@ -86,14 +88,14 @@ public final class WatchdogThread implements VexusThread {
 						}
 						
 						//Current directory (path) validity
-						if (VarLib.getCurrentDir() == null) {
+						if (Global.getCurrentDir() == null) {
 							stopWithError(1, 15000, "The internal path variable was set to \"null\".\n"
 									+ "This means, that the program cannot determine your current path anymore\n"
 									+ "and might do some strange stuff breaking functionality completely.\n"
 									+ "To prevent that from happening, this shutdown was induced to smoothly suspend\n"
 									+ "the running Java instance and not hard kill it.");
 							break;
-						} else if (VarLib.getCurrentDir().isBlank()) {
+						} else if (Global.getCurrentDir().isBlank()) {
 							stopWithError(1, 15000, "The internal path variable is blank, which should not be,\n"
 									+ "since every OS has some kind of filesystem root (e.g. \"C:\\\" on Windows and"
 									+ "\"/\" for Unix-like systems.\n"
@@ -102,8 +104,8 @@ public final class WatchdogThread implements VexusThread {
 									+ "To prevent that from happening, this shutdown was induced to smoothly suspend\n"
 									+ "the running Java instance and not hard kill it.");
 							break;
-						} else if (!(Files.exists(Paths.get(VarLib.getCurrentDir()), LinkOption.NOFOLLOW_LINKS))
-								|| !(Files.isDirectory(Paths.get(VarLib.getCurrentDir()), LinkOption.NOFOLLOW_LINKS))) {
+						} else if (!(Files.exists(Paths.get(Global.getCurrentDir()), LinkOption.NOFOLLOW_LINKS))
+								|| !(Files.isDirectory(Paths.get(Global.getCurrentDir()), LinkOption.NOFOLLOW_LINKS))) {
 							stopWithError(1, 15000, "The internal path variable does not refer to a valid\n"
 									+ "folder location. This could mean, that you changed your directory(cd) to\n"
 									+ "a file or nonexistent path and the system didn't catch the error,\n"
@@ -115,7 +117,7 @@ public final class WatchdogThread implements VexusThread {
 						}
 						
 						//Internal state and phase checking
-						if (!(sys.getActivePhase().equalsIgnoreCase("run"))) {
+						if (!(Global.getCurrentPhase().equals(Runphase.RUN))) {
 							stopWithError(1, 15000, "After 5 seconds of waiting, the system still doesn't seem to have fully\n"
 									+ "finished initializing. That could be, either because an internal state caused\n"
 									+ "some kind of change, that disallowed setting the current phase to required mode 'run',\n"
@@ -210,12 +212,11 @@ public final class WatchdogThread implements VexusThread {
 			new components.ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
 			Main.mainFrameAWT.getCmdLine().setText("");
 		}
-		sys.setActivePhase("error");
-		sys.setShellMode("native");
+		Global.setErrorRunphase();
 		try { Thread.sleep(200); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		sys.log("[WDT]", 4, errMsg);
 		Platform.runLater(() -> {
-			sys.shellPrintln(AWTANSI.B_Yellow,
+			Shell.println(AWTANSI.B_Yellow,
 					"\n\n===============================================\n"
 							+ "There was an operation-critical error and execution cannot proceed.\n\n"
 							+ errMsg + "\n\n"
@@ -225,10 +226,10 @@ public final class WatchdogThread implements VexusThread {
 							+ "===============================================");
 		});
 		if (!Main.javafxEnabled) { Main.mainFrameAWT.getCmdLine().setEditable(false); }
-		sys.shellPrintln(AWTANSI.B_Cyan, "Log file is at: " + VarLib.getLogFile().getAbsolutePath());
+		Shell.println(AWTANSI.B_Cyan, "Log file is at: " + Global.getLogFile().getAbsolutePath());
 		if (waitBeforeStop > 100 && waitBeforeStop < 60000) {
 			Platform.runLater(() -> {
-			sys.shellPrintln(AWTANSI.B_Green,
+			Shell.println(AWTANSI.B_Green,
 					"This JVM will be suspended in " + Double.toString(waitBeforeStop / 1000) + " seconds.");
 			});
 			try {
@@ -240,7 +241,7 @@ public final class WatchdogThread implements VexusThread {
 			sys.log("WTT", 3, "Can't wait less than 100 or more than 60,000 milliseconds until VM suspension.");
 			sys.log("WTT", 3, "Defaulting to 10 seconds.");
 			Platform.runLater(() -> {
-				sys.shellPrintln(AWTANSI.B_Green, "This JVM will be suspended in 10 seconds.");
+				Shell.println(AWTANSI.B_Green, "This JVM will be suspended in 10 seconds.");
 			});
 			try {
 				Thread.sleep(waitBeforeStop);

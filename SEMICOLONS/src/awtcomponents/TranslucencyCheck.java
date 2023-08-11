@@ -1,4 +1,4 @@
-package awt.windowManager;
+package awtcomponents;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsDevice.WindowTranslucency;

@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import engine.AWTANSI;
+import awtcomponents.AWTANSI;
 import engine.sys;
 
 public class Err {
@@ -62,8 +62,8 @@ public class Err {
 			dumpStr += "\t" + traceElement.getFileName() + ", at Line " + traceElement.getLineNumber() + "\n";
 		}
 		
-		Path dumpFile = Paths.get(VarLib.getDataDir() + VarLib.fsep + "dumps-ex"
-				+ VarLib.fsep + "dump_" + VarLib.getDateTime(true) + ".txt");
+		Path dumpFile = Paths.get(Global.getDataDir() + Global.fsep + "dumps-ex"
+				+ Global.fsep + "dump_" + Global.getDateTime(true) + ".txt");
 		try {
 			Files.createFile(dumpFile);
 			Files.writeString(dumpFile, dumpStr, StandardOpenOption.WRITE);

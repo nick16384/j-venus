@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-import engine.AWTANSI;
+import awtcomponents.AWTANSI;
 import engine.sys;
 import libraries.FileCheckUtils;
-import libraries.VarLib;
+import libraries.Global;
 
 /**
  * Displays information about files / folders
@@ -22,8 +22,8 @@ public class File_fileStats {
 			sys.log("FSTAT", 0, "No parameter given, reading working directory permission.");
 			sys.shellPrintln(AWTANSI.B_White, "Info: No file name supplied:\n"
 					+ "Checking permissions for working directory.");
-			sys.shellPrintln(AWTANSI.B_Green, "Element \"" + VarLib.getCurrentDir() + "\": "
-					+ FileCheckUtils.getPermissions(new File(VarLib.getCurrentDir())));
+			sys.shellPrintln(AWTANSI.B_Green, "Element \"" + Global.getCurrentDir() + "\": "
+					+ FileCheckUtils.getPermissions(new File(Global.getCurrentDir())));
 		}
 		//Parameters are valid, check if element exists globally
 		else if (FileCheckUtils.exists(new File(params.get(0)))) {
@@ -32,11 +32,11 @@ public class File_fileStats {
 					+ params.get(0) + "\": " + FileCheckUtils.getPermissions(new File(params.get(0))));
 		}
 		//Check if element exists locally (inside working directory)
-		else if (FileCheckUtils.exists(new File(VarLib.getCurrentDir() + VarLib.fsep + params.get(0)))) {
+		else if (FileCheckUtils.exists(new File(Global.getCurrentDir() + Global.fsep + params.get(0)))) {
 			sys.log("FSTAT", 0, "File \"" + params.get(0) +  "\" exists inside working directory as \""
-					+ VarLib.getCurrentDir() + VarLib.fsep + params.get(0) + "\".");
+					+ Global.getCurrentDir() + Global.fsep + params.get(0) + "\".");
 			sys.shellPrintln(AWTANSI.B_Green, "Element \""
-					+ VarLib.getCurrentDir() + VarLib.fsep + params.get(0)
+					+ Global.getCurrentDir() + Global.fsep + params.get(0)
 					+ "\": " + FileCheckUtils.getPermissions(new File(params.get(0))));
 		}
 		//Supplied file / folder name not valid
