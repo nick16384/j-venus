@@ -1,5 +1,6 @@
 package internalCommands;
 
+import components.Shell;
 import components.TestException;
 import engine.sys;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class System_Generate_Stacktrace
         (RuntimeException) Class.forName(params.get(0)).getConstructor(new Class[] { String.class }).newInstance(new Object[] { params.get(0) });
       throw ex;
     } 
-    sys.shellPrint(1, "STACKTRC", "Exception name must be fully qualified name, for example: java.lang.NullPointerException instead of NullPointerException.\n", new boolean[0]);
+    Shell.print(1, "STACKTRC", "Exception name must be fully qualified name, for example: java.lang.NullPointerException instead of NullPointerException.\n", new boolean[0]);
     
     throw new TestException("TestCode", "This is a test exception.");
   }

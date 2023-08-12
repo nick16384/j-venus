@@ -9,7 +9,7 @@ public class ShellWriteThreadNew implements InternalThread {
 	private static String writeQueue = "";
 	
 	private Thread shellWriteThread = new Thread(() -> {
-		while (!Main.ThreadAllocMain.isShutdownSignalActive()) {
+		while (!ThreadAllocation.isShutdownSignalActive()) {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {

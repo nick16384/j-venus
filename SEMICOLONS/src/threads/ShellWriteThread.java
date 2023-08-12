@@ -84,7 +84,7 @@ public class ShellWriteThread implements InternalThread {
 				updateShellStream();
 
 				// Run if neither WDT's shutdown signal nor local suspend signal is active
-				while (!Main.ThreadAllocMain.isShutdownSignalActive() && !suspend) {
+				while (!ThreadAllocation.isShutdownSignalActive() && !suspend) {
 					try {
 						// Wait until thread gets InterruptedException
 						Thread.sleep(200);

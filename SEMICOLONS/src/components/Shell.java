@@ -3,9 +3,11 @@ package components;
 import java.awt.Color;
 
 import awtcomponents.AWTANSI;
+import engine.Runphase;
 import engine.sys;
 import libraries.Global;
 import main.Main;
+import threads.ThreadAllocation;
 
 /**
  * Contains all functions required by other methods for the shell.
@@ -76,16 +78,16 @@ public class Shell {
 	public static void showPrompt() {
 		if (!Main.javafxEnabled)
 			Main.mainFrameAWT.getCmdLine().setEditable(false);
-		if (sys.getActivePhase().equals("init")) {
+		if (Global.getCurrentPhase().equals(Runphase.INIT)) {
 
-			sys.shellPrint(Global.getMOTD()); // Print message of the day, when in init phase
+			Shell.print(Global.getMOTD()); // Print message of the day, when in init phase
 			prompt = getPromptWithPattern(promptPattern);
-			sys.shellPrint(1, "HIDDEN", prompt);
+			Shell.print(1, "HIDDEN", prompt);
 
-		} else if (sys.getActivePhase().equals("run")) {
+		} else if (Global.getCurrentPhase().equals(Runphase.RUN)) {
 
 			prompt = getPromptWithPattern(promptPattern);
-			sys.shellPrint(AWTANSI.B_Green, "\n" + prompt);
+			Shell.print(AWTANSI.B_Green, "\n" + prompt);
 
 		} else {
 			sys.log("LIB", 4, "Shell prepare was called during pre-init. Doing nothing, but this");
@@ -105,19 +107,19 @@ public class Shell {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			if (priority == 0) { //Priority 0 / Just print, nothing important
-				Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
+				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
 			} else if (priority == 1) { //Priority 1 / Info, Progress, etc.
-				Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
+				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
 			} else if (priority == 2) { //Priority 2 / Warnings
-				Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.D_Yellow, message, noProtect);
+				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_Yellow, message, noProtect);
 			} else if (priority == 3) { //Priority 3 / Non-Critical errors
-				Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.D_Red, message, noProtect);
+				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_Red, message, noProtect);
 			} else if (priority == 4) { //Priority 4 / Critical errors
-				Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.B_Red, message, noProtect);
+				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.B_Red, message, noProtect);
 			} else if (priority == 5) { //Priority 5 / Fatal or Non-recoverable errors
-				Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.B_Red, message, noProtect);
+				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.B_Red, message, noProtect);
 			} else { //If priority out of range, choose default white
-				Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
+				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
 			}
 		}
 	}
@@ -132,21 +134,21 @@ public class Shell {
 		if (main.Main.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
-			Main.ThreadAllocMain.getSWT().appendTextQueue(color, message, noProtect);
+			ThreadAllocation.getSWT().appendTextQueue(color, message, noProtect);
 		}
 	}
 	public static void println(Color color, String message, boolean... noProtect) {
 		if (main.Main.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
-			Main.ThreadAllocMain.getSWT().appendTextQueue(color, message + "\n", noProtect);
+			ThreadAllocation.getSWT().appendTextQueue(color, message + "\n", noProtect);
 		}
 	}
 	public static void print(String message) {
-		Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.cReset, message);
+		ThreadAllocation.getSWT().appendTextQueue(AWTANSI.cReset, message);
 	}
 	public static void println(String message) {
-		Main.ThreadAllocMain.getSWT().appendTextQueue(AWTANSI.cReset, message + "\n");
+		ThreadAllocation.getSWT().appendTextQueue(AWTANSI.cReset, message + "\n");
 	}
 	/**
 	 * Direct shellWrite when in single-threaded mode. More efficient than going through shellWriteThread.

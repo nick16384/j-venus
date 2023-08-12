@@ -3,47 +3,49 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
+import components.Shell;
 import engine.sys;
 import libraries.VariableInitializion;
+import libraries.Env;
 import libraries.Global;
 
 public class System_ChangeEnvironment {
 	public static String changeEnv(ArrayList<String> params, Map<String, String> paramsWithValues) {
 		if ((params.size() == 3) && (params.get(0).equalsIgnoreCase("-add"))) {
-			if (Global.getEnv(params.get(1)) == null) { //If it doesn't already exist
-				sys.shellPrint(0, "HIDDEN", "Adding new environment variable: " + params.get(1)
+			if (Env.getEnv(params.get(1)) == null) { //If it doesn't already exist
+				Shell.print(0, "HIDDEN", "Adding new environment variable: " + params.get(1)
 						+ "\nwith value: " + params.get(2) + "\n");
-				Global.addEnv(params.get(1), params.get(2));
+				Env.addEnv(params.get(1), params.get(2));
 			} else {
-				sys.shellPrint(3, "HIDDEN", "Key " + params.get(1) + " already exists.\n"
+				Shell.print(3, "HIDDEN", "Key " + params.get(1) + " already exists.\n"
 						+ "Cannot add two same keys.\n"
 						+ "Try 'chEnv -modify' to change already existing variables.\n");
 			}
 			
 		} else if ((params.size() == 3) && (params.get(0).equalsIgnoreCase("-modify"))) {
-			if (Global.getEnv(params.get(1)) != null) { //Only execute if the value already exists
-				sys.shellPrint(0, "HIDDEN", "Modifying variable: " + params.get(1)
-					+ "\nOld value: " + Global.getEnv(params.get(1))
+			if (Env.getEnv(params.get(1)) != null) { //Only execute if the value already exists
+				Shell.print(0, "HIDDEN", "Modifying variable: " + params.get(1)
+					+ "\nOld value: " + Env.getEnv(params.get(1))
 					+ "\nNew value: " + params.get(2));
-				Global.changeEnv(params.get(1), params.get(2));
+				Env.changeEnv(params.get(1), params.get(2));
 			} else {
-				sys.shellPrint(0, "HIDDEN", "Environment variable '" + params.get(1) + "'\n"
+				Shell.print(0, "HIDDEN", "Environment variable '" + params.get(1) + "'\n"
 						+ "does not exist, so it cannot be modified.\n"
 						+ "Create new environemt variables with 'chEnv -add <yourKey> <value>'\n");
 			}
 			
 			
 		} else if ((params.size() >= 1) && (params.get(0).equalsIgnoreCase("-update"))) {
-			if ((params.size() == 2) && (Global.getEnv(params.get(1)) != null)) {
-				sys.shellPrint(1, "HIDDEN", "Updating '" + params.get(1) + "'\n");
-				VariableInitializion.updateEnv(params.get(1));
+			if ((params.size() == 2) && (Env.getEnv(params.get(1)) != null)) {
+				Shell.print(1, "HIDDEN", "Updating '" + params.get(1) + "'\n");
+				Env.updateEnv(params.get(1));
 			} else {
-				sys.shellPrint(1, "HIDDEN", "Updating all variables.\n");
-				VariableInitializion.updateEnv("$$ALL");
+				Shell.print(1, "HIDDEN", "Updating all variables.\n");
+				Env.updateEnv("$$ALL");
 			}
 			
 		} else {
-			sys.shellPrint(0, "HIDDEN", "Changes environent variables\n"
+			Shell.print(0, "HIDDEN", "Changes environent variables\n"
 				+ "List all current environment variables with 'env'\n"
 				+ "Parameters:\n"
 				+ "-add <key> <value>\n"

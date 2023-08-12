@@ -10,12 +10,14 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import components.Shell;
+
 
 public class File_CRS_LZSS
 {
   public static String crs_lzss(ArrayList<String> params, Map<String, String> paramsWithValues) {
     if (params == null || params.size() < 1 || params.get(0) == null) {
-      sys.shellPrint(0, "HIDDEN", "Input string for compression required, but not given.\nType: crs.lzss <YourString>\n", new boolean[0]);
+      Shell.print(0, "HIDDEN", "Input string for compression required, but not given.\nType: crs.lzss <YourString>\n", new boolean[0]);
       
       return "paramMissing";
     } 
@@ -30,27 +32,27 @@ public class File_CRS_LZSS
 
     
     if (Files.exists(Paths.get(params.get(0), new String[0]), new LinkOption[] { LinkOption.NOFOLLOW_LINKS })) {
-      sys.shellPrint(0, "HIDDEN", "Input string represents a file, using file content.\n", new boolean[0]);
+      Shell.print(0, "HIDDEN", "Input string represents a file, using file content.\n", new boolean[0]);
       try {
         inputString = Files.readString(Paths.get(params.get(0), new String[0]));
       } catch (IOException ioe) {
-        sys.shellPrint(0, "HIDDEN", "Cannot read input file, using provided string.\nDo you have sufficient permission to read: " + 
+        Shell.print(0, "HIDDEN", "Cannot read input file, using provided string.\nDo you have sufficient permission to read: " + 
             (String)params.get(0) + "?\n", new boolean[0]);
       } 
     } else {
-      sys.shellPrint(0, "HIDDEN", "Using input string as value to compress.\n", new boolean[0]);
+      Shell.print(0, "HIDDEN", "Using input string as value to compress.\n", new boolean[0]);
       inputString = params.get(0);
     } 
     if (inputString.length() < 100) {
-      sys.shellPrint(0, "HIDDEN", "Input: " + inputString + "\n", new boolean[0]);
+      Shell.print(0, "HIDDEN", "Input: " + inputString + "\n", new boolean[0]);
     } else {
-      sys.shellPrint(0, "HIDDEN", "Input string too large to display.\n", new boolean[0]);
+      Shell.print(0, "HIDDEN", "Input string too large to display.\n", new boolean[0]);
     } 
     
-    sys.shellPrint(0, "HIDDEN", "Compressing using the LZSS method...\n", new boolean[0]);
-    sys.shellPrint(0, "HIDDEN", "Initializing the LinkedList. ", new boolean[0]);
+    Shell.print(0, "HIDDEN", "Compressing using the LZSS method...\n", new boolean[0]);
+    Shell.print(0, "HIDDEN", "Initializing the LinkedList. ", new boolean[0]);
     for (int i = 0; i <= 127; ) { searchBuffer.add(null); i++; }
-     sys.shellPrint(0, "HIDDEN", String.valueOf(searchBuffer.size()) + ", Resuming.\n", new boolean[0]);
+     Shell.print(0, "HIDDEN", String.valueOf(searchBuffer.size()) + ", Resuming.\n", new boolean[0]);
     
     int index = 0; byte b; int j; char[] arrayOfChar;
     for (j = (arrayOfChar = inputString.toCharArray()).length, b = 0; b < j; ) { char c = arrayOfChar[b];
@@ -99,12 +101,12 @@ public class File_CRS_LZSS
         }
         catch (NoSuchElementException nsee) {
           nsee.printStackTrace();
-          sys.shellPrint(0, "HIDDEN", "Unexpected NoSuchElementException while searching in searchBuffer\nTry again. If not fixed, please report so we can fix the issue.\n", new boolean[0]);
+          Shell.print(0, "HIDDEN", "Unexpected NoSuchElementException while searching in searchBuffer\nTry again. If not fixed, please report so we can fix the issue.\n", new boolean[0]);
           
           return "InternalErr";
         } catch (IndexOutOfBoundsException ioobe) {
           ioobe.printStackTrace();
-          sys.shellPrint(0, "HIDDEN", "Could not check string match, because the index is out of range\nTry again. If not fixed, please report so we can fix the issue.\n", new boolean[0]);
+          Shell.print(0, "HIDDEN", "Could not check string match, because the index is out of range\nTry again. If not fixed, please report so we can fix the issue.\n", new boolean[0]);
           
           return "InternalErr";
         } 

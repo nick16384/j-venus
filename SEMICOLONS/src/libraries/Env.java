@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
+import components.Shell;
+import engine.Runphase;
 import engine.sys;
 
 /**
@@ -25,7 +27,7 @@ public class Env {
 	public static void addEnv(String key, String val) {
 		try {
 			if (Integer.getInteger(getEnv("$MAX_ENV_SIZE")) > env.size()) { //If max env count exceeded
-				sys.shellPrint(2, "HIDDEN", "Maximum environment variable amount exceeded.\n"
+				Shell.print(2, "HIDDEN", "Maximum environment variable amount exceeded.\n"
 						+ "Modify $MAX_ENV_SIZE to change. Warning: values above default (4096)\n"
 						+ "Can lead to increased memory usage. Normally, this limit is not reached,\n"
 						+ "so please check for loops that add Envs each time. Also you may try\n"
@@ -33,8 +35,8 @@ public class Env {
 				return;
 			}
 		} catch (NullPointerException npe) {
-			if (sys.getActivePhase().equalsIgnoreCase("run")) {
-				sys.shellPrint(2, "VARLIB", "Environment variable '$MAX_ENV_SIZE' does not exist.\n"
+			if (Global.getCurrentPhase().equals(Runphase.RUN)) {
+				Shell.print(2, "VARLIB", "Environment variable '$MAX_ENV_SIZE' does not exist.\n"
 						+ "Please add it manually or run 'chEnv -update $MAX_ENV_SIZE'.\n");
 				sys.log("VARLIB", 2, "Environment variable '$MAX_ENV_SIZE' does not exist.\n"
 						+ "Please add it manually or run 'chEnv -update $MAX_ENV_SIZE'.");
@@ -43,11 +45,11 @@ public class Env {
 		}
 		if (key == null) {
 			sys.log("VARLIB", 3, "Tried to add envV with key null. Exited with error.");
-			engine.sys.shellPrint(3, "VARLIB", "Cannot add envV with key null.\n");
+			Shell.print(3, "VARLIB", "Cannot add envV with key null.\n");
 			return;
-		} else if (val == null && engine.sys.getActivePhase().equalsIgnoreCase("run")) {
+		} else if (val == null && Global.getCurrentPhase().equals(Runphase.RUN)) {
 			sys.log("VARLIB", 3, "Tried to set an envV with value 'null', when in RUN phase. Exited with error.");
-			engine.sys.shellPrint(3, "VARLIB", "Cannot set an envV with value 'null', when in RUN phase.\n");
+			Shell.print(3, "VARLIB", "Cannot set an envV with value 'null', when in RUN phase.\n");
 		}
 		
 		String envMsgOut = "New environment variable '" + key + "' -> '" + val + "' : ";
@@ -55,17 +57,17 @@ public class Env {
 		
 		if (getEnv(key) != null && getEnv(key).equals(val)) {
 			envMsgOut += "SUCCESS";
-			if (!sys.getActivePhase().equals("init"))
-				sys.shellPrint(AWTANSI.B_Green, "Success: " + key + " -> " + val + "\n");
+			if (!Global.getCurrentPhase().equals(Runphase.INIT))
+				Shell.print(AWTANSI.B_Green, "Success: " + key + " -> " + val + "\n");
 		} else {
 			envMsgOut += "FAIL";
-			if (!sys.getActivePhase().equals("init")) {
-				sys.shellPrint(AWTANSI.B_Yellow, "Could not create envV. Information below:\n");
-				sys.shellPrint("Created variable, but validation failed \\/\n"
+			if (!Global.getCurrentPhase().equals(Runphase.INIT)) {
+				Shell.print(AWTANSI.B_Yellow, "Could not create envV. Information below:\n");
+				Shell.print("Created variable, but validation failed \\/\n"
 						+ "Method call key: " + key + "\n"
 						+ "Method call value: " + val + "\n"
 						+ "envV Value with getEnv() call: " + getEnv(key) + "\n");
-				sys.shellPrint(AWTANSI.B_Magenta, "Try 'env' to see, if your envV exists or try again.\n");
+				Shell.print(AWTANSI.B_Magenta, "Try 'env' to see, if your envV exists or try again.\n");
 			}
 		}
 		sys.log("VARLIB", 1, envMsgOut);
@@ -92,7 +94,7 @@ public class Env {
 			} else {
 				sys.log("VARLIB:CHENV", 2, "Tried to modify special variable or constant ($$*). "
 						+ "This incident will be reported.");
-				sys.shellPrint(2, "HIDDEN", "Tried to modify special variable or constant ($$*).\n"
+				Shell.print(2, "HIDDEN", "Tried to modify special variable or constant ($$*).\n"
 						+ "This incident will be reported.\n");
 			}
 		}

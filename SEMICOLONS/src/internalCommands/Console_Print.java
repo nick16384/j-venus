@@ -2,10 +2,13 @@ package internalCommands;
 //Add this line to every internalCommands and remove those thingies: /* */
 
 /*    */ import engine.sys;
+import libraries.Env;
 import libraries.Global;
 
 /*    */ import java.util.ArrayList;
 /*    */ import java.util.Map;
+
+import components.Shell;
 
 
 public class Console_Print {
@@ -18,14 +21,14 @@ public class Console_Print {
 			if (word.contains("$")) {
 				String env = "$" + word.split("\\$")[1].split(" ")[0];
 				sys.log("PRINT", 1, "Searching for environment variable '" + env + "'");
-				if (Global.getEnv(env) != null) {
-					sys.log("PRINT", 1, "Found! " + env + " -> " + Global.getEnv(env));
-					word = word.replace(env, Global.getEnv(env));
+				if (Env.getEnv(env) != null) {
+					sys.log("PRINT", 1, "Found! " + env + " -> " + Env.getEnv(env));
+					word = word.replace(env, Env.getEnv(env));
 				} else {
 					sys.log("PRINT", 1, "Not found. Keeping String.");
 				}
 			}
-			sys.shellPrint(word.replace("\\", "\"") + " ");
+			Shell.print(word.replace("\\", "\"") + " ");
 		}
      	return null;
 	}

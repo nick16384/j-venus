@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
+import components.Shell;
 import engine.sys;
 import libraries.VariableInitializion;
+import libraries.Env;
 import libraries.Global;
 
 public class Console_ChangeDirectory {
@@ -54,7 +56,7 @@ public class Console_ChangeDirectory {
 		}
 
 		sys.log("CHDIR", 1, "Updating the $PATH variable.");
-		VariableInitializion.updateEnv("$PATH");
+		Env.updateEnv("$PATH");
 		return null;
 	}
 	
@@ -77,10 +79,10 @@ public class Console_ChangeDirectory {
 					if (!bracket.equals(Global.getFSRoot()))
 						addedBrackets = addedBrackets.concat(bracket + Global.fsep);
 				} else {
-					sys.shellPrintln(AWTANSI.B_Yellow, "Can't change into the folder:");
-					sys.shellPrintln(AWTANSI.B_Green, location);
-					sys.shellPrintln(AWTANSI.B_Yellow, "because the following folder does not exist:");
-					sys.shellPrintln(AWTANSI.B_Cyan, addedBrackets + "\n");
+					Shell.println(AWTANSI.B_Yellow, "Can't change into the folder:");
+					Shell.println(AWTANSI.B_Green, location);
+					Shell.println(AWTANSI.B_Yellow, "because the following folder does not exist:");
+					Shell.println(AWTANSI.B_Cyan, addedBrackets + "\n");
 					return addedBrackets;
 				}
 			}

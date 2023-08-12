@@ -2,12 +2,13 @@ package internalCommands;
 
 import java.util.ArrayList;
 
+import components.Shell;
 import engine.sys;
 
 public class Console_Alias {
 	public static String alias(ArrayList<String> params) {
 		if (params == null || params.size() < 1) {
-			sys.shellPrintln("No Parameters specified. Try using --help or -h for help.");
+			Shell.println("No Parameters specified. Try using --help or -h for help.");
 			return "ParseErr_TooFewParams";
 		}
 		
@@ -20,14 +21,14 @@ public class Console_Alias {
 						+ "  -p, --permanent     Save aliases permanently in external file.\n"
 						+ "  -d, --delete        Delete alias (permanent or temporary).\n"
 						+ "  -h, --help          Display this help text.";
-				sys.shellPrintln(helpStr);
+				Shell.println(helpStr);
 				return null;
 			}
 			//Only return error, if help is not specified.
 			return "ParseErr_TooFewParams";
 		}
 		
-		sys.shellPrintln("alias command is currently not functional. (Developer's TODO)");
+		Shell.println("alias command is currently not functional. (Developer's TODO)");
 		//Two syntax types may follow: "alias --delete aliasname" OR "alias something somethingelse --someparams"
 		
 		//Check for alias deletion

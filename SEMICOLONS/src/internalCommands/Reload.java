@@ -3,7 +3,10 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
+import components.Shell;
 import engine.sys;
+import libraries.Env;
+import libraries.Global;
 import libraries.VariableInitializion;
 import main.Main;
 
@@ -14,22 +17,25 @@ public class Reload {
 			sys.log("RELOAD", 1, "Restarting JavaDOS with everything loaded...");
 			sys.log("RELOAD", 2, "Performing extended reload.");
 			//Perform restart
-			sys.log("RELOAD", 1, "Reloading J-Vexus...");
+			sys.log("RELOAD", 1, "Reloading SEMICOLONS...");
 			Main.mainFrameAWT.getCmdLine().setText("");
-			VariableInitializion.initVars();
-			VariableInitializion.updateEnv("$$ALL");
-			VariableInitializion.verifyFiles();
-			VariableInitializion.refreshDateTime();
-			VariableInitializion.cmdLinePrepare();
+			VariableInitializion.initializeAll();
+			Env.updateEnv("$$ALL");
+			Global.refreshDateTime();
+			Shell.showPrompt();
 		} else {
 			sys.log("RELOAD", 1, "Reloading J-Vexus...");
-			sys.setActivePhase("pre-init");
+			sys.log("RELOAD", 2, "A full reinit is only possible via a restart, not with reload.\n"
+					+ "This message is since 23.08.");
+			
+			// This part does not work because of API changes since 23.08
+			/*sys.setActivePhase("pre-init");
 			Main.mainFrameAWT.getCmdLine().setText("");
-			sys.setActivePhase("init");
-			VariableInitializion.initVars();
-			VariableInitializion.updateEnv("$$ALL");
-			VariableInitializion.refreshDateTime();
-			VariableInitializion.cmdLinePrepare();
+			sys.setActivePhase("init");*/
+			VariableInitializion.initializeAll();
+			Env.updateEnv("$$ALL");
+			Global.refreshDateTime();
+			Shell.showPrompt();
 		}
 		
 		return null;

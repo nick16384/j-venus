@@ -16,19 +16,18 @@ import jfxcomponents.JFxWinloader;
 import jfxcomponents.PartiallyEditableInlineCSSTextArea;
 import libraries.VariableInitializion;
 import libraries.Global;
-import threads.ThreadAllocator;
+import threads.ThreadAllocation;
 
 public class Main extends JFrame {
 	public static String[] argsMain;
 	public static boolean fullscreen = false;
 	public static boolean singleThreaded = false;
-	public static boolean javafxEnabled = false;
+	public static boolean javafxEnabled = true;
 	
 	public static PartiallyEditableInlineCSSTextArea cmdLine;
 	public static Font shellFont;
 	public static final Color DEFAULT_SHELL_COLOR = Color.LIME;
 	
-	public static ThreadAllocator ThreadAllocMain;
 	public static JFxWinloader jfxWinloader;
 	
 	public static void main(String[] args) {
@@ -52,6 +51,7 @@ public class Main extends JFrame {
 		engine.Init.init(args);
 		
 		if (Arrays.asList(args).contains("--awt")) {
+			javafxEnabled = false;
 			sys.log("MAIN", 1, "Using deprecated AWT window loader.");
 			awtcomponents.AWTWinload.awtWinload();
 		} else {
@@ -65,14 +65,12 @@ public class Main extends JFrame {
 			}
 		}
 		
-		if (ThreadAllocMain.getJFXT().isGUIActive())
+		if (ThreadAllocation.getJFXT().isGUIActive())
 			jfxWinloader.clearCmdLine();
 		
-		Global.nextRunphase();
-		try { new components.Command("clear --noPrompt").start(); } catch (Exception ex) { ex.printStackTrace(); }
-		try { Thread.sleep(200); } catch (InterruptedException ie) { ie.printStackTrace(); }
+		try { Thread.sleep(1000); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		Shell.showPrompt();
-		Global.nextRunphase();
+		Global.setNextRunphase(); // RUN
 		
 		//==================================== INIT END ====================================
 	}
@@ -99,6 +97,6 @@ public class Main extends JFrame {
 	 * @return
 	 */
 	public static long getRuntime() {
-		return System.currentTimeMillis() - ThreadAllocMain.getWDT().getTimeStart();
+		return System.currentTimeMillis() - ThreadAllocation.getWDT().getTimeStart();
 	}
 }

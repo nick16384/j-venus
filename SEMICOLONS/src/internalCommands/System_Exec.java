@@ -12,6 +12,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
+import components.Shell;
+
 public class System_Exec {
 	private static Process process;
 	private static InputStream stdout;
@@ -23,7 +25,7 @@ public class System_Exec {
 	public static String sysexec(ArrayList<String> params) {
 		if (!LIB_Utils.checkValid(params))
 			return "paramMissing";
-		sys.shellPrintln("Note, that only process output can be displayed, and no text can be entered.");
+		Shell.println("Note, that only process output can be displayed, and no text can be entered.");
 		
 		String newFullCmd = "";
 		for (String prm : params) {
@@ -74,13 +76,13 @@ public class System_Exec {
 					// Only use useful data part of newData (not null bytes)
 					newDataStr = String.valueOf(newData, 0, charCount);
 					sys.log("SYSEXEC:STDOUT", 0, newDataStr);
-					sys.shellPrint(newDataStr);
+					Shell.print(newDataStr);
 				}
 				if (forceKill) { process.descendants().forEach( (p) -> { p.destroy(); } ); process.destroy(); continue; }
 				try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
 			}
 			//TODO make inputstream work (e.g. make [sudo] password be able to be entered)
-			sys.shellPrintln("---EOF---");
+			Shell.println("---EOF---");
 		} catch (IOException ioe) {
 			sys.log("SYSEXEC", 3, "Reading stdout failed: IOException");
 			return "RuntimeErr";

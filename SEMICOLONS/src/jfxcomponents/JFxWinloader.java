@@ -8,6 +8,8 @@ import java.nio.file.StandardOpenOption;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.InlineCssTextArea;
 
+import components.Shell;
+import engine.Runphase;
 import engine.sys;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -84,8 +86,8 @@ public class JFxWinloader extends Application {
 					} catch (Exception ex) {
 						sys.log("JFX", 3, "Exception in command extractor / formatter: "
 								+ "Probably the prompt was edited by the user.");
-						sys.shellPrint("Whatever you're trying, it's not funny!");
-						libraries.VariableInitializion.cmdLinePrepare();
+						Shell.print("Whatever you're trying, it's not funny!");
+						Shell.showPrompt();
 					}
 				} else if (event.getCode().equals(KeyCode.UP)) {
 					event.consume();
@@ -93,8 +95,8 @@ public class JFxWinloader extends Application {
 						KeyEventHandlers.handleCommandRepeat();
 					} catch (Exception ex) {
 						sys.log("JFX", 3, "Command repeat encountered an exception. This is an internal undefined error.");
-						sys.shellPrint("You broke something. It's not healthy for your PC.");
-						libraries.VariableInitializion.cmdLinePrepare();
+						Shell.print("You broke something. It's not healthy for your PC.");
+						Shell.showPrompt();
 					}
 				}
 				
@@ -146,7 +148,7 @@ public class JFxWinloader extends Application {
 	public void appendText(String text, Color color) {
 		sys.log("JFX", 1, "Appending new text to cmdLine with " + text.length() + " characters.");
 		
-		if (sys.getActivePhase().equals("run") && Main.cmdLine != null) {
+		if (Global.getCurrentPhase().equals(Runphase.RUN) && Main.cmdLine != null) {
 			// Enqueue cmdLine write in JavaFX thread
 			Platform.runLater(() -> {
 				try {

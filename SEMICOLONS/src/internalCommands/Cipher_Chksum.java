@@ -5,6 +5,8 @@ import internalCommands.Cipher_Chksum;
 import java.util.ArrayList;
 import java.util.Map;
 
+import components.Shell;
+
 
 
 public class Cipher_Chksum
@@ -16,31 +18,31 @@ public class Cipher_Chksum
         String inputStr = params.get(1);
         int chksumLength = 32;
         String chksumFinal = inputStr;
-        sys.shellPrint(1, "HIDDEN", "Input to convert:\n" + inputStr + "\n", new boolean[0]);
-        sys.shellPrint(2, "HIDDEN", "Processing...\n", new boolean[0]);
+        Shell.print(1, "HIDDEN", "Input to convert:\n" + inputStr + "\n", new boolean[0]);
+        Shell.print(2, "HIDDEN", "Processing...\n", new boolean[0]);
         if (inputStr.length() < 32) {
           int index = 0;
           while (chksumFinal.length() < 32) {
             chksumFinal = chksumFinal.concat(String.valueOf(randomChar(chksumFinal)));
           }
         } 
-        sys.shellPrint(2, "HIDDEN", "\nDone.\n", new boolean[0]);
-        sys.shellPrint(1, "HIDDEN", "----------------- CHECKSUM --------------------\n", new boolean[0]); int i;
-        for (i = 0; i < inputStr.length(); ) { sys.shellPrint(1, "HIDDEN", " ", new boolean[0]); i++; }
-         for (i = 1; i < chksumFinal.length() - inputStr.length(); ) { sys.shellPrint(1, "HIDDEN", String.valueOf(i), new boolean[0]); i++; }
-         sys.shellPrint(1, "HIDDEN", "\n", new boolean[0]);
-        sys.shellPrint(1, "HIDDEN", String.valueOf(chksumFinal) + "\n", new boolean[0]);
-        sys.shellPrint(1, "HIDDEN", "---------------- CHECKSUM END -----------------\n", new boolean[0]);
+        Shell.print(2, "HIDDEN", "\nDone.\n", new boolean[0]);
+        Shell.print(1, "HIDDEN", "----------------- CHECKSUM --------------------\n", new boolean[0]); int i;
+        for (i = 0; i < inputStr.length(); ) { Shell.print(1, "HIDDEN", " ", new boolean[0]); i++; }
+         for (i = 1; i < chksumFinal.length() - inputStr.length(); ) { Shell.print(1, "HIDDEN", String.valueOf(i), new boolean[0]); i++; }
+         Shell.print(1, "HIDDEN", "\n", new boolean[0]);
+        Shell.print(1, "HIDDEN", String.valueOf(chksumFinal) + "\n", new boolean[0]);
+        Shell.print(1, "HIDDEN", "---------------- CHECKSUM END -----------------\n", new boolean[0]);
         return null;
       } 
 
       
-      sys.shellPrint(3, "CHKSUM", "Please provide a String to apply the checksum algorithm on.", new boolean[0]);
-      sys.shellPrint(3, "CHKSUM", "Exiting...", new boolean[0]);
+      Shell.print(3, "CHKSUM", "Please provide a String to apply the checksum algorithm on.", new boolean[0]);
+      Shell.print(3, "CHKSUM", "Exiting...", new boolean[0]);
       return "paramMissing";
     } 
     if (((String)params.get(0)).contains("crc")) {
-      sys.shellPrint(2, "CHKSUM", "CRC and others still not implemented, please wait for the next update :)", new boolean[0]);
+      Shell.print(2, "CHKSUM", "CRC and others still not implemented, please wait for the next update :)", new boolean[0]);
       return null;
     } 
     return "InternalErr";
@@ -96,7 +98,7 @@ public class Cipher_Chksum
       sys.log("FASTRAND", 2, "Seed to long");
     } 
     
-    sys.shellPrint(2, "HIDDEN", String.valueOf(String.valueOf(randNum)) + " ", new boolean[0]);
+    Shell.print(2, "HIDDEN", String.valueOf(String.valueOf(randNum)) + " ", new boolean[0]);
     out = seed.charAt(randNum);
     return out;
   }

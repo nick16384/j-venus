@@ -2,6 +2,7 @@ package commandProcessing;
 
 import java.util.ArrayList;
 
+import components.Shell;
 import engine.sys;
 import internalCommands.*;
 
@@ -10,7 +11,7 @@ public class CmdSearch {
 	public static String findCommandAndExecute(String command, ArrayList<String> params) throws Exception {
 		command = command.trim();
 		
-		sys.shellPrint("\n");
+		Shell.print("\n");
 		
 		switch (command) {
 		//All commands derived from package internalCommands

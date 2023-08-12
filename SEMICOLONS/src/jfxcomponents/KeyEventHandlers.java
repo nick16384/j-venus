@@ -7,11 +7,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
+import components.Shell;
 import engine.sys;
 import libraries.Err;
 import libraries.VariableInitializion;
 import libraries.Global;
 import main.Main;
+import threads.ThreadAllocation;
 
 /**
  * Separate class, specific to running actions that happen on key events ENTER and UP in JFxWinloader.
@@ -28,30 +30,30 @@ public class KeyEventHandlers {
 	protected static void actionOnEnter() {
 		main.Main.tabCountInRow = 0;
 		//UPDATE SHELL STREAM ==============================================================================
-		Main.ThreadAllocMain.getSWT().updateShellStream();
+		ThreadAllocation.getSWT().updateShellStream();
 		//END UPDATE SHELL STREAM ==========================================================================
 		//Splitting WindowMain.cmdLine text into command
 		String[] lines = Main.cmdLine.getText().split("\n");
 		
 		String lastLine = lines[lines.length - 1];
 		
-		System.err.println("VarLib prompt: " + Global.getPrompt());
+		System.err.println("VarLib prompt: " + Shell.getPrompt());
 		System.err.println("Last line length: " + lastLine.length());
 		System.err.println("Last line content: " + lastLine);
-		System.err.println("Prompt length: " + Global.getPrompt().length());
+		System.err.println("Prompt length: " + Shell.getPrompt().length());
 		
 		//Extract full command from last line (Remove prompt)
 		//Dev. note: VarLib.getPrompt() contains ANSI excapes, but cmdLine.getText() doesn't, so
 		//all ANSI escape chars had to be cleared out by the regex shown.
 		String fullCommand = lastLine.substring(
-				Global.getPrompt().replaceAll("\u001B\\[[\\d;]*[^\\d;]","").length(), lastLine.length());
+				Shell.getPrompt().replaceAll("\u001B\\[[\\d;]*[^\\d;]","").length(), lastLine.length());
 		
 		//if (fullCommand.contains(VarLib.getPrompt())) { fullCommand = fullCommand.split("\\$ ")[1]; }
 		if (!fullCommand.isBlank()) {
 			if (fullCommand.contains(" && ")) {
 				sys.log("MAIN", 2, "Info: Found multiple commands connected with '&&'.");
 				sys.log("MAIN", 2, "This is still experimental: Expect errors.");
-				sys.shellPrintln("Using experimental command interconnect: '&&'");
+				Shell.println("Using experimental command interconnect: '&&'");
 				for (String subCommand : fullCommand.split(" && ")) {
 					sys.log("MAIN", 0, "Running '" + fullCommand + "'");
 					sys.log("Subcommand: " + subCommand);
@@ -101,7 +103,7 @@ public class KeyEventHandlers {
 			}
 			//============================END ADD FULLCMD TO HISTORY==============================
 		} else {
-			VariableInitializion.cmdLinePrepare();
+			Shell.showPrompt();
 		}
 	}
 	
@@ -112,7 +114,7 @@ public class KeyEventHandlers {
 	protected static void handleCommandRepeat() {
 		//========================================COMMAND REPEAT============================================
 		main.Main.tabCountInRow++;
-		VariableInitializion.cmdLinePrepare();
+		Shell.showPrompt();
 		
 		main.Main.commandHistory.clear();
 		try {
@@ -131,7 +133,7 @@ public class KeyEventHandlers {
 			//Write out last command without it getting protected (..., true)
 			sys.log("REPEAT", 0, "Command repeat: "
 					+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
-			sys.shellPrint(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
+			Shell.print(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
 		} else {
 			//TODO Find some sort of replaceLast() \/ -------------------
 			/*try {
@@ -143,7 +145,7 @@ public class KeyEventHandlers {
 			}*/
 			sys.log("REPEAT", 0, "Command repeat(" + main.Main.tabCountInRow + "): "
 					+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
-			sys.shellPrint(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
+			Shell.print(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
 		}
 		//========================================COMMAND REPEAT END============================================
 	}

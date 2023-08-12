@@ -22,7 +22,7 @@ public class WatchdogThread2 implements InternalThread {
 				}
 				while (true) {
 					if (Global.getCurrentPhase().equals(Runphase.RUN)) {
-						if (Main.ThreadAllocMain.isWDTActive()) {
+						if (ThreadAllocation.isWDTActive()) {
 							
 							try {
 								if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
@@ -37,13 +37,16 @@ public class WatchdogThread2 implements InternalThread {
 								sys.log("WDT2", 3, "Setting cursor to last text position threw an error, because the set position was out of range.");
 							}
 							
-							if (Main.javafxEnabled && Main.cmdLine.getText().equals("SHELL INIT")) {
+							// This check often fails for no reason, so it is left out.
+							/*if (Main.javafxEnabled
+									&& Global.getCurrentPhase().equals(Runphase.RUN)
+									&& Main.cmdLine.getText().equals("SHELL INIT")) {
 								System.err.println("What have I done to you?!");
 								WatchdogThread.stopWithError(1, 15000, "The shell didn't initialize properly. Try again.");
-							}
+							}*/
 						} else {
 							Shell.print(AWTANSI.B_Yellow, "Init fail.\n");
-							Global.setErrorRunphase();;
+							Global.setErrorRunphase();
 						}
 						
 						try {
@@ -58,9 +61,9 @@ public class WatchdogThread2 implements InternalThread {
 						break;
 					}
 				}
-				while (!Main.ThreadAllocMain.isShutdownSignalActive()) {
+				while (!ThreadAllocation.isShutdownSignalActive()) {
 					try { Thread.sleep(2000); } catch (InterruptedException ie) { ie.printStackTrace(); }
-					if (!Main.ThreadAllocMain.isWDTActive()) {
+					if (!ThreadAllocation.isWDTActive()) {
 						WatchdogThread.stopWithError(2, 15000, "[WDT2] Watchdog Thread 1 (WDT) is found inactive.\n"
 								+ "Because it cannot detect further errors, Vexus will be terminated.\n"
 								+ "This is probably an internal error or bug. If this issue continues to persist\n"

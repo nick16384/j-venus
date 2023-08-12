@@ -3,6 +3,7 @@ package internalCommands;
 import java.util.ArrayList;
 
 import awtcomponents.AWTANSI;
+import components.Shell;
 import engine.sys;
 import main.Main;
 
@@ -25,16 +26,16 @@ public class Cipher_PseudoRand {
 			try {
 				seed = Integer.parseInt(params.get(0));
 			} catch (IllegalArgumentException iae) {
-				sys.shellPrintln("Usage: pseudorand [seed]\n"
+				Shell.println("Usage: pseudorand [seed]\n"
 						+ "Info: [seed] can only be an integer between -2,147,483,648 and 2,147,483,647");
 				return "ParamErr_WrongType";
 			}
 		} else {
 			seed = (int) main.Main.getRuntime(); //May result in overflow which increases unpredictability
 		}
-		sys.shellPrintln(AWTANSI.B_Yellow, "Warning: This computation is unsafe for cryptographic use!\n");
-		sys.shellPrintln(AWTANSI.B_Cyan, "Seed: " + seed);
-		sys.shellPrintln("Generating pseudo-random number:");
+		Shell.println(AWTANSI.B_Yellow, "Warning: This computation is unsafe for cryptographic use!\n");
+		Shell.println(AWTANSI.B_Cyan, "Seed: " + seed);
+		Shell.println("Generating pseudo-random number:");
 		
 		//======================== RANDOM NUMBER GENERATION ===========================
 		try {
@@ -42,20 +43,20 @@ public class Cipher_PseudoRand {
 			if (seed == 0)
 				seed = seed + 285976538;
 			seed = getLastNDigits((int) (Math.sqrt(Math.abs(seed * 473)) * 666999), 5);
-			sys.shellPrintln("Seed initialized: " + seed);
+			Shell.println("Seed initialized: " + seed);
 			for (int i = 0; i <= 1000; i++) {
 				if (i % 20 == 0) //Display "working dot" every twenty operations
-					sys.shellPrint(".");
+					Shell.print(".");
 				seed = randomIteration(seed, i);
 			}
 		} catch (ArithmeticException | IllegalArgumentException e) {
 			sys.log("PSEUDORAND", 3, "Arithmetic or Illegal Argument Exception. Aborting calculation.");
-			sys.shellPrintln("Arithmetic or Illegal Arument Exception. Aborting calculation.");
+			Shell.println("Arithmetic or Illegal Arument Exception. Aborting calculation.");
 		}
 		try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
-		sys.shellPrintln(""); //Line break
+		Shell.println(""); //Line break
 		//At this point, "seed" is the generated random number
-		sys.shellPrintln(AWTANSI.B_White, "Result: " + seed);
+		Shell.println(AWTANSI.B_White, "Result: " + seed);
 		
 		return null;
 	}
@@ -89,7 +90,7 @@ public class Cipher_PseudoRand {
 			input = getLastNDigits(input, 8);
 		} catch (ArithmeticException | IllegalArgumentException e) {
 			sys.log("PSEUDORAND", 3, "Arithmetic error during calculation. Iteration count: " + iterationCount);
-			sys.shellPrintln(AWTANSI.B_Red, "Arithmetic error (probably divizion by zero) during calculation. "
+			Shell.println(AWTANSI.B_Red, "Arithmetic error (probably divizion by zero) during calculation. "
 					+ "Discarding changes.\n"
 					+ "Iteration number: " + iterationCount);
 			//Add some random number to mitigate chances of a recurring error

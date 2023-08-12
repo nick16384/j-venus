@@ -9,6 +9,7 @@ import javax.swing.text.StyledDocument;
 
 import libraries.Global;
 import main.Main;
+import threads.ThreadAllocation;
 
 public class Logging {
 	protected static void shell_write(int priority, String auth, String message) {
@@ -76,7 +77,7 @@ public class Logging {
 		//4: Critical error (program must stop e.g. security issue or no sufficient permissions)
 		//5: Irreversible critical error(fatal) (Damages still persist after Vexus shutdown)
 		long runtime;
-		try { runtime = System.currentTimeMillis() - Main.ThreadAllocMain.getWDT().getTimeStart(); }
+		try { runtime = System.currentTimeMillis() - ThreadAllocation.getWDT().getTimeStart(); }
 		catch (NullPointerException npe) { runtime = -1; }
 		if (status == -1) {
 			System.out.println("[ " + runtime + ", -1/ERR, " + auth + " ]: " + message);

@@ -15,6 +15,7 @@ import libraries.Err;
 import libraries.ErrCodes;
 import libraries.VariableInitializion;
 import main.Main;
+import threads.ThreadAllocation;
 
 public class CommandManager implements threads.InternalThread {
 	//
@@ -46,7 +47,7 @@ public class CommandManager implements threads.InternalThread {
 			public final void run() {
 				//Separate thread waiting for cmdQueue to run through, while main/Main can do other stuff
 				
-				while (!Main.ThreadAllocMain.isShutdownSignalActive() && !suspend) {
+				while (!ThreadAllocation.isShutdownSignalActive() && !suspend) {
 					if (cmdQueue.isEmpty()) {
 						try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
 						continue;
@@ -176,7 +177,7 @@ public class CommandManager implements threads.InternalThread {
 		//Wait 500ms for any text printing to finish -> CmdLine will scroll to last line eventually
 		try { Thread.sleep(100); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		if (!noPrompt) {
-			VariableInitializion.cmdLinePrepare();
+			Shell.showPrompt();
 		}
 	}
 	

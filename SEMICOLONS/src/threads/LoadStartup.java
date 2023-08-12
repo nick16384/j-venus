@@ -7,10 +7,15 @@ import java.nio.file.Paths;
 
 import engine.sys;
 
+/**
+ * This class'es intention was to have a series of commands executed after startup.
+ * @deprecated The implementation needs to be rewritten, because of ugly code and old API usage.
+ */
+@Deprecated
 public class LoadStartup {
 	public static boolean loadAndExecute() throws IOException {
 		final File startupFile = new File(libraries.Global.getDataDir().getAbsolutePath()
-				+ libraries.Global.fsep + "startup.jscr");
+				+ sys.fsep + "startup.jscr");
 		String startupFileString = "";
 		
 		
@@ -23,7 +28,7 @@ public class LoadStartup {
 			if (startupFileString.startsWith("# JavaDOS startup script")) {
 				startupFileString = startupFileString.replaceFirst("# JavaDOS startup script\n", "");
 				for (String command : startupFileString.split("\n")) {
-					commandProcessing.CommandMain.executeCommand(new components.Command(command + " noErrorChecking"));
+					new components.Command(command + " noErrorChecking").start();
 					return false;
 				}
 			} else {

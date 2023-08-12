@@ -130,7 +130,7 @@ public class Global {
 		return motd.isBlank() ? "MOTD is empty\n" : motd;
 	}
 	
-	public static void nextRunphase() {
+	public static void setNextRunphase() {
 		currentPhase = Runphase.getNextPhase(currentPhase);
 		sys.log("--- RUNPHASE CHANGED: " + currentPhase.toString() + "---\n"
 				+ currentPhase.getDescription());

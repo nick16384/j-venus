@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
+import components.Shell;
 import engine.sys;
 import libraries.Global;
 import main.Main;
+import threads.ThreadAllocation;
 
 public class Terminate {
 	public static String terminate(ArrayList<String> params, Map<String, String> paramsWithValues) {
@@ -15,11 +17,11 @@ public class Terminate {
 			sys.log("TERMINATE", 0, "Exiting...");
 			System.exit(0);
 		} else {
-			if (Main.ThreadAllocMain.isWDTActive()) {
+			if (ThreadAllocation.isWDTActive()) {
 				sys.log("TERMINATE", 1, "Sending shutdown signal to global Thread Allocator...");
-				sys.shellPrintln(AWTANSI.B_Blue, "Exiting...");
-				Global.setPromptPattern("$-");
-				Main.ThreadAllocMain.shutdownVexus(0);
+				Shell.println(AWTANSI.B_Blue, "Exiting...");
+				Shell.setPromptPattern("$-");
+				ThreadAllocation.shutdownVexus(0);
 			} else {
 				sys.log("TERMINATE", 3, "Watchdog Thread not started! If this problem persists, please reinstall!");
 				System.exit(1);

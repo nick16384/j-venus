@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 
+import components.Shell;
+
 
 
 public class File_readText
@@ -28,7 +30,7 @@ public class File_readText
     try {
     	return Files.readString(Paths.get(params.get(0), new String[0]));
     } catch (IOException ioe) {
-      sys.shellPrint(3, "READTEXT", "Unknown error while reading file content", new boolean[0]);
+      Shell.print(3, "READTEXT", "Unknown error while reading file content", new boolean[0]);
       return "UnknownFileError";
     }
   }

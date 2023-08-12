@@ -18,6 +18,7 @@ import java.util.Calendar;
 import awtcomponents.AWTANSI;
 import engine.sys;
 import main.Main;
+import threads.ThreadAllocation;
 
 public class VariableInitializion {
 	public static final void initializeAll() {
@@ -28,7 +29,7 @@ public class VariableInitializion {
 		if (System.getProperty("java.home") == null) {
 			System.err.println("INITVARS: The JAVA_HOME variable was not found.");
 			System.err.println("INITVARS: J-Vexus needs JDK installed in order to work. Exiting...");
-			Main.ThreadAllocMain.shutdownVexus(1);
+			ThreadAllocation.shutdownVexus(1);
 		}
 		Global.javaHome = new File(System.getProperty("java.home"));
 		Global.osName = System.getProperty("os.name");
@@ -72,13 +73,15 @@ public class VariableInitializion {
 		// log path. Cannot save log."); }
 		if (Global.osName.equalsIgnoreCase("UnknownOS")) {
 			sys.log("LIB", 2, "INITVARS: Operating system not supported. Exiting...");
-			Main.ThreadAllocMain.shutdownVexus(1);
+			ThreadAllocation.shutdownVexus(1);
 		}
 		
 		prepareEnvironment();
 
 		// Fetch message of the day (replace env aliases with real values.)
 		fetchMOTD();
+		
+		sys.setFileSeparator(Global.fsep);
 	}
 
 	private static final void initializeForLinux() {

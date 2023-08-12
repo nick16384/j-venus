@@ -58,13 +58,13 @@ public final class WatchdogThread implements InternalThread {
 						}
 						
 						//Threads status
-						if (!Main.ThreadAllocMain.getWDT2().isRunning()) {
+						if (!ThreadAllocation.getWDT2().isRunning()) {
 							stopWithError(1, 15000, "Watchdog thread 2 is not running, and in the event of this thread\n"
 									+ "(\"Watchdog Thread 1\") malfunctioning, there won't be any detection of internal\n"
 									+ "errors anymore, so vexus has to shutdown. If this error reoccurs, some file might\n"
 									+ "be missing and try to reinstall.");
 							break;
-						} else if (!Main.ThreadAllocMain.getSWT().isRunning()) {
+						} else if (!ThreadAllocation.getSWT().isRunning()) {
 							WindowMain.cmdLine.setText("Fatal error: ShellWriteThread not running, causing no more shell\n"
 									+ "output to be displayed. If this issue persists, try reinstalling.");
 							//This error message might not display due to SWT inactivity
@@ -73,13 +73,13 @@ public final class WatchdogThread implements InternalThread {
 									+ "Obviously, the shell can't be used when no feedback is coming from the system,\n"
 									+ "and because of this, we have to shutdown. Try reinstalling, if this issue persists.");
 							break;
-						} else if (!Main.ThreadAllocMain.getCUIT().isRunning() && !nonCriticalAlreadyDisplayed) {
+						} else if (!ThreadAllocation.getCUIT().isRunning() && !nonCriticalAlreadyDisplayed) {
 							Shell.println(AWTANSI.B_Yellow, "Warning: the internal \"User Input Detection Thread\" has stopped,\n"
 									+ "and therefore, some control signals like CTRL + C may not work anymore.\n"
 									+ "This is not a critical error, but might indicate a problem and you should try to restart.\n"
 									+ "If that does not get rid of the problem, consider reinstalling.");
 							nonCriticalAlreadyDisplayed = true;
-						} else if (!Main.ThreadAllocMain.getCMGR().isRunning()) {
+						} else if (!ThreadAllocation.getCMGR().isRunning()) {
 							stopWithError(1, 15000, "The Command Management Thread is inactive. This will cause no commands to\n"
 									+ "be executed anymore unless you have enabled deprecated methods and disabled multithreading.\n"
 									+ "This shell can't be used when no commands are getting processed, so this process will\n"
@@ -152,7 +152,7 @@ public final class WatchdogThread implements InternalThread {
 				// String logFilePath = "/var/J-Vexus_logs/" + "logfile1.txt";
 
 				sys.log("WATCHDOG", 0, "Threads stopping...");
-				if (Main.javafxEnabled && Main.ThreadAllocMain.getJFXT().isGUIActive()) Main.jfxWinloader.stop();
+				if (Main.javafxEnabled && ThreadAllocation.getJFXT().isGUIActive()) Main.jfxWinloader.stop();
 				System.exit(exitCode);
 			}
 		}, "WDT");
@@ -249,6 +249,6 @@ public final class WatchdogThread implements InternalThread {
 				sys.log("Error stop wait was interrupted.");
 			}
 		}
-		Main.ThreadAllocMain.getWDT().shutdownVexus(exitCode);
+		ThreadAllocation.getWDT().shutdownVexus(exitCode);
 	}
 }

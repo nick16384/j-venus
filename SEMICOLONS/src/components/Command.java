@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import engine.sys;
 import main.Main;
+import threads.ThreadAllocation;
 
 public class Command {
 	private Object[] all = null;
@@ -43,7 +44,7 @@ public class Command {
 			}
 		} catch (ClassCastException cce) {
 			sys.log("CMD", 2, "ClassCastException while mapping of command or arguments.");
-			sys.shellPrint(3, "CMD", "ClassCastException while mapping of command or arguments.");
+			Shell.print(3, "CMD", "ClassCastException while mapping of command or arguments.");
 			command = "";
 			options = new ArrayList<String>();
 			params = new ArrayList<String>();
@@ -68,7 +69,7 @@ public class Command {
 	}
 	
 	public void start() throws IOException {
-		Main.ThreadAllocMain.getCMGR().invokeCommand(this);
+		ThreadAllocation.getCMGR().invokeCommand(this);
 		//returnVal = main.CommandMain.executeCommand(this);
 	}
 }

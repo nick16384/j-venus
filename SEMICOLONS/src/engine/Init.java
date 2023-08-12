@@ -19,7 +19,7 @@ import libraries.Env;
 import libraries.Global;
 import main.Main;
 import threads.CommandLoader;
-import threads.ThreadAllocator;
+import threads.ThreadAllocation;
 
 /**
  * Contains all initialization code (e.g. preparing environment variables).
@@ -71,8 +71,7 @@ public class Init {
 			System.out.println("the Command Line argument '--single-threaded'!");
 		}
 		if (!main.Main.singleThreaded) {
-			Main.ThreadAllocMain = new ThreadAllocator();
-			Main.ThreadAllocMain.launchAll();
+			ThreadAllocation.launchAll();
 		}
 		try {
 			System.out.println("Startup sleep for everything to finish before init (1 sec).");
@@ -82,7 +81,7 @@ public class Init {
 			e.printStackTrace();
 		}
 		
-		Global.nextRunphase(); // Init
+		Global.setNextRunphase(); // Init
 		//TODO patch motd file not found and fix a few formatting errors (extra \n, etc.)
 		System.out.print(Global.getMOTD());
 		System.out.println("");
@@ -126,7 +125,6 @@ public class Init {
 			ioe.printStackTrace();
 		}
 		sys.log("MAIN", 1, "Done.");
-		while (CommandMain.isExecThreadAlive()) { try { Thread.sleep(100); } catch (InterruptedException ie) {} }
 		
 		/*sys.log("Initializing main frame...");
 		Main mainWindow = new Main();

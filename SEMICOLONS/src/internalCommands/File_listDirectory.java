@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
+import components.Shell;
 import libraries.FileCheckUtils;
 import libraries.Global;
 
@@ -88,7 +89,7 @@ public class File_listDirectory {
 			currentLineLength = 0;
 		}
 		if (!finalListingDirs.isBlank())
-			sys.shellPrintln(AWTANSI.B_Green, finalListingDirs);
+			Shell.println(AWTANSI.B_Green, finalListingDirs);
 		
 		//List files
 		for (String fileName : files) {
@@ -101,7 +102,7 @@ public class File_listDirectory {
 			currentLineLength = 0;
 		}
 		if (!finalListingFiles.isBlank())
-			sys.shellPrintln(AWTANSI.B_Yellow, finalListingFiles);
+			Shell.println(AWTANSI.B_Yellow, finalListingFiles);
 		
 		//List every other unknown element
 		for (String unknownName : unknown) {
@@ -114,7 +115,7 @@ public class File_listDirectory {
 			currentLineLength = 0;
 		}
 		if (!finalListingUnknown.isBlank())
-			sys.shellPrint(AWTANSI.B_Red, finalListingUnknown);
+			Shell.print(AWTANSI.B_Red, finalListingUnknown);
 
 		return null;
 	}

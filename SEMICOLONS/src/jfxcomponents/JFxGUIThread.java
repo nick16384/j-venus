@@ -3,6 +3,7 @@ package jfxcomponents;
 import engine.sys;
 import main.Main;
 import threads.InternalThread;
+import threads.ThreadAllocation;
 
 public class JFxGUIThread implements InternalThread {
 	private Thread jfxGUIThread;
@@ -20,7 +21,7 @@ public class JFxGUIThread implements InternalThread {
 			//loadGUI() will not return until window is closed or Platform.exit() is called.
 			isGUIActive = false;
 			sys.log("JFXT", 1, "JavaFX window was closed. Stopping J-Venus.");
-			Main.ThreadAllocMain.shutdownVexus(0);
+			ThreadAllocation.shutdownVexus(0);
 		}, "JFXT");
 	}
 	

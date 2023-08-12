@@ -3,6 +3,7 @@ package threads;
 import java.awt.event.KeyEvent;
 
 import awtcomponents.AWTANSI;
+import components.Shell;
 import engine.sys;
 import libraries.VariableInitializion;
 import main.Main;
@@ -14,7 +15,7 @@ public class CheckUserInputThread implements InternalThread {
 	protected CheckUserInputThread() {
 		checkUserInputThread = new Thread(null, new Runnable() {
 			public final void run() {
-				while (!Main.ThreadAllocMain.isShutdownSignalActive() && !suspend) {
+				while (!ThreadAllocation.isShutdownSignalActive() && !suspend) {
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException ie) {
@@ -30,12 +31,12 @@ public class CheckUserInputThread implements InternalThread {
 						if (engine.Keyboard.isKeyPressed(KeyEvent.VK_C)) {
 							sys.log("CHKINP", 3, "User pressed CTRL + C");
 							sys.log("CHKINP", 3, "Forcing execution thread termination!");
-							sys.shellPrint(AWTANSI.D_Cyan, "^C");
+							Shell.print(AWTANSI.D_Cyan, "^C");
 							//TODO Add some form of command termination in CommandManager
-							if (Main.ThreadAllocMain.getCMGR().isCommandRunning())
-								Main.ThreadAllocMain.getCMGR().killCurrent();
+							if (ThreadAllocation.getCMGR().isCommandRunning())
+								ThreadAllocation.getCMGR().killCurrent();
 							else
-								VariableInitializion.cmdLinePrepare();
+								Shell.showPrompt();
 						}
 					}
 				}
