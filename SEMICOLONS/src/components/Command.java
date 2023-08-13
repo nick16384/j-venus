@@ -3,6 +3,7 @@ package components;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import engine.InfoType;
 import engine.sys;
 import main.Main;
 import threads.ThreadAllocation;
@@ -43,7 +44,7 @@ public class Command {
 				command = "";
 			}
 		} catch (ClassCastException cce) {
-			sys.log("CMD", 2, "ClassCastException while mapping of command or arguments.");
+			sys.log("CMD", InfoType.WARN, "ClassCastException while mapping of command or arguments.");
 			Shell.print(3, "CMD", "ClassCastException while mapping of command or arguments.");
 			command = "";
 			options = new ArrayList<String>();

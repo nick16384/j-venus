@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import awtcomponents.AWTANSI;
 import components.Shell;
+import engine.InfoType;
 import engine.sys;
 import libraries.VariableInitializion;
 import main.Main;
@@ -19,7 +20,7 @@ public class CheckUserInputThread implements InternalThread {
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException ie) {
-						sys.log("", 3, "err checkuserinputthread interrupted");
+						sys.log("", InfoType.ERR, "err checkuserinputthread interrupted");
 					}
 					while (engine.Keyboard.isKeyPressed(KeyEvent.VK_CONTROL)) {
 						try { Thread.sleep(50); }
@@ -29,8 +30,8 @@ public class CheckUserInputThread implements InternalThread {
 						}
 						
 						if (engine.Keyboard.isKeyPressed(KeyEvent.VK_C)) {
-							sys.log("CHKINP", 3, "User pressed CTRL + C");
-							sys.log("CHKINP", 3, "Forcing execution thread termination!");
+							sys.log("CHKINP", InfoType.INFO, "User pressed CTRL + C");
+							sys.log("CHKINP", InfoType.INFO, "Forcing execution thread termination!");
 							Shell.print(AWTANSI.D_Cyan, "^C");
 							//TODO Add some form of command termination in CommandManager
 							if (ThreadAllocation.getCMGR().isCommandRunning())

@@ -3,6 +3,7 @@ package awtcomponents;
 import javax.swing.*;
 import javax.swing.text.*;
 
+import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import libraries.Global;
@@ -110,7 +111,7 @@ public class AWTANSI extends JTextPane {
 
 	public static Color getANSIColor(String ANSIColor) {
 		if (!ANSIColor.equals("\u001B[0m") && !lastColorCode.equals(ANSIColor)) {
-			sys.log("ANSI_DEBUG", 0, "Requesting new ANSI color: " + ANSIColor + "===" + "\u001B[0m");
+			sys.log("ANSI_DEBUG", InfoType.STATUS, "Requesting new ANSI color: " + ANSIColor + "===" + "\u001B[0m");
 			lastColorCode = ANSIColor;
 		}
 		if (ANSIColor.equals("\u001B[30m"))        { return D_Black; }
@@ -177,19 +178,19 @@ public class AWTANSI extends JTextPane {
 				int len = pane.getDocument().getLength(); 
 				try {pane.getDocument().insertString(len, s, aset);} 
 				catch (Exception e) {
-					sys.log("ANSI_APPEND", 3, "BadLocationException while appending text.");
+					sys.log("ANSI_APPEND", InfoType.ERR, "BadLocationException while appending text.");
 					try {
 						for (int i = 0; i < 100; i++) {
 							append(pane, c, s);
 							try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
 							if (pane.getText().endsWith(s))
 								continue;
-							sys.log("ANSI_SHLWRT", 2, "Shell write verification failed on attempt No. " + i);
+							sys.log("ANSI_SHLWRT", InfoType.WARN, "Shell write verification failed on attempt No. " + i);
 							if (i >= 99)
-								sys.log("ANSI_SHLWRT", 3, "Tried to append text 100 times unsuccessfully.");
+								sys.log("ANSI_SHLWRT", InfoType.ERR, "Tried to append text 100 times unsuccessfully.");
 						}
 					} catch (BadLocationException ble) {
-						sys.log("ANSI_APPEND", 3, "BadLocationException while appending text inside catch block.");
+						sys.log("ANSI_APPEND", InfoType.ERR, "BadLocationException while appending text inside catch block.");
 					}
 				}
 			}

@@ -1,5 +1,6 @@
 package jfxcomponents;
 
+import engine.InfoType;
 import engine.sys;
 import main.Main;
 import threads.InternalThread;
@@ -11,16 +12,16 @@ public class JFxGUIThread implements InternalThread {
 	
 	public JFxGUIThread() {
 		jfxGUIThread = new Thread(null, () -> {
-			sys.log("JFXT", 1, "Starting JFx GUI thread.");
+			sys.log("JFXT", InfoType.INFO, "Starting JFx GUI thread.");
 			while (Main.jfxWinloader == null)
 				try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
 			
-			sys.log("JFXT", 1, "Launching JavaFX GUI...");
+			sys.log("JFXT", InfoType.INFO, "Launching JavaFX GUI...");
 			isGUIActive = true;
 			Main.jfxWinloader.loadGUI(Main.argsMain);
 			//loadGUI() will not return until window is closed or Platform.exit() is called.
 			isGUIActive = false;
-			sys.log("JFXT", 1, "JavaFX window was closed. Stopping J-Venus.");
+			sys.log("JFXT", InfoType.INFO, "JavaFX window was closed. Stopping SEMICOLONS.");
 			ThreadAllocation.shutdownVexus(0);
 		}, "JFXT");
 	}

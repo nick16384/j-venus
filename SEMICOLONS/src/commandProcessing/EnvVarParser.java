@@ -1,5 +1,6 @@
 package commandProcessing;
 
+import engine.InfoType;
 import engine.sys;
 import libraries.Env;
 import libraries.Global;
@@ -28,7 +29,7 @@ public class EnvVarParser {
 			if (replacement == null)
 				replacement = currentToken;
 			
-			sys.log("EVP", 0, "Current token: \"" + currentToken + "\" -> \"" + replacement + "\"");
+			sys.log("EVP", InfoType.DEBUG, "Current token: \"" + currentToken + "\" -> \"" + replacement + "\"");
 			in = in.replaceFirst("[\\$, \\$\\$]?" + currentToken, replacement);
 		}
 		

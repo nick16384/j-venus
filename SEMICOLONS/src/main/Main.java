@@ -9,6 +9,7 @@ import components.Shell;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import engine.InfoType;
 import engine.sys;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -52,10 +53,10 @@ public class Main extends JFrame {
 		
 		if (Arrays.asList(args).contains("--awt")) {
 			javafxEnabled = false;
-			sys.log("MAIN", 1, "Using deprecated AWT window loader.");
+			sys.log("MAIN", InfoType.INFO, "Using deprecated AWT window loader.");
 			awtcomponents.AWTWinload.awtWinload();
 		} else {
-			sys.log("MAIN", 1, "Using default JavaFX window loader.");
+			sys.log("MAIN", InfoType.INFO, "Using default JavaFX window loader.");
 			try {
 				jfxWinloader = new JFxWinloader();
 				//TODO load GUI in thread
@@ -81,9 +82,9 @@ public class Main extends JFrame {
 	
 	//========================================MAIN===========================================
 	public static final void initAWTWindow() {
-		sys.log("MAIN", 1, "Creating new WindowMain object.");
+		sys.log("MAIN", InfoType.DEBUG, "Creating new WindowMain object.");
 		mainFrameAWT = new awtcomponents.WindowMain("J-Vexus " + Global.getVersion());
-		sys.log("MAIN", 1, "Attaching KeyListener to mainFrame.");
+		sys.log("MAIN", InfoType.DEBUG, "Attaching KeyListener to mainFrame.");
 		awtcomponents.KeyListenerAttacher.attachKeyListener(mainFrameAWT);
 	}
 	

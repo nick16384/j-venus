@@ -9,6 +9,7 @@ import java.util.Map;
 import awtcomponents.AWTANSI;
 import components.Command;
 import components.Shell;
+import engine.InfoType;
 import engine.sys;
 import internalCommands.System_Exec;
 import libraries.Err;
@@ -58,7 +59,7 @@ public class CommandManager implements threads.InternalThread {
 						sys.log("---\nRunning new command: " + cmdCurrent.getFullCommand() + "\n---");
 						//Assign internal variables
 						try {
-							sys.log("CMDMGR", 1, "Mapping parameters to internal variables.");
+							sys.log("CMDMGR", InfoType.DEBUG, "Mapping parameters to internal variables.");
 							command = cmdCurrent.getCommand();
 							params = cmdCurrent.getParams();
 						} catch (ClassCastException cce) {
@@ -72,7 +73,7 @@ public class CommandManager implements threads.InternalThread {
 							if (command != null) {
 								returnValues.put(cmdCurrent, commandProcessing.CmdSearch.findCommandAndExecute(command, params));
 							} else {
-								sys.log("CMGR", 2, "A previous error prevents the command from running.");
+								sys.log("CMGR", InfoType.WARN, "A previous error prevents the command from running.");
 							}
 						} catch (Exception e) {
 							returnValues.put(cmdCurrent, "RuntimeErr");
@@ -91,8 +92,8 @@ public class CommandManager implements threads.InternalThread {
 								+ returnValues.get(cmdCurrent));
 							} else {
 								//Known error
-								sys.log("CMDMGR", 1, "Command error found in main.ErrCodes: " + returnValues.get(cmdCurrent));
-								sys.log("CMDMGR", 1, "Error description: " + ErrCodes.getErrDesc(returnValues.get(cmdCurrent)));
+								sys.log("CMDMGR", InfoType.INFO, "Command error found in main.ErrCodes: " + returnValues.get(cmdCurrent));
+								sys.log("CMDMGR", InfoType.INFO, "Error description: " + ErrCodes.getErrDesc(returnValues.get(cmdCurrent)));
 								Shell.println(ErrCodes.valueOf(returnValues.get(cmdCurrent)) + " : "
 										+ ErrCodes.getErrDesc(returnValues.get(cmdCurrent)));
 							}
@@ -153,7 +154,7 @@ public class CommandManager implements threads.InternalThread {
 	}
 	
 	public void suspend() {
-		sys.log("CMGR", 3, "Suspend method not implemented (not in use for this class).");
+		sys.log("CMGR", InfoType.ERR, "Suspend method not implemented (not in use for this class).");
 	}
 	
 	public boolean isCommandRunning() {
@@ -173,7 +174,7 @@ public class CommandManager implements threads.InternalThread {
 		} else {
 			noPrompt = true;
 		}
-		sys.log("CMGR", 1, "NoPrompt is enabled: " + noPrompt);
+		sys.log("CMGR", InfoType.DEBUG, "NoPrompt is enabled: " + noPrompt);
 		//Wait 500ms for any text printing to finish -> CmdLine will scroll to last line eventually
 		try { Thread.sleep(100); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		if (!noPrompt) {
@@ -182,7 +183,7 @@ public class CommandManager implements threads.InternalThread {
 	}
 	
 	public void killCurrent() {
-		sys.log("CMGR", 2, "Killing current command.");
+		sys.log("CMGR", InfoType.WARN, "Killing current command.");
 		System_Exec.forceKill();
 		cleanup(cmdQueue.getFirst());
 	}

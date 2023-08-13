@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.tools.*;
 
+import engine.InfoType;
 import engine.sys;
 import libraries.Global;
 
@@ -42,7 +43,7 @@ public class CommandLoader {
 		File commandSource = new File(Global.getDefaultDir() + Global.fsep + "commands");
 		
 		if (alreadyExecuted) {
-			sys.log("LDEXTCMDS", 2, "External commands already loaded. Cannot proceed.");
+			sys.log("LDEXTCMDS", InfoType.ERR, "External commands already loaded. Cannot proceed.");
 			return null;
 		}
 		
@@ -53,14 +54,14 @@ public class CommandLoader {
 		
 		//======================================LOAD CONFIG FILE========================================
 		//Read config file 'commands.cfg'
-		sys.log("LDEXTCMDS", 0, "Reading config file...");
+		sys.log("LDEXTCMDS", InfoType.DEBUG, "Reading config file...");
         String configFileContent = Files.readString(configFileSource.toPath());
-        sys.log("LDEXTCMDS", 0, "Done. Read content:");
-        sys.log("LDEXTCMDS", 0, configFileContent + "\n");
+        sys.log("LDEXTCMDS", InfoType.DEBUG, "Done. Read content:");
+        sys.log("LDEXTCMDS", InfoType.DEBUG, configFileContent + "\n");
         //Loading config file
         if ((configFileContent.startsWith("Type:JDCFG")) && configFileSource.getName().equalsIgnoreCase("commands.cfg")) {
         	configFileContent = configFileContent.substring(configFileContent.indexOf("\n") + 1); //Remove first line
-        	sys.log("LDEXTCMDS", 0, "Extracting aliases and paths...");
+        	sys.log("LDEXTCMDS", InfoType.DEBUG, "Extracting aliases and paths...");
         	//Split into aliases and paths
         	configFileContent.trim();
         	String[] splittedCFGFile = configFileContent.split("\n");
@@ -68,20 +69,20 @@ public class CommandLoader {
         	for (String value : splittedCFGFile) {
         		extCommands.put(value.split(">")[0], new File(value.split(">")[1]
         				.replace("ROOT/commands/", Global.getCmdDir().getAbsolutePath() + Global.fsep)));
-        		sys.log("LDEXTCMDS", 0, "Loaded value: " + value);
+        		sys.log("LDEXTCMDS", InfoType.DEBUG, "Loaded value: " + value);
         	}
         } else {
-        	sys.log("LDEXTCMDS", 2, "Config file format not correct. Cannot proceed loading external commands.");
+        	sys.log("LDEXTCMDS", InfoType.ERR, "Config file format not correct. Cannot proceed loading external commands.");
         	return null;
         }
-        sys.log("LDEXTCMDS", 0, "Successfully loaded config file for commands");
+        sys.log("LDEXTCMDS", InfoType.INFO, "Successfully loaded config file for commands");
         
         //======================================LOAD COMMANDS===========================================
         //Verifying command files
-        sys.log("LDEXTCMDS", 0, "Loading commands...");
-        sys.log("LDEXTCMDS", 0, "Verifying command files...");
+        sys.log("LDEXTCMDS", InfoType.DEBUG, "Loading commands...");
+        sys.log("LDEXTCMDS", InfoType.DEBUG, "Verifying command files...");
         if (extCommands.size() == commandSource.list().length) {
-        	sys.log("LDEXTCMDS", 0, "Verification successful.");
+        	sys.log("LDEXTCMDS", InfoType.DEBUG, "Verification successful.");
         	File[] commands = new File[extCommands.size()];
         	int index = 0;
         	for (String key : extCommands.keySet()) {
@@ -92,7 +93,7 @@ public class CommandLoader {
         	for (File command : commands) {
         		File commandTempPath = new File(Global.getDefaultDir().toString() + Global.fsep + "temp" + Global.fsep + command.getName().trim().replace(".jdexe", ".java"));
         		command = new File(command.toString().trim().replaceAll("\n", ""));
-        		sys.log("LDEXTCMDS", 0, "Processing command: " +  command);
+        		sys.log("LDEXTCMDS", InfoType.DEBUG, "Processing command: " +  command);
         		String commandContent = Files.readString(command.toPath());
         		if (commandContent.startsWith("Type:JDEXE")) {
         			commandContent = commandContent.substring(commandContent.indexOf("\n") + 1);
@@ -107,17 +108,17 @@ public class CommandLoader {
         				commandTempPath.createNewFile();
         				Files.writeString(commandTempPath.toPath(), code, StandardOpenOption.APPEND);
         			} else {
-        				sys.log("LDEXTCMDS", 2, "Unknown command format. cannot proceed loading external command: " + command);
+        				sys.log("LDEXTCMDS", InfoType.ERR, "Unknown command format. cannot proceed loading external command: " + command);
         			}
         		}
         	}
         } else {
-        	sys.log("LDEXTCMDS", 2, "Could not verify commands. Cannot proceed loading external commands.");
+        	sys.log("LDEXTCMDS", InfoType.ERR, "Could not verify commands. Cannot proceed loading external commands.");
         	return null;
         }
         
         //======================================COMPILE COMMANDS========================================
-        sys.log("LDEXTCMDS", 0, "Compiling commands...");
+        sys.log("LDEXTCMDS", InfoType.DEBUG, "Compiling commands...");
         String javaCompilerLocation = "";
         
         if (Global.getOSName().equalsIgnoreCase("Windows")) {
@@ -131,7 +132,7 @@ public class CommandLoader {
         
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         if (compiler == null) {
-        	sys.log("LDEXTCMDS", 2, "No compiler found. JDOS needs JDK. cannot compile commands.");
+        	sys.log("LDEXTCMDS", InfoType.ERR, "No compiler found. JDOS needs JDK. cannot compile commands.");
         	return null;
         }
         int compilationResult = 1;
@@ -145,21 +146,21 @@ public class CommandLoader {
         
         //Checking for errors
         if (compilationResult != 0) {
-        	sys.log("LDEXTCMDS", 2, "LDCMDS: Failed to compile commands. Error code: " + compilationResult);
+        	sys.log("LDEXTCMDS", InfoType.ERR, "LDCMDS: Failed to compile commands. Error code: " + compilationResult);
         } else {
-        	sys.log("LDEXTCMDS", 0, "LDCMDS: Compilation completed successfully.");
+        	sys.log("LDEXTCMDS", InfoType.INFO, "LDCMDS: Compilation completed successfully.");
         }
         
         Files.copy(Paths.get(Global.getDefaultDir() + Global.fsep + "temp" + Global.fsep + "*.class"), 
     			Paths.get(Global.getDefaultDir() + Global.fsep + "bin"), StandardCopyOption.REPLACE_EXISTING);
         
-        sys.log("LDEXTCMDS", 0, "Compiling done.");
-        sys.log("LDEXTCMDS", 0, "Deleting temporary files...");
+        sys.log("LDEXTCMDS", InfoType.INFO, "Compiling done.");
+        sys.log("LDEXTCMDS", InfoType.DEBUG, "Deleting temporary files...");
         File[] allTempFiles = Global.getTempDir().listFiles();
         for (File file : allTempFiles) {
         	Files.delete(file.toPath());
         }
-        if (Global.getTempDir().list().length == 0) { sys.log("LDEXTCMDS", 0, "Successfully deleted all temporary files."); }
+        if (Global.getTempDir().list().length == 0) { sys.log("LDEXTCMDS", InfoType.DEBUG, "Successfully deleted all temporary files."); }
         File[] binFiles = Global.getTempDir().listFiles();
         //TODO Assign compiled commands to Map extCommands
         if ((binFiles.length <= 0) && (!extCommands.isEmpty())) {
@@ -169,11 +170,11 @@ public class CommandLoader {
         	    index++;
         	}
         } else {
-        	sys.log("LDEXTCMDS", 2, "No class files found to assign");
+        	sys.log("LDEXTCMDS", InfoType.WARN, "No class files found to assign");
         }
-    	sys.log("LDEXTCMDS", 0, "Assigned all commands.");
+    	sys.log("LDEXTCMDS", InfoType.INFO, "Assigned all commands.");
         
-    	sys.log("LDEXTCMDS", 2, "WARNING: Beta command loader, not ready for use!");
+    	sys.log("LDEXTCMDS", InfoType.WARN, "WARNING: Beta command loader, not ready for use!");
 		return extCommands;
 	}
 }

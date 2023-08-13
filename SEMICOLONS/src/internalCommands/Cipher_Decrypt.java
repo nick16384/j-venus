@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import engine.InfoType;
 import engine.sys;
 import libraries.Global;
  
@@ -25,28 +26,28 @@ public class Cipher_Decrypt
      String ciphertext = "";
      String key = ""; 
      try { ciphertext = Files.readString(ciphertextFile.toPath()); }
-     catch (IOException ioe) { sys.log("DECRYPT", 0, "Error reading input file. aborting."); return null; }
+     catch (IOException ioe) { sys.log("DECRYPT", InfoType.WARN, "Error reading input file. aborting."); return null; }
       try { key = Files.readString(keyFile.toPath()); }
-     catch (IOException ioe) { sys.log("DECRYPT", 0, "Error reading key file. aborting."); return null; }
+     catch (IOException ioe) { sys.log("DECRYPT", InfoType.WARN, "Error reading key file. aborting."); return null; }
       String plaintext = "";
      if (params.contains("shift2c")) {
        
-       sys.log("DECRYPT", 0, "Decryption with Shift2C started...");
+       sys.log("DECRYPT", InfoType.DEBUG, "Decryption with Shift2C started...");
        String shiftlist = "";
        Map<String, String> invertedShiftOrder = new HashMap<>();
        Map<String, String> invertedShiftOrderAfter = new HashMap<>();
-       sys.log("DECRYPT", 0, "Reading SHIFTLIST.txt to assign shift order"); 
+       sys.log("DECRYPT", InfoType.STATUS, "Reading SHIFTLIST.txt to assign shift order"); 
        try { shiftlist = Files.readString((new File(String.valueOf(Global.getDefaultDir().toString()) + "\\Program Sources\\Shift2C\\SHIFTLIST.txt")).toPath()); }
-       catch (IOException ioe) { sys.log("DECRYPT", 0, "Error reading SHIFTLIST.txt, aborting"); return null; }
+       catch (IOException ioe) { sys.log("DECRYPT", InfoType.ERR, "Error reading SHIFTLIST.txt, aborting"); return null; }
         shiftlist = shiftlist.trim();
        String[] splittedShiftlist = shiftlist.split("\\<endNorm\\>"); byte b1; int i; String[] arrayOfString1;
        for (i = (arrayOfString1 = splittedShiftlist[0].trim().split("\n")).length, b1 = 0; b1 < i; ) { String value = arrayOfString1[b1];
          value = value.trim().replaceAll("\r", ""); invertedShiftOrder.put(value.split(":")[1], value.split(":")[0]); b1++; }
         for (i = (arrayOfString1 = splittedShiftlist[1].trim().split("\n")).length, b1 = 0; b1 < i; ) { String value = arrayOfString1[b1];
          value = value.trim().replaceAll("\r", ""); invertedShiftOrderAfter.put(value.split(":")[1], value.split(":")[0]); b1++; }
-        sys.log("DECRYPT", 0, "Done. Decrypting...");
-       sys.log("DECRYPT", 0, "Ciphertext: " + ciphertext);
-       sys.log("DECRYPT", 0, "Key: " + key);
+        sys.log("DECRYPT", InfoType.DEBUG, "Done. Decrypting...");
+       sys.log("DECRYPT", InfoType.DEBUG, "Ciphertext: " + ciphertext);
+       sys.log("DECRYPT", InfoType.DEBUG, "Key: " + key);
        
        char[] ciphertextCharArray = ciphertext.toCharArray();
        String[] ciphertextChars = new String[ciphertext.length()];
@@ -58,14 +59,14 @@ public class Cipher_Decrypt
          for (int k = 0; k < Integer.parseInt(Character.toString(key.charAt(plaintext.length()))); k++) {
            if (invertedShiftOrder.get(value) != null) {
              if (invertedShiftOrderAfter.get(value) != null) {
-               sys.log("DECRYPT", 0, "Decryption, Stage 1, Char " + value + ", Round " + k);
+               sys.log("DECRYPT", InfoType.DEBUG, "Decryption, Stage 1, Char " + value + ", Round " + k);
                value = value.replace(value, invertedShiftOrderAfter.get(value.trim())).trim();
              } 
              
-             sys.log("DECRYPT", 0, "Decryption, Stage 2, Char " + value + ", Round " + k);
+             sys.log("DECRYPT", InfoType.DEBUG, "Decryption, Stage 2, Char " + value + ", Round " + k);
              value = value.replace(value, invertedShiftOrder.get(value)).trim();
            } else {
-             sys.log("DECRYPT", 0, "Warning: Character '" + value + "' not present in SHIFTLIST.txt");
+             sys.log("DECRYPT", InfoType.DEBUG, "Warning: Character '" + value + "' not present in SHIFTLIST.txt");
            } 
          } 
          plaintext = plaintext.concat(value); b2++; }
@@ -73,21 +74,21 @@ public class Cipher_Decrypt
        plaintext = plaintext.replaceAll(" ", "E");
        
        if (plaintext.length() == key.length() && !plaintext.equalsIgnoreCase(ciphertext)) {
-         sys.log("DECRYPT", 0, "Decryption successful.");
-         sys.log("DECRYPT", 0, "Note that the output can be very weird, if you've used the wrong key.");
+         sys.log("DECRYPT", InfoType.INFO, "Decryption successful.");
+         sys.log("DECRYPT", InfoType.INFO, "Note that the output can be very weird, if you've used the wrong key.");
        } else {
-         sys.log("DECRYPT", 0, "Decryption failed.");
+         sys.log("DECRYPT", InfoType.ERR, "Decryption failed.");
        } 
        
        if (plaintext.length() < 100) {
-         sys.log("DECRYPT", 0, "Outputxt: " + plaintext);
+         sys.log("DECRYPT",InfoType.INFO, "Outputxt: " + plaintext);
        }
-       sys.log("DECRYPT", 0, "Saving file to 'decOut.txt'");
+       sys.log("DECRYPT", InfoType.INFO, "Saving file to 'decOut.txt'");
        File outFile = new File(String.valueOf(Global.getDefaultDir().toString()) + "\\Program Sources\\Shift2C\\decOut.txt"); 
-       try { outFile.createNewFile(); } catch (IOException ioe) { sys.log("DECRYPT", 0, "Could not create decryption output file."); }
+       try { outFile.createNewFile(); } catch (IOException ioe) { sys.log("DECRYPT", InfoType.ERR, "Could not create decryption output file."); }
         try { Files.writeString(outFile.toPath(), ciphertext, new OpenOption[] { StandardOpenOption.APPEND }); }
-       catch (IOException ioe) { sys.log("DECRYPT", 0, "Could not write to decryption output file."); }
-        sys.log("DECRYPT", 0, " Done.");
+       catch (IOException ioe) { sys.log("DECRYPT", InfoType.ERR, "Could not write to decryption output file."); }
+        sys.log("DECRYPT", InfoType.STATUS, " Done.");
      } 
      
      return plaintext;

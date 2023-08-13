@@ -3,6 +3,7 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
+import engine.InfoType;
 import engine.sys;
 import main.Main;
 
@@ -17,7 +18,7 @@ public class Console_ClearScreen
 		  new components.ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
 		  Main.mainFrameAWT.getCmdLine().setText("");
 	  } else {
-		  sys.log("CLS", 3, "Clearing screen failed, because components are still null.");
+		  sys.log("CLS", InfoType.ERR, "Clearing screen failed, because components are still null.");
 	  }
 	  return null;
   }

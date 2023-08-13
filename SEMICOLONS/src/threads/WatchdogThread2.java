@@ -1,5 +1,6 @@
 package threads;
 
+import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import libraries.Global;
@@ -26,24 +27,25 @@ public class WatchdogThread2 implements InternalThread {
 							
 							try {
 								if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
-									sys.log("WDT2", 1, "Not setting caret to last position");
+									sys.log("WDT2", InfoType.INFO, "Not setting caret to last position");
 									// set jfx caret to last pos
 								else
 									Main.mainFrameAWT.getCmdLine()
 											.setCaretPosition(Main.mainFrameAWT.getCmdLine().getText().length());
 							} catch (NullPointerException npe) {
-								sys.log("WDT2", 3, "Setting cursor to last text position threw an error. Main.mainFrame probably is null.");
+								sys.log("WDT2", InfoType.ERR, "Setting cursor to last text position threw an error. Main.mainFrame probably is null.");
 							} catch (IllegalArgumentException iae) {
-								sys.log("WDT2", 3, "Setting cursor to last text position threw an error, because the set position was out of range.");
+								sys.log("WDT2", InfoType.ERR, "Setting cursor to last text position threw an error, because the set position was out of range.");
 							}
 							
 							// This check often fails for no reason, so it is left out.
-							/*if (Main.javafxEnabled
-									&& Global.getCurrentPhase().equals(Runphase.RUN)
+							// TODO Prevent the shell from blanking out during start 50% of the time!!!
+							if (Main.javafxEnabled
 									&& Main.cmdLine.getText().equals("SHELL INIT")) {
 								System.err.println("What have I done to you?!");
-								WatchdogThread.stopWithError(1, 15000, "The shell didn't initialize properly. Try again.");
-							}*/
+								System.err.println("The shell didn't initialize properly.");
+								//WatchdogThread.stopWithError(1, 15000, "The shell didn't initialize properly. Try again.");
+							}
 						} else {
 							Shell.print(AWTANSI.B_Yellow, "Init fail.\n");
 							Global.setErrorRunphase();
@@ -91,7 +93,7 @@ public class WatchdogThread2 implements InternalThread {
 
 	@Override
 	public void suspend() {
-		sys.log("WDT2", 2, "WatchdogThread2 cannot be suspended.");
+		sys.log("WDT2", InfoType.WARN, "WatchdogThread2 cannot be suspended.");
 	}
 
 	@Override

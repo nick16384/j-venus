@@ -1,6 +1,7 @@
 package threads;
 
 import commandProcessing.CommandManager;
+import engine.InfoType;
 import engine.sys;
 import jfxcomponents.JFxGUIThread;
 
@@ -16,18 +17,18 @@ public class ThreadAllocation {
 	private static final JFxGUIThread JFXT = new JFxGUIThread();
 	
 	public static void launchAll() {
-		sys.log("THREAD-ALLOC", 1, "Launching all internal threads...");
-		if (WDT.isRunning())  { sys.log("THREAD-ALLOC", 2, "WatchdogThread already running."); }
+		sys.log("THREAD-ALLOC", InfoType.INFO, "Launching all internal threads...");
+		if (WDT.isRunning())  { sys.log("THREAD-ALLOC", InfoType.WARN, "WatchdogThread already running."); }
 		else { WDT.start(); }
-		if (WDT2.isRunning()) { sys.log("THREAD-ALLOC", 2, "WatchdogThread2 already running."); }
+		if (WDT2.isRunning()) { sys.log("THREAD-ALLOC", InfoType.WARN, "WatchdogThread2 already running."); }
 		else { WDT2.start(); }
-		if (SWT.isRunning())  { sys.log("THREAD-ALLOC", 2, "ShellWriteThread already running."); }
+		if (SWT.isRunning())  { sys.log("THREAD-ALLOC", InfoType.WARN, "ShellWriteThread already running."); }
 		else { SWT.start(); }
-		if (CUIT.isRunning()) { sys.log("THREAD-ALLOC", 2, "CheckUserInputThread already running."); }
+		if (CUIT.isRunning()) { sys.log("THREAD-ALLOC", InfoType.WARN, "CheckUserInputThread already running."); }
 		else { CUIT.start(); }
-		if (CMGR.isRunning()) { sys.log("THREAD-ALLOC", 2, "Command Manager Thread already running."); }
+		if (CMGR.isRunning()) { sys.log("THREAD-ALLOC", InfoType.WARN, "Command Manager Thread already running."); }
 		else { CMGR.start(); }
-		if (JFXT.isRunning()) { sys.log("THREAD-ALLOC", 2, "JavaFX GUI Thread already running."); }
+		if (JFXT.isRunning()) { sys.log("THREAD-ALLOC", InfoType.WARN, "JavaFX GUI Thread already running."); }
 		else { JFXT.start(); }
 	}
 	
@@ -46,7 +47,7 @@ public class ThreadAllocation {
 	public static boolean isJFXTActive() { return JFXT.isRunning(); }
 	
 	public static void shutdownVexus(int exitCode) {
-		sys.log("THREAD-ALLOC", 1, "Calling WDT thread(s) shutdown.");
+		sys.log("THREAD-ALLOC", InfoType.INFO, "Calling WDT thread(s) shutdown.");
 		WDT.shutdownVexus(exitCode);
 	}
 	

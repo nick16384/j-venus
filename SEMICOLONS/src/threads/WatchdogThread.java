@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import awtcomponents.AWTANSI;
 import awtcomponents.WindowMain;
 import components.Shell;
+import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
@@ -33,15 +34,15 @@ public final class WatchdogThread implements InternalThread {
 
 		watchdogThread = new Thread(null, new Runnable() {
 			public final void run() {
-				sys.log("WATCHDOG", 0, "Vexus security checker thread started.");
+				sys.log("WDT", InfoType.STATUS, "Watchdog enabled.");
 				Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
 
 				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException ie) {
-					sys.log("WATCHDOG", 3, "Watchdog startup sleep has been interrupted.");
+					sys.log("WATCHDOG", InfoType.ERR, "Watchdog startup sleep has been interrupted.");
 				}
-				sys.log("WATCHDOG", 0, "Watchdog idle now.");
+				sys.log("WATCHDOG", InfoType.STATUS, "Watchdog idle now.");
 
 				while (Global.getCurrentPhase().equals(Runphase.INIT)) {
 					// wait for phase to change to "run"
@@ -138,7 +139,7 @@ public final class WatchdogThread implements InternalThread {
 								+ "without errors, has thrown an exception, which means, some check failed miserably. This\n"
 								+ "problem probably arose from the program and has nothing to do with you, but because\n"
 								+ "stable operation is not guaranteed from now, this program will now terminate.");
-						sys.log("WDT", 4, "Exception thrown inside WDT. Stopping with error. Stacktrace below:");
+						sys.log("WDT", InfoType.CRIT, "Exception thrown inside WDT. Stopping with error. Stacktrace below:");
 						ex.printStackTrace();
 					}
 				}
@@ -146,12 +147,12 @@ public final class WatchdogThread implements InternalThread {
 				//====================================== CHECKING END ======================================
 
 				long activeTime = System.currentTimeMillis() - timeStart;
-				sys.log("STOPPING", 0, "Vexus active time: " + activeTime + "ms");
-				sys.log("STOPPING", 0, "Saving log file to: /var/J-Vexus_logs/ ");
+				sys.log("STOPPING", InfoType.STATUS, "Vexus active time: " + activeTime + "ms");
+				sys.log("STOPPING", InfoType.STATUS, "Saving log file to: /var/J-Vexus_logs/ ");
 
 				// String logFilePath = "/var/J-Vexus_logs/" + "logfile1.txt";
 
-				sys.log("WATCHDOG", 0, "Threads stopping...");
+				sys.log("WATCHDOG", InfoType.STATUS, "Threads stopping...");
 				if (Main.javafxEnabled && ThreadAllocation.getJFXT().isGUIActive()) Main.jfxWinloader.stop();
 				System.exit(exitCode);
 			}
@@ -161,7 +162,7 @@ public final class WatchdogThread implements InternalThread {
 	@Override
 	public final void start() {
 		if (watchdogThread.isAlive()) {
-			sys.log("WATCHDOG", 2, "WatchdogThread already running.");
+			sys.log("WATCHDOG", InfoType.WARN, "WatchdogThread already running.");
 		} else {
 			watchdogThread.start();
 		}
@@ -174,7 +175,7 @@ public final class WatchdogThread implements InternalThread {
 
 	@Override
 	public final void suspend() {
-		sys.log("WTT", 3, "Watchdog thread cannot be suspended.");
+		sys.log("WTT", InfoType.NONCRIT, "Watchdog thread cannot be suspended.");
 	}
 
 	protected final void shutdownVexus(int exitCode) {
@@ -214,7 +215,7 @@ public final class WatchdogThread implements InternalThread {
 		}
 		Global.setErrorRunphase();
 		try { Thread.sleep(200); } catch (InterruptedException ie) { ie.printStackTrace(); }
-		sys.log("[WDT]", 4, errMsg);
+		sys.log("[WDT]", InfoType.CRIT, errMsg);
 		Platform.runLater(() -> {
 			Shell.println(AWTANSI.B_Yellow,
 					"\n\n===============================================\n"
@@ -238,8 +239,8 @@ public final class WatchdogThread implements InternalThread {
 				sys.log("Error stop wait was interrupted.");
 			}
 		} else {
-			sys.log("WTT", 3, "Can't wait less than 100 or more than 60,000 milliseconds until VM suspension.");
-			sys.log("WTT", 3, "Defaulting to 10 seconds.");
+			sys.log("WTT", InfoType.ERR, "Can't wait less than 100 or more than 60,000 milliseconds until VM suspension.");
+			sys.log("WTT", InfoType.ERR, "Defaulting to 10 seconds.");
 			Platform.runLater(() -> {
 				Shell.println(AWTANSI.B_Green, "This JVM will be suspended in 10 seconds.");
 			});

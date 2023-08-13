@@ -1,5 +1,6 @@
 package internalCommands;
 
+import engine.InfoType;
 import engine.sys;
 import internalCommands.System_Exec;
 
@@ -44,10 +45,10 @@ public class System_Exec {
 		String newDataStr = "";
 
 		try {
-			sys.log("SYSEXEC", 1, "Starting command as external process.");
+			sys.log("SYSEXEC", InfoType.INFO, "Starting command as external process.");
 			process = processBuilder.start();
 		} catch (IOException ioe) {
-			sys.log("SYSEXEC", 3, "Unable to start process: IOException");
+			sys.log("SYSEXEC", InfoType.ERR, "Unable to start process: IOException");
 			//ioe.printStackTrace();
 			return "CmdNotFound";
 		}
@@ -75,7 +76,7 @@ public class System_Exec {
 					
 					// Only use useful data part of newData (not null bytes)
 					newDataStr = String.valueOf(newData, 0, charCount);
-					sys.log("SYSEXEC:STDOUT", 0, newDataStr);
+					sys.log("SYSEXEC:STDOUT", InfoType.DEBUG, newDataStr);
 					Shell.print(newDataStr);
 				}
 				if (forceKill) { process.descendants().forEach( (p) -> { p.destroy(); } ); process.destroy(); continue; }
@@ -84,18 +85,18 @@ public class System_Exec {
 			//TODO make inputstream work (e.g. make [sudo] password be able to be entered)
 			Shell.println("---EOF---");
 		} catch (IOException ioe) {
-			sys.log("SYSEXEC", 3, "Reading stdout failed: IOException");
+			sys.log("SYSEXEC", InfoType.ERR, "Reading stdout failed: IOException");
 			return "RuntimeErr";
 		}
 		//CMGR is hung up
 		
 		// CLEANING UP ======================================================
-		sys.log("SYSEXEC", 1, "Closing process streams...");
-		try { stdout.close(); } catch (IOException ioe) { sys.log("SYSEXEC", 3, "Fail on stdout."); }
-		try { stdoutRead.close(); } catch (IOException ioe) { sys.log("SYSEXEC", 3, "Fail on stdoutRead."); }
-		try { stdin.close(); } catch (IOException ioe) { sys.log("SYSEXEC", 3, "Fail on stdin."); }
-		try { stdinWrite.close(); } catch (IOException ioe) { sys.log("SYSEXEC", 3, "Fail on stdinWrite."); }
-		sys.log("SYSEXEC", 1, "Closing process streams done.");
+		sys.log("SYSEXEC", InfoType.DEBUG, "Closing process streams...");
+		try { stdout.close(); } catch (IOException ioe) { sys.log("SYSEXEC", InfoType.ERR, "Fail on stdout."); }
+		try { stdoutRead.close(); } catch (IOException ioe) { sys.log("SYSEXEC", InfoType.ERR, "Fail on stdoutRead."); }
+		try { stdin.close(); } catch (IOException ioe) { sys.log("SYSEXEC", InfoType.ERR, "Fail on stdin."); }
+		try { stdinWrite.close(); } catch (IOException ioe) { sys.log("SYSEXEC", InfoType.ERR, "Fail on stdinWrite."); }
+		sys.log("SYSEXEC", InfoType.DEBUG, "Closing process streams done.");
 		
 		forceKill = false;
 		return null;
@@ -106,10 +107,10 @@ public class System_Exec {
 	 */
 	public static void forceKill() {
 		forceKill = true;
-		sys.log("SYSEXEC:KILL", 1, "Waiting for process to stop...");
+		sys.log("SYSEXEC:KILL", InfoType.DEBUG, "Waiting for process to stop...");
 		while (process != null && process.isAlive()) {
 			try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		}
-		sys.log("SYSEXEC:KILL", 1, "Process stopped.");
+		sys.log("SYSEXEC:KILL", InfoType.DEBUG, "Process stopped.");
 	}
 }

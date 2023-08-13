@@ -1,5 +1,6 @@
 package internalCommands;
 
+import engine.InfoType;
 import engine.sys;
 import internalCommands.Cipher_Chksum;
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class Cipher_Chksum
         randNum *= -1;
       } 
     } catch (Exception e) {
-      sys.log("FASTRAND", 2, "Seed to long");
+      sys.log("FASTRAND", InfoType.WARN, "Seed to long");
     } 
     
     Shell.print(2, "HIDDEN", String.valueOf(String.valueOf(randNum)) + " ", new boolean[0]);

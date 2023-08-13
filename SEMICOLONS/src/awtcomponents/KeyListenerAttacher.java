@@ -11,11 +11,14 @@ import java.util.Arrays;
 
 import javax.swing.text.BadLocationException;
 
+import components.Shell;
+import engine.InfoType;
 import engine.sys;
 import libraries.Err;
 import libraries.VariableInitializion;
 import libraries.Global;
 import main.Main;
+import threads.ThreadAllocation;
 
 /**
  * Attached a KeyListener for ENTER and TAB for WindowMain.cmdLine
@@ -35,7 +38,7 @@ public class KeyListenerAttacher {
 				if (e.getKeyChar() == KeyEvent.VK_ENTER) {
 					main.Main.tabCountInRow = 0;
 					//UPDATE SHELL STREAM ==============================================================================
-					Main.ThreadAllocMain.getSWT().updateShellStream();
+					ThreadAllocation.getSWT().updateShellStream();
 					//END UPDATE SHELL STREAM ==========================================================================
 					//Splitting WindowMain.cmdLine text into command
 					String[] lines = WindowMain.cmdLine.getText().split("\n");
@@ -51,27 +54,27 @@ public class KeyListenerAttacher {
 					String lastLine2 = lines2[lines2.length - 1];
 					//if (lastLine) //check lastline multiple prompts
 					
-					System.err.println("VarLib prompt: " + Global.getPrompt());
+					System.err.println("VarLib prompt: " + Shell.getPrompt());
 					System.err.println("Last line length: " + lastLine.length());
 					System.err.println("Last line content: " + lastLine);
 					System.err.println("Last line 2 length: " + lastLine2.length());
 					System.err.println("Last line 2 content: " + lastLine2);
-					System.err.println("Prompt length: " + Global.getPrompt().length());
+					System.err.println("Prompt length: " + Shell.getPrompt().length());
 					
 					//Extract full command from last line (Remove prompt)
 					//Dev. note: VarLib.getPrompt() contains ANSI excapes, but cmdLine.getText() doesn't, so
 					//all ANSI escape chars had to be cleared out by the regex shown.
 					String fullCommand = lastLine.substring(
-							Global.getPrompt().replaceAll("\u001B\\[[\\d;]*[^\\d;]","").length(), lastLine.length());
+							Shell.getPrompt().replaceAll("\u001B\\[[\\d;]*[^\\d;]","").length(), lastLine.length());
 					
 					//if (fullCommand.contains(VarLib.getPrompt())) { fullCommand = fullCommand.split("\\$ ")[1]; }
 					if (!fullCommand.isBlank()) {
 						if (fullCommand.contains(" && ")) {
-							sys.log("MAIN", 2, "Info: Found multiple commands connected with '&&'.");
-							sys.log("MAIN", 2, "This is still experimental: Expect errors.");
-							sys.shellPrintln("Using experimental command interconnect: '&&'");
+							sys.log("MAIN", InfoType.WARN, "Info: Found multiple commands connected with '&&'.");
+							sys.log("MAIN", InfoType.WARN, "This is still experimental: Expect errors.");
+							Shell.println("Using experimental command interconnect: '&&'");
 							for (String subCommand : fullCommand.split(" && ")) {
-								sys.log("MAIN", 0, "Running '" + fullCommand + "'");
+								sys.log("MAIN", InfoType.DEBUG, "Running '" + fullCommand + "'");
 								sys.log("Subcommand: " + subCommand);
 								try {
 									components.Command cmd = new components.Command(subCommand);
@@ -85,7 +88,7 @@ public class KeyListenerAttacher {
 								}
 							}
 						} else {
-							sys.log("MAIN", 0, "Sending '" + fullCommand + "' to Command Parser");
+							sys.log("MAIN", InfoType.DEBUG, "Sending '" + fullCommand + "' to Command Parser");
 							try {
 								new components.Command(fullCommand).start();
 								//For returnVal, try:
@@ -112,14 +115,14 @@ public class KeyListenerAttacher {
 									Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"),
 									fullCommand + "\n", StandardOpenOption.APPEND);
 						} catch (IOException ioe) {
-							sys.log("MAIN", 2, "IOException while writing to cmd history.");
+							sys.log("MAIN", InfoType.WARN, "IOException while writing to cmd history.");
 						} catch (NumberFormatException nfe) {
-							sys.log("MAIN", 2, "Parsing cmd_history_max_length failed. Check file exists" +
+							sys.log("MAIN", InfoType.WARN, "Parsing cmd_history_max_length failed. Check file exists" +
 									" and contains a number below 2.147.483.647");
 						}
 						//============================END ADD FULLCMD TO HISTORY==============================
 					} else {
-						VariableInitializion.cmdLinePrepare();
+						Shell.showPrompt();
 					}
 				} else if (e.getKeyChar() == KeyEvent.VK_TAB) {
 					//========================================COMMAND REPEAT============================================
@@ -131,11 +134,11 @@ public class KeyListenerAttacher {
 								WindowMain.cmdLine.getText().substring(WindowMain.cmdLine.getText().lastIndexOf("\n")).length());
 						new components.ProtectedTextComponent(WindowMain.cmdLine).protectText(0, WindowMain.cmdLine.getText().length());
 					} catch (BadLocationException ble) {
-						sys.log("KLA", 3, "Command repeat error: Could not remove last line.");
+						sys.log("KLA", InfoType.ERR, "Command repeat error: Could not remove last line.");
 					} catch (NullPointerException npe) {
-						sys.log("KLA", 3, "Command repeat error: main.mainFrame is null.");
+						sys.log("KLA", InfoType.ERR, "Command repeat error: main.mainFrame is null.");
 					}
-					VariableInitializion.cmdLinePrepare();
+					Shell.showPrompt();
 					main.Main.commandHistory.clear();
 					try {
 						//Add all entries of cmd_history to LinkedList main.Main.commandHistory
@@ -143,17 +146,17 @@ public class KeyListenerAttacher {
 								Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history")).split("\n")));
 					} catch (IOException ioe) {
 						//TODO edit command history and TAB repeating further
-						sys.log("MAIN", 3, "CMD History read fail. main.Main.commandHistory<LinkedList> is empty now.");
+						sys.log("MAIN", InfoType.ERR, "CMD History read fail. main.Main.commandHistory<LinkedList> is empty now.");
 					}
 					
 					if (main.Main.tabCountInRow > main.Main.commandHistory.size()) {
 						Toolkit.getDefaultToolkit().beep();
-						sys.log("MAIN", 1, "Command history end reached");
+						sys.log("MAIN", InfoType.INFO, "Command history end reached");
 					} else if (main.Main.tabCountInRow == 1) {
 						//Write out last command without it getting protected (..., true)
-						sys.log("REPEAT", 0, "Command repeat: "
+						sys.log("REPEAT", InfoType.DEBUG, "Command repeat: "
 								+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
-						sys.shellPrint(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
+						Shell.print(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
 					} else {
 						//TODO Find some sort of replaceLast() \/ -------------------
 						/*try {
@@ -163,9 +166,9 @@ public class KeyListenerAttacher {
 						} catch (BadLocationException ble) {
 							OpenLib.logWrite("MAIN", 3, "Command repeat error: Could not remove old command");
 						}*/
-						sys.log("REPEAT", 0, "Command repeat(" + main.Main.tabCountInRow + "): "
+						sys.log("REPEAT", InfoType.DEBUG, "Command repeat(" + main.Main.tabCountInRow + "): "
 								+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
-						sys.shellPrint(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
+						Shell.print(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
 					}
 					//========================================COMMAND REPEAT END============================================
 				}

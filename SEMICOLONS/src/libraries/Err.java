@@ -8,21 +8,22 @@ import java.nio.file.StandardOpenOption;
 
 import awtcomponents.AWTANSI;
 import components.Shell;
+import engine.InfoType;
 import engine.sys;
 
 public class Err {
 	public static void shellPrintErr(Exception ex, String errName, String errType) {
 		if (ex == null) {
-			sys.log("ERRMSG", 2, "Exception is null, so no error message displayed.");
+			sys.log("ERRMSG", InfoType.WARN, "Exception is null, so no error message displayed.");
 			Shell.println("Warning: Error message suppressed. See more information in log at \"ERRMSG\".");
 			return;
 		}
 		String dumpStr = "";
 		
 		if (errName == null) {
-			sys.log("ERR", 4, "ERROR (DEF)");
+			sys.log("ERR", InfoType.CRIT, "ERROR (DEF)");
 		} else {
-			sys.log("ERR", 4, errName);
+			sys.log("ERR", InfoType.CRIT, errName);
 		}
 		Shell.print(4, "ERR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
 				+ ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
@@ -69,7 +70,7 @@ public class Err {
 			Files.createFile(dumpFile);
 			Files.writeString(dumpFile, dumpStr, StandardOpenOption.WRITE);
 		} catch (IOException ioe) {
-			sys.log("ERR", 3, "Could not create or write to dump file at '" + dumpFile.toFile().getAbsolutePath() + "'");
+			sys.log("ERR", InfoType.ERR, "Could not create or write to dump file at '" + dumpFile.toFile().getAbsolutePath() + "'");
 			ioe.printStackTrace();
 			Shell.println(AWTANSI.D_Yellow,
 					"Could not create or write to dump file at '" + dumpFile.toFile().getAbsolutePath() + "'");

@@ -9,6 +9,7 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.InlineCssTextArea;
 
 import components.Shell;
+import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import javafx.scene.Cursor;
@@ -34,21 +35,21 @@ public class JFxWinloader extends Application {
 	//private String Main.wqtest = "";
 	
 	public void loadGUI(String[] args) {
-		sys.log("JFX", 1, "Running JavaFX init()...");
+		sys.log("JFX", InfoType.DEBUG, "Running JavaFX init()...");
 		try { init(); } catch (Exception ex) { ex.printStackTrace(); }
-		sys.log("JFX", 1, "Starting JavaFX application...");
+		sys.log("JFX", InfoType.INFO, "Starting JavaFX application...");
 		Application.launch(args);
 	}
 	
 	public void stop() {
-		sys.log("JFX", 1, "Stopping JavaFX application...");
+		sys.log("JFX", InfoType.INFO, "Stopping JavaFX application...");
 		Platform.exit();
-		sys.log("JFX", 1, "Stopping JavaFX application done.");
+		sys.log("JFX", InfoType.INFO, "Stopping JavaFX application done.");
 	}
 	
 	@Override
 	public void start(Stage primaryStage) {
-		sys.log("JFX", 1, "Loading JavaFX window :)");
+		sys.log("JFX", InfoType.INFO, "Loading JavaFX window :)");
 		
 		try {
 			primaryStage.setTitle("S.E.M.I.C.O.L.O.N. Shell " + Global.getVersion());
@@ -66,7 +67,7 @@ public class JFxWinloader extends Application {
 	        Main.cmdLine.setCache(true);
 			
 			Image icon = null;
-			sys.log("JFX", 1,
+			sys.log("JFX", InfoType.INFO,
 					"Icon path: " + Global.getDataDir().getAbsolutePath() + Global.fsep + "semicolons-icon.png");
 			try { icon = new Image(
 					"file:" + Global.getDataDir().getAbsolutePath() + Global.fsep + "semicolons-icon.png"); }
@@ -84,7 +85,7 @@ public class JFxWinloader extends Application {
 					try {
 						KeyEventHandlers.actionOnEnter();
 					} catch (Exception ex) {
-						sys.log("JFX", 3, "Exception in command extractor / formatter: "
+						sys.log("JFX", InfoType.ERR, "Exception in command extractor / formatter: "
 								+ "Probably the prompt was edited by the user.");
 						Shell.print("Whatever you're trying, it's not funny!");
 						Shell.showPrompt();
@@ -94,17 +95,17 @@ public class JFxWinloader extends Application {
 					try {
 						KeyEventHandlers.handleCommandRepeat();
 					} catch (Exception ex) {
-						sys.log("JFX", 3, "Command repeat encountered an exception. This is an internal undefined error.");
+						sys.log("JFX", InfoType.ERR, "Command repeat encountered an exception. This is an internal undefined error.");
 						Shell.print("You broke something. It's not healthy for your PC.");
 						Shell.showPrompt();
 					}
 				}
 				
 				if (event.getCode().equals(KeyCode.PAGE_UP)) {
-					sys.log("JFX", 1, "Increasing shell font size.");
+					sys.log("JFX", InfoType.DEBUG, "Increasing shell font size.");
 					//Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
 				} else if (event.getCode().equals(KeyCode.PAGE_DOWN)) {
-					sys.log("JFX", 1, "Shrinking shell font size.");
+					sys.log("JFX", InfoType.DEBUG, "Shrinking shell font size.");
 					//Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
 					//TODO show big number on screen for font size change
 				}
@@ -126,7 +127,7 @@ public class JFxWinloader extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
-			sys.log("JFX", 1, "start(primaryStage) method end reached.");
+			sys.log("JFX", InfoType.DEBUG, "start(primaryStage) method end reached.");
 			
 		} catch (Exception ex) {
 			for(StackTraceElement e: ex.getStackTrace())
@@ -146,7 +147,7 @@ public class JFxWinloader extends Application {
 	}
 	
 	public void appendText(String text, Color color) {
-		sys.log("JFX", 1, "Appending new text to cmdLine with " + text.length() + " characters.");
+		sys.log("JFX", InfoType.DEBUG, "Appending new text to cmdLine with " + text.length() + " characters.");
 		
 		if (Global.getCurrentPhase().equals(Runphase.RUN) && Main.cmdLine != null) {
 			// Enqueue cmdLine write in JavaFX thread
@@ -154,19 +155,19 @@ public class JFxWinloader extends Application {
 				try {
 					Main.cmdLine.appendText(text);
 					Main.cmdLine.setReadOnlyTo(Main.cmdLine.getText().length());
-					sys.log("JFX", 1, "Text write color hex: (0x)" + color.toString().substring(2, 8));
+					sys.log("JFX", InfoType.DEBUG, "Text write color hex: (0x)" + color.toString().substring(2, 8));
 					// Apply text color on new segment:
 					Main.cmdLine.setStyle(Main.cmdLine.getText().length() - text.length(),
 										  Main.cmdLine.getText().length(),
 										  "-fx-fill: #" + color.toString().substring(2, 8) + ";");
 				} catch (Exception ex) {
-					sys.log("JFX", 2, "Writing text to cmdLine failed.");
+					sys.log("JFX", InfoType.WARN, "Writing text to cmdLine failed.");
 					ex.printStackTrace();
 				}
 			});
 			Platform.requestNextPulse();
 		} else {
-			sys.log("JFX", 3, "Appending text not possible, because Main.cmdLine is null.");
+			sys.log("JFX", InfoType.WARN, "Appending text not possible, because Main.cmdLine is null.");
 		}
 	}
 	
@@ -185,7 +186,7 @@ public class JFxWinloader extends Application {
 		
 		createCssStylesheetFileIfNotExisting(cssFile);
 		scene.getStylesheets().clear();
-		sys.log("JFX", 1, "Loading external stylesheet...");
+		sys.log("JFX", InfoType.INFO, "Loading external stylesheet...");
 		scene.getStylesheets().add("file:///" + cssFile.getAbsolutePath().replace("\\", "/"));
 	}
 	
@@ -208,12 +209,12 @@ public class JFxWinloader extends Application {
 		
 		if (!libraries.FileCheckUtils.exists(cssFile)) {
 			try {
-				sys.log("JFX:CSS", 1, "External CSS stylesheet does not exist. Creating default file.");
+				sys.log("JFX:CSS", InfoType.INFO, "External CSS stylesheet does not exist. Creating default file.");
 				cssFile.createNewFile();
 				Files.writeString(cssFile.toPath(), cssData, StandardOpenOption.WRITE);
 			} catch (IOException ioe) {
-				sys.log("JFX:CSS", 3, "Error creating new default CSS stylesheet.");
-				sys.log("JFX:CSS", 3, "Running in fallback color mode.");
+				sys.log("JFX:CSS", InfoType.ERR, "Error creating new default CSS stylesheet.");
+				sys.log("JFX:CSS", InfoType.ERR, "Running in fallback color mode.");
 			}
 		}
 	}

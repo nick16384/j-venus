@@ -1,5 +1,6 @@
 package internalCommands;
 
+import engine.InfoType;
 import engine.sys;
 import java.io.File;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class File_listDirectory {
 			listDirName = Global.getCurrentDir();
 			listDir = new File(Global.getCurrentDir());
 		}
-		sys.log("LSDIR", 0, "Listing directory: '" + listDirName + "'");
+		sys.log("LSDIR", InfoType.INFO, "Listing directory: '" + listDirName + "'");
 		
 		if (!FileCheckUtils.isDirStrict(listDir)) {
 			return "FileErr_NotADir";

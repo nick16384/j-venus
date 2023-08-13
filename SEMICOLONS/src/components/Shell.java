@@ -3,6 +3,7 @@ package components;
 import java.awt.Color;
 
 import awtcomponents.AWTANSI;
+import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import libraries.Global;
@@ -30,7 +31,7 @@ public class Shell {
 			else
 				promptPattern = newPromptPattern;
 		} else {
-			sys.log("OPENLIB", 2, "Attempt to set prompt to null, changing nothing.");
+			sys.log("OPENLIB", InfoType.WARN, "Attempt to set prompt to null, changing nothing.");
 		}
 	}
 
@@ -90,9 +91,9 @@ public class Shell {
 			Shell.print(AWTANSI.B_Green, "\n" + prompt);
 
 		} else {
-			sys.log("LIB", 4, "Shell prepare was called during pre-init. Doing nothing, but this");
-			sys.log("LIB", 4, "is unusual and should not be seen multiple times.");
-			sys.log("LIB", 4, "Although, it's just a beta version by now, so it's just like that :)");
+			sys.log("LIB", InfoType.CRIT, "Shell prepare was called during pre-init. Doing nothing, but this");
+			sys.log("LIB", InfoType.CRIT, "is unusual and should not be seen multiple times.");
+			sys.log("LIB", InfoType.CRIT, "Although, it's just a beta version by now, so it's just like that :)");
 		}
 		if (!Main.javafxEnabled)
 			Main.mainFrameAWT.getCmdLine().setEditable(true);

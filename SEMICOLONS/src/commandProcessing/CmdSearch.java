@@ -3,6 +3,7 @@ package commandProcessing;
 import java.util.ArrayList;
 
 import components.Shell;
+import engine.InfoType;
 import engine.sys;
 import internalCommands.*;
 
@@ -102,7 +103,7 @@ public class CmdSearch {
 		sys.log("External .jar execution to be implemented!");
 		
 		// SYSTEM BINARY ===============================================
-		sys.log("CMDEXEC", 1, "Running command as external system process.");
+		sys.log("CMDEXEC", InfoType.INFO, "Running command as external system process.");
 		ArrayList<String> newCommandArray = new ArrayList<String>();
 		newCommandArray.add(command);
 		newCommandArray.addAll(params);

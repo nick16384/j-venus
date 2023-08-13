@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.attribute.PosixFileAttributeView;
+
+import engine.InfoType;
 import engine.sys;
 
 /**
@@ -33,7 +35,7 @@ public class FileCheckUtils {
 			else if (!file.exists() || !file.getCanonicalFile().exists())
 				return false;
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Filesystem element existence check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Filesystem element existence check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -49,7 +51,7 @@ public class FileCheckUtils {
 			else if (!file.isDirectory() || !file.getCanonicalFile().isDirectory())
 				return false;
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Directory check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Directory check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -73,7 +75,7 @@ public class FileCheckUtils {
 				return false;
 			}
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Strict directory check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Strict directory check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -88,7 +90,7 @@ public class FileCheckUtils {
 			else if (!file.isFile() || !file.getCanonicalFile().isFile())
 				return false;
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "File check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "File check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -112,7 +114,7 @@ public class FileCheckUtils {
 				return false;
 			}
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Strict file check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Strict file check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -121,7 +123,7 @@ public class FileCheckUtils {
 	public static boolean canRead(File file) {
 		if (Global.getOSName().equals("Windows"))
 			//canRead(), canWrite(), and canExecute() cause problems on Windows
-			sys.log("FCU", 2, "Warning: The canRead() method may not work on Windows systems as desired.");
+			sys.log("FCU", InfoType.WARN, "Warning: The canRead() method may not work on Windows systems as desired.");
 		try {
 			file = prefetchFile(file);
 			if (file == null) return DEFAULT;
@@ -130,7 +132,7 @@ public class FileCheckUtils {
 			else if (!Files.isReadable(file.toPath()) || !Files.isReadable(file.getCanonicalFile().toPath()))
 				return false;
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Readability check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Readability check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -140,7 +142,7 @@ public class FileCheckUtils {
 	public static boolean canWrite(File file) {
 		if (Global.getOSName().equals("Windows"))
 			//canRead(), canWrite(), and canExecute() cause problems on Windows
-			sys.log("FCU", 2, "Warning: The canWrite() method may not work on Windows systems as desired.");
+			sys.log("FCU", InfoType.WARN, "Warning: The canWrite() method may not work on Windows systems as desired.");
 		try {
 			file = prefetchFile(file);
 			if (file == null) return DEFAULT;
@@ -149,7 +151,7 @@ public class FileCheckUtils {
 			else if (!Files.isWritable(file.toPath()) || !Files.isWritable(file.getCanonicalFile().toPath()))
 				return false;
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Writability check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Writability check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -159,7 +161,7 @@ public class FileCheckUtils {
 	public static boolean canExecute(File file) {
 		if (Global.getOSName().equals("Windows"))
 			//canRead(), canWrite(), and canExecute() cause problems on Windows
-			sys.log("FCU", 2, "Warning: The canExecute() method may not work on Windows systems as desired.");
+			sys.log("FCU", InfoType.WARN, "Warning: The canExecute() method may not work on Windows systems as desired.");
 		try {
 			file = prefetchFile(file);
 			if (file == null) return DEFAULT;
@@ -168,7 +170,7 @@ public class FileCheckUtils {
 			else if (!Files.isExecutable(file.toPath()) || !Files.isExecutable(file.getCanonicalFile().toPath()))
 				return false;
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Executability check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Executability check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -184,7 +186,7 @@ public class FileCheckUtils {
 			else if (!file.isHidden() || !file.getCanonicalFile().isHidden())
 				return false;
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Hidden file / folder check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Hidden file / folder check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -203,7 +205,7 @@ public class FileCheckUtils {
 					|| !Files.isRegularFile(file.getCanonicalFile().toPath(), LinkOption.NOFOLLOW_LINKS))
 				return false;
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "File regularity check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "File regularity check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -222,7 +224,7 @@ public class FileCheckUtils {
 				return false;
 			
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Symlink check failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Symlink check failed: IOException");
 			ioe.printStackTrace();
 			return DEFAULT;
 		}
@@ -239,7 +241,7 @@ public class FileCheckUtils {
 		try {
 			return Files.getOwner(file.toPath(), LinkOption.NOFOLLOW_LINKS).getName();
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Checking file / folder ownership failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Checking file / folder ownership failed: IOException");
 			ioe.printStackTrace();
 			return (String) DEFAULT_NONBOOL;
 		}
@@ -314,7 +316,7 @@ public class FileCheckUtils {
 			return permStr;
 			
 		} catch (IOException ioe) {
-			sys.log("FCU", 3, "Checking file / folder permissions failed: IOException");
+			sys.log("FCU", InfoType.ERR, "Checking file / folder permissions failed: IOException");
 			ioe.printStackTrace();
 			return (String) DEFAULT_NONBOOL;
 		}
@@ -343,23 +345,23 @@ public class FileCheckUtils {
 		// Replace leading dot with current / workspace location
 		if (fileLocationString.startsWith(".")) {
 			fileLocationString = fileLocationString.replaceFirst(".", Global.getCurrentDir());
-			sys.log("FCU", 1, "File prefetch: Replaced leading dot: " + fileLocationString);
+			sys.log("FCU", InfoType.DEBUG, "File prefetch: Replaced leading dot: " + fileLocationString);
 		}
 		
 		if (fileLocationString.startsWith("~")) {
 			fileLocationString = fileLocationString.replaceFirst("~", Global.getHomeDir().getAbsolutePath());
-			sys.log("FCU", 1, "File prefetch: Replaced leading \"~\" (home): " + fileLocationString);
+			sys.log("FCU", InfoType.DEBUG, "File prefetch: Replaced leading \"~\" (home): " + fileLocationString);
 		}
 		
 		if (!fileLocationString.startsWith("/")
 				&& exists(new File(Global.getCurrentDir() + fileLocationString))) {
 			fileLocationString = Global.getCurrentDir() + Global.fsep + fileLocationString;
-			sys.log("FCU", 1, "File prefetch: Found file location inside workspace: " + fileLocationString);
+			sys.log("FCU", InfoType.DEBUG, "File prefetch: Found file location inside workspace: " + fileLocationString);
 		}
 		
 		fileLocationString = fileLocationString.replaceAll("//", "/");
 		
-		sys.log("FCU", 0, "Final prefetch: " + fileLocationString);
+		sys.log("FCU", InfoType.DEBUG, "Final prefetch: " + fileLocationString);
 		
 		// TODO 1. Change Eclipse workspace variable, so dot is not automatically replaced by
 		// TODO 2. the eclipse workspace, when "new File(".")" is called. -> check via "ls home"
