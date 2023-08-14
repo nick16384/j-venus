@@ -68,6 +68,7 @@ Be aware, that it might not be fully up to date, because this list isn't updated
 - [ ] 7. ⛔ \[Feature] Slight transparency for window on systems, that support it
 - [ ] 8. 🔁 \[Feature] Add keyboard shortcuts (e.g. CTRL + C for SIGTERM)
 - [ ] 9. 🔁 \[Feature] Add CLI support (don't launch another window)
+- [ ] 10. 🔁 \[Feature] Overlay suggesting possible command completions
 
 **Legend**: \
 ✔️ = Fully implemented and functional \
