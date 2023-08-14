@@ -3,9 +3,9 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
-import components.Shell;
 import engine.sys;
 import libraries.VariableInitializion;
+import shell.Shell;
 import libraries.Env;
 import libraries.Global;
 

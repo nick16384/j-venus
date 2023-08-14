@@ -4,8 +4,6 @@ import java.lang.Exception;
 
 import javax.swing.JFrame;
 
-import components.Shell;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -16,14 +14,12 @@ import javafx.scene.text.Font;
 import jfxcomponents.JFxWinloader;
 import jfxcomponents.PartiallyEditableInlineCSSTextArea;
 import libraries.VariableInitializion;
+import shell.Shell;
 import libraries.Global;
 import threads.ThreadAllocation;
 
 public class Main extends JFrame {
 	public static String[] argsMain;
-	public static boolean fullscreen = false;
-	public static boolean singleThreaded = false;
-	public static boolean javafxEnabled = true;
 	
 	public static PartiallyEditableInlineCSSTextArea cmdLine;
 	public static Font shellFont;
@@ -52,7 +48,7 @@ public class Main extends JFrame {
 		engine.Init.init(args);
 		
 		if (Arrays.asList(args).contains("--awt")) {
-			javafxEnabled = false;
+			Global.javafxEnabled = false;
 			sys.log("MAIN", InfoType.INFO, "Using deprecated AWT window loader.");
 			awtcomponents.AWTWinload.awtWinload();
 		} else {
@@ -60,14 +56,11 @@ public class Main extends JFrame {
 			try {
 				jfxWinloader = new JFxWinloader();
 				//TODO load GUI in thread
-				javafxEnabled = true;
+				Global.javafxEnabled = true;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		
-		if (ThreadAllocation.getJFXT().isGUIActive())
-			jfxWinloader.clearCmdLine();
 		
 		try { Thread.sleep(1000); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		Shell.showPrompt();

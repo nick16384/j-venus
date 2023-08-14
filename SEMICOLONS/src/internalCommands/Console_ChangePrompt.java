@@ -3,8 +3,8 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
-import components.Shell;
 import libraries.Global;
+import shell.Shell;
 
 
 

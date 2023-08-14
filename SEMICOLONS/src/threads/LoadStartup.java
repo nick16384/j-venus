@@ -29,7 +29,7 @@ public class LoadStartup {
 			if (startupFileString.startsWith("# JavaDOS startup script")) {
 				startupFileString = startupFileString.replaceFirst("# JavaDOS startup script\n", "");
 				for (String command : startupFileString.split("\n")) {
-					new components.Command(command + " noErrorChecking").start();
+					new commandProcessing.Command(command + " noErrorChecking").start();
 					return false;
 				}
 			} else {

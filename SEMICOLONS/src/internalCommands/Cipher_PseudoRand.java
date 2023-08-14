@@ -3,10 +3,10 @@ package internalCommands;
 import java.util.ArrayList;
 
 import awtcomponents.AWTANSI;
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
 import main.Main;
+import shell.Shell;
 
 public class Cipher_PseudoRand {
 	//First internal command to not use paramsWithValues any more

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import commandProcessing.Command;
 import commandProcessing.EnvVarParser;
-import components.Command;
 
 public class CommandParser {
 	//Add second command (after |) to execution queue while executing first one

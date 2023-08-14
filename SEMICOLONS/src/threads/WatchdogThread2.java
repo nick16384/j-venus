@@ -5,9 +5,9 @@ import engine.Runphase;
 import engine.sys;
 import libraries.Global;
 import main.Main;
+import shell.Shell;
 import awtcomponents.AWTANSI;
 import components.ProtectedTextComponent;
-import components.Shell;
 
 public class WatchdogThread2 implements InternalThread {
 	private Thread watchdogThread2;
@@ -26,7 +26,7 @@ public class WatchdogThread2 implements InternalThread {
 						if (ThreadAllocation.isWDTActive()) {
 							
 							try {
-								if (Main.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
+								if (Global.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
 									sys.log("WDT2", InfoType.INFO, "Not setting caret to last position");
 									// set jfx caret to last pos
 								else
@@ -40,7 +40,7 @@ public class WatchdogThread2 implements InternalThread {
 							
 							// This check often fails for no reason, so it is left out.
 							// TODO Prevent the shell from blanking out during start 50% of the time!!!
-							if (Main.javafxEnabled
+							if (Global.javafxEnabled
 									&& Main.cmdLine.getText().equals("SHELL INIT")) {
 								System.err.println("What have I done to you?!");
 								System.err.println("The shell didn't initialize properly.");
@@ -52,7 +52,7 @@ public class WatchdogThread2 implements InternalThread {
 						}
 						
 						try {
-							if (!Main.javafxEnabled) {
+							if (!Global.javafxEnabled) {
 								Main.mainFrameAWT.getCmdLine().setEditable(true);
 								new ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
 							}
@@ -74,7 +74,7 @@ public class WatchdogThread2 implements InternalThread {
 					}
 					
 					try {
-						if (!Main.javafxEnabled) {
+						if (!Global.javafxEnabled) {
 							Main.mainFrameAWT.getCmdLine().setEditable(true);
 							new ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
 						}

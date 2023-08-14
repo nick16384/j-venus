@@ -3,13 +3,13 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
 import libraries.Env;
 import libraries.Global;
 import libraries.VariableInitializion;
 import main.Main;
+import shell.Shell;
 
 public class Reload {
 	public static String reload (ArrayList<String> params, Map<String, String> paramsWithValues) {

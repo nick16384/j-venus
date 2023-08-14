@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
-import components.Shell;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
+import shell.Shell;
 
 /**
  * Contains useful functions for creating, modifying and deleting environment variables.

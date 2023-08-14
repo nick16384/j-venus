@@ -3,14 +3,14 @@ package internalCommands;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import components.Shell;
 import engine.sys;
 import jfxcomponents.JFXANSI;
-import main.Main;
+import libraries.Global;
+import shell.Shell;
 
 public class Console_ColorTest {
 	public static String colorTest(ArrayList<String> params) {
-		if (Main.javafxEnabled) {
+		if (Global.javafxEnabled) {
 			Shell.println(Color.decode(JFXANSI.cReset.toString()) , "Testing JavaFX colors...");
 			runJFxTest();
 		} else {

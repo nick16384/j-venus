@@ -2,6 +2,8 @@ package internalCommands;
 
 import engine.InfoType;
 import engine.sys;
+import shell.Shell;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -10,8 +12,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
-import components.Shell;
 
 
 public class File_CRS_LZSS

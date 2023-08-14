@@ -64,7 +64,7 @@ public class Init {
 			System.exit(0);
 		}
 		if (vmArgs.contains("--single-threaded")) {
-			main.Main.singleThreaded = true;
+			libraries.Global.singleThreaded = true;
 			System.out.println("Warning: Disabling watchdog and other threads is for debugging puposes only.");
 			System.out.println("If you are aware of that but having issues with multithreading, try restarting");
 			System.out.println("or reinstalling J-Venus. If it's a general problem, please report it.");
@@ -74,7 +74,7 @@ public class Init {
 		if (vmArgs.contains("--debug") || vmArgs.contains("-v") || vmArgs.contains("--verbose")) {
 			InfoType.DEBUG.enable(); InfoType.STATUS.enable();
 		}
-		if (!main.Main.singleThreaded) {
+		if (!libraries.Global.singleThreaded) {
 			ThreadAllocation.launchAll();
 		}
 		

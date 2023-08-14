@@ -3,11 +3,11 @@ package threads;
 import java.awt.event.KeyEvent;
 
 import awtcomponents.AWTANSI;
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
 import libraries.VariableInitializion;
 import main.Main;
+import shell.Shell;
 
 public class CheckUserInputThread implements InternalThread {
 	private boolean suspend = false;

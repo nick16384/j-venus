@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
-import components.Shell;
 import libraries.FileCheckUtils;
 import libraries.Global;
+import shell.Shell;
 
 public class File_listDirectory {
 	public static String listDirectory(ArrayList<String> params, Map<String, String> paramsWithValues) {

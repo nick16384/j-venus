@@ -3,9 +3,9 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
-import components.Shell;
 import engine.sys;
 import main.Main;
+import shell.Shell;
 import threads.ThreadAllocation;
 
 public class Test {

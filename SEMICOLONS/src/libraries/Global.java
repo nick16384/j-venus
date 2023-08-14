@@ -53,6 +53,10 @@ public class Global {
 	//Log file to save consoleLogStream to
 	protected static File logfile;
 	protected static Runphase currentPhase = Runphase.PREINIT;
+	// Program arguments:
+	public static boolean fullscreen = false;
+	public static boolean singleThreaded = false;
+	public static boolean javafxEnabled = true;
 	
 	public static String getVersion() {
 		return VERSION;
@@ -132,13 +136,13 @@ public class Global {
 	
 	public static void setNextRunphase() {
 		currentPhase = Runphase.getNextPhase(currentPhase);
-		sys.log("--- RUNPHASE CHANGED: " + currentPhase.toString() + "---\n"
+		sys.log("--- RUNPHASE CHANGED: " + currentPhase.toString() + " ---\n"
 				+ currentPhase.getDescription());
 	}
 	
 	public static void setErrorRunphase() {
 		currentPhase = Runphase.ERR;
-		sys.log("--- RUNPHASE CHANGED: " + currentPhase.toString() + "---\n"
+		sys.log("--- RUNPHASE CHANGED: " + currentPhase.toString() + " ---\n"
 				+ currentPhase.getDescription());
 	}
 	

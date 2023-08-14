@@ -2,10 +2,10 @@ package commandProcessing;
 
 import java.util.ArrayList;
 
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
 import internalCommands.*;
+import shell.Shell;
 
 public class CmdSearch {
 	private static String returnVal = "";

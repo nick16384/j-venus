@@ -7,9 +7,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import awtcomponents.AWTANSI;
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
+import shell.Shell;
 
 public class Err {
 	public static void shellPrintErr(Exception ex, String errName, String errType) {

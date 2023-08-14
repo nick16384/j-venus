@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
 import libraries.Global;
 import main.Main;
+import shell.Shell;
 import threads.ThreadAllocation;
 
 public class Terminate {

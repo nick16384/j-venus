@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
 import libraries.VariableInitializion;
+import shell.Shell;
 import libraries.Env;
 import libraries.Global;
 

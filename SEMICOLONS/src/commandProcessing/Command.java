@@ -1,4 +1,4 @@
-package components;
+package commandProcessing;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import engine.InfoType;
 import engine.sys;
 import main.Main;
+import shell.Shell;
 import threads.ThreadAllocation;
 
 public class Command {

@@ -198,8 +198,8 @@ public class VariableInitializion {
 		Env.addEnv("$SCROLL_AT_LINES", Integer.toString(Global.CMDLINE_MAX_LINE_COUNT));
 		Env.addEnv("$CMDLINE_MAX_LINE_COUNT", "26");
 		Env.addEnv("$MAX_CMD_QUEUE_LENGTH", "16");
-		Env.addEnv("$$ARG_MT", Boolean.toString(!main.Main.singleThreaded)); // Multithreading enabled
-		Env.addEnv("$$ARG_FULLSCREEN", Boolean.toString(main.Main.fullscreen)); // Fullscreen mode on
-		Env.addEnv("$$ARG_JFX", Boolean.toString(main.Main.javafxEnabled)); // JavaFX is enabled
+		Env.addEnv("$$ARG_MT", Boolean.toString(!libraries.Global.singleThreaded)); // Multithreading enabled
+		Env.addEnv("$$ARG_FULLSCREEN", Boolean.toString(libraries.Global.fullscreen)); // Fullscreen mode on
+		Env.addEnv("$$ARG_JFX", Boolean.toString(libraries.Global.javafxEnabled)); // JavaFX is enabled
 	}
 }

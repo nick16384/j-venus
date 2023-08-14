@@ -7,13 +7,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
 import libraries.Err;
 import libraries.VariableInitializion;
 import libraries.Global;
 import main.Main;
+import shell.Shell;
 import threads.ThreadAllocation;
 
 /**
@@ -59,7 +59,7 @@ public class KeyEventHandlers {
 					sys.log("MAIN", InfoType.DEBUG, "Running '" + fullCommand + "'");
 					sys.log("Subcommand: " + subCommand);
 					try {
-						components.Command cmd = new components.Command(subCommand);
+						commandProcessing.Command cmd = new commandProcessing.Command(subCommand);
 						cmd.start();
 						sys.log("New thread started (subCommand placed into cmdQueue)");
 						//For returnVal, try:
@@ -72,7 +72,7 @@ public class KeyEventHandlers {
 			} else {
 				sys.log("MAIN", InfoType.DEBUG, "Sending '" + fullCommand + "' to Command Parser");
 				try {
-					new components.Command(fullCommand).start();
+					new commandProcessing.Command(fullCommand).start();
 					//For returnVal, try:
 					//CommandMain.executeCommand(new components.Command(fullCommand));
 				} catch (Exception ex) {

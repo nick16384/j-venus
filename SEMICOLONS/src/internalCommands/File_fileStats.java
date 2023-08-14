@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
 import libraries.FileCheckUtils;
 import libraries.Global;
+import shell.Shell;
 
 /**
  * Displays information about files / folders

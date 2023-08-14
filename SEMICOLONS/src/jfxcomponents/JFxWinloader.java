@@ -8,7 +8,6 @@ import java.nio.file.StandardOpenOption;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.InlineCssTextArea;
 
-import components.Shell;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
@@ -29,6 +28,7 @@ import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import libraries.Global;
 import main.Main;
+import shell.Shell;
 
 public class JFxWinloader extends Application {
 	//private TextArea Main.cmdLine;

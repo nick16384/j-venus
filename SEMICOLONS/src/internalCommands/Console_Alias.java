@@ -2,8 +2,8 @@ package internalCommands;
 
 import java.util.ArrayList;
 
-import components.Shell;
 import engine.sys;
+import shell.Shell;
 
 public class Console_Alias {
 	public static String alias(ArrayList<String> params) {

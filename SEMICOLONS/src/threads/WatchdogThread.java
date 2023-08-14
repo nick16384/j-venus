@@ -6,13 +6,13 @@ import java.nio.file.Paths;
 
 import awtcomponents.AWTANSI;
 import awtcomponents.WindowMain;
-import components.Shell;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
 import libraries.Global;
 import main.Main;
+import shell.Shell;
 
 public final class WatchdogThread implements InternalThread {
 	protected boolean shutdownSignal;
@@ -153,7 +153,7 @@ public final class WatchdogThread implements InternalThread {
 				// String logFilePath = "/var/J-Vexus_logs/" + "logfile1.txt";
 
 				sys.log("WATCHDOG", InfoType.STATUS, "Threads stopping...");
-				if (Main.javafxEnabled && ThreadAllocation.getJFXT().isGUIActive()) Main.jfxWinloader.stop();
+				if (Global.javafxEnabled && ThreadAllocation.getJFXT().isGUIActive()) Main.jfxWinloader.stop();
 				System.exit(exitCode);
 			}
 		}, "WDT");
@@ -207,7 +207,7 @@ public final class WatchdogThread implements InternalThread {
 	 */
 	protected static final void stopWithError(int exitCode, int waitBeforeStop, String errMsg) {
 		try { Thread.sleep(1000); } catch (InterruptedException ie) { ie.printStackTrace(); }
-		if (Main.javafxEnabled) {
+		if (Global.javafxEnabled) {
 			Platform.runLater(() -> { Main.cmdLine.clear(); });
 		} else {
 			new components.ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
@@ -226,7 +226,7 @@ public final class WatchdogThread implements InternalThread {
 							+ "https://theophil.pudelkern.com/\n"
 							+ "===============================================");
 		});
-		if (!Main.javafxEnabled) { Main.mainFrameAWT.getCmdLine().setEditable(false); }
+		if (!Global.javafxEnabled) { Main.mainFrameAWT.getCmdLine().setEditable(false); }
 		Shell.println(AWTANSI.B_Cyan, "Log file is at: " + Global.getLogFile().getAbsolutePath());
 		if (waitBeforeStop > 100 && waitBeforeStop < 60000) {
 			Platform.runLater(() -> {

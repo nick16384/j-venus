@@ -27,15 +27,15 @@ public class WindowMain extends JFrame {
 		GraphicsDevice device = null;
 		if (Arrays.asList(Main.argsMain).contains("--fullscreen") ||
 			Arrays.asList(Main.argsMain).contains("--full-screen")) {
-			main.Main.fullscreen = true;
+			libraries.Global.fullscreen = true;
 		} else {
-			main.Main.fullscreen = false;
+			libraries.Global.fullscreen = false;
 		}
 		
 		//TODO maybe remove this later if not working (23.01)
 		//dispose();
 		
-		if (main.Main.fullscreen) {
+		if (libraries.Global.fullscreen) {
 			//Fullscreen display (entire screen, no window)
 			device = GraphicsEnvironment
 			        .getLocalGraphicsEnvironment().getScreenDevices()[0];

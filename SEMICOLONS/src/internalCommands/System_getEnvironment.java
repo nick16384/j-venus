@@ -3,10 +3,10 @@ package internalCommands;
 import java.util.ArrayList;
 import java.util.Map;
 
-import components.Shell;
 import engine.sys;
 import libraries.Env;
 import libraries.Global;
+import shell.Shell;
 
 public class System_getEnvironment {
 	public static String getEnv(ArrayList<String> params, Map<String, String> paramsWithValues) {

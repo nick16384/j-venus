@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
-import components.Command;
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
 import internalCommands.System_Exec;
@@ -16,6 +14,7 @@ import libraries.Err;
 import libraries.ErrCodes;
 import libraries.VariableInitializion;
 import main.Main;
+import shell.Shell;
 import threads.ThreadAllocation;
 
 public class CommandManager implements threads.InternalThread {
@@ -30,7 +29,7 @@ public class CommandManager implements threads.InternalThread {
 	//private static boolean SIGTERM = false; //If on, command may detect and shutdown (if supported)
 	//private static boolean stopExec = false; //If on, execThread will stop and has to be restarted to work again
 	private String command;
-	private LinkedList<components.Command> cmdQueue;
+	private LinkedList<commandProcessing.Command> cmdQueue;
 	public ArrayList<String> commandQueue; 
 	private ArrayList<String> params;
 	private Thread commandManagerThread;

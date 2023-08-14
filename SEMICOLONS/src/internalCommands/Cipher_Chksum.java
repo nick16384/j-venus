@@ -3,10 +3,10 @@ package internalCommands;
 import engine.InfoType;
 import engine.sys;
 import internalCommands.Cipher_Chksum;
+import shell.Shell;
+
 import java.util.ArrayList;
 import java.util.Map;
-
-import components.Shell;
 
 
 

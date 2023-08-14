@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import awtcomponents.AWTANSI;
 import components.IntentionalVexusErrorException;
-import components.Shell;
 import engine.InfoType;
 import engine.sys;
+import shell.Shell;
 
 public class System_Cause_Error_Termination {
 	public static String causeErrTerm (ArrayList<String> params) throws IntentionalVexusErrorException {

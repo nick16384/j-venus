@@ -1,4 +1,4 @@
-package components;
+package shell;
 
 import java.awt.Color;
 
@@ -6,6 +6,7 @@ import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
+import javafx.application.Platform;
 import libraries.Global;
 import main.Main;
 import threads.ThreadAllocation;
@@ -77,12 +78,13 @@ public class Shell {
 	}
 
 	public static void showPrompt() {
-		if (!Main.javafxEnabled)
+		if (!Global.javafxEnabled)
 			Main.mainFrameAWT.getCmdLine().setEditable(false);
 		if (Global.getCurrentPhase().equals(Runphase.INIT)) {
 
 			Shell.print(Global.getMOTD()); // Print message of the day, when in init phase
 			prompt = getPromptWithPattern(promptPattern);
+			Main.jfxWinloader.clearCmdLine();
 			Shell.print(1, "HIDDEN", prompt);
 
 		} else if (Global.getCurrentPhase().equals(Runphase.RUN)) {
@@ -95,7 +97,7 @@ public class Shell {
 			sys.log("LIB", InfoType.CRIT, "is unusual and should not be seen multiple times.");
 			sys.log("LIB", InfoType.CRIT, "Although, it's just a beta version by now, so it's just like that :)");
 		}
-		if (!Main.javafxEnabled)
+		if (!Global.javafxEnabled)
 			Main.mainFrameAWT.getCmdLine().setEditable(true);
 	}
 	
@@ -104,7 +106,7 @@ public class Shell {
 	// ======================================== SHELL PRINTING ========================================
 	
 	public static void print(int priority, String auth, String message, boolean... noProtect) {
-		if (main.Main.singleThreaded) {
+		if (libraries.Global.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			if (priority == 0) { //Priority 0 / Just print, nothing important
@@ -132,14 +134,14 @@ public class Shell {
 	 * @param noProtect
 	 */
 	public static void print(Color color, String message, boolean... noProtect) {
-		if (main.Main.singleThreaded) {
+		if (libraries.Global.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			ThreadAllocation.getSWT().appendTextQueue(color, message, noProtect);
 		}
 	}
 	public static void println(Color color, String message, boolean... noProtect) {
-		if (main.Main.singleThreaded) {
+		if (libraries.Global.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			ThreadAllocation.getSWT().appendTextQueue(color, message + "\n", noProtect);
