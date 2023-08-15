@@ -181,9 +181,14 @@ public class CommandManager implements threads.InternalThread {
 		}
 	}
 	
-	public void killCurrent() {
-		sys.log("CMGR", InfoType.WARN, "Killing current command.");
-		System_Exec.forceKill();
-		cleanup(cmdQueue.getFirst());
+	public void killCurrentIfRunning() {
+		if (isCommandRunning) {
+			sys.log("CMGR", InfoType.DEBUG, "Killing current command.");
+			System_Exec.forceKill();
+			cleanup(cmdQueue.getFirst());
+		} else {
+			if (!noPrompt)
+				Shell.showPrompt();
+		}
 	}
 }

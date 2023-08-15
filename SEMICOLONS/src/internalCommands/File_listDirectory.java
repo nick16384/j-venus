@@ -18,9 +18,6 @@ public class File_listDirectory {
 		ArrayList<String> listedElements = new ArrayList<>();
 		String listDirName = "";
 		File listDir = null;
-		String finalListingDirs = "";
-		String finalListingFiles = "";
-		String finalListingUnknown = "";
 		
 		//Preparation of "listDirName" and "listDir" variable
 		

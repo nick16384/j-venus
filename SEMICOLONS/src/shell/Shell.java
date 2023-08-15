@@ -84,7 +84,7 @@ public class Shell {
 
 			Shell.print(Global.getMOTD()); // Print message of the day, when in init phase
 			prompt = getPromptWithPattern(promptPattern);
-			Main.jfxWinloader.clearCmdLine();
+			clearCmdLine();
 			Shell.print(1, "HIDDEN", prompt);
 
 		} else if (Global.getCurrentPhase().equals(Runphase.RUN)) {
@@ -162,4 +162,24 @@ public class Shell {
 	}
 	
 	// ======================================== SHELL PRINTING END ========================================
+	
+	/**
+	 * Clears Main.cmdLine (set text to "")
+	 */
+	public static void clearCmdLine() {
+		if (Main.cmdLine != null) {
+			Platform.runLater(() -> {
+				Main.cmdLine.clear();
+			});
+		}
+	}
+	
+	public static void triggerScrollUpdate() {
+		if (Main.cmdLine != null) {
+			Platform.runLater(() -> {
+				Main.cmdLine.requestFollowCaret();
+				Platform.requestNextPulse();
+			});
+		}
+	}
 }

@@ -23,7 +23,7 @@ import main.Main;
  */
 
 public class Global {
-	protected static final String VERSION = "23.05 IOTA";
+	protected static final String VERSION = "23.08 IOTA";
 	//Message of the day -> start msg before any commands e.g. Welcome to ...
 	protected static String motd = "J-Venus Version " + VERSION + " Warning: Beta state, problems may occur.\n"
 			+ "Copyleft () 2021 - 2023 The J-Venus Project. All rights reserved.\n"

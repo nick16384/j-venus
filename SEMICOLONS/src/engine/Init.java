@@ -1,24 +1,15 @@
 package engine;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.net.UnknownHostException;
-import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import commandProcessing.CommandMain;
 import libraries.Env;
 import libraries.Global;
-import main.Main;
-import threads.CommandLoader;
 import threads.ThreadAllocation;
 
 /**
@@ -61,6 +52,7 @@ public class Init {
 			System.out.println("\t--javafx, --jfx \t Use experimental JavaFX GUI loader instead of AWT.");
 			System.out.println("\t--root-folder \t Set another root folder instead of the default defined one.");
 			System.out.println("\t--debug, -v, --verbose  Enable debugging and status messages.");
+			System.out.println("\t--silent, --quiet \t Only show warnings and errors.");
 			System.exit(0);
 		}
 		if (vmArgs.contains("--single-threaded")) {
@@ -73,6 +65,9 @@ public class Init {
 		}
 		if (vmArgs.contains("--debug") || vmArgs.contains("-v") || vmArgs.contains("--verbose")) {
 			InfoType.DEBUG.enable(); InfoType.STATUS.enable();
+		}
+		if (vmArgs.contains("--silent") || vmArgs.contains("--quiet")) {
+			InfoType.DEBUG.disable(); InfoType.STATUS.disable(); InfoType.INFO.disable();
 		}
 		if (!libraries.Global.singleThreaded) {
 			ThreadAllocation.launchAll();
@@ -87,15 +82,7 @@ public class Init {
 		sys.log("MAIN", InfoType.INFO, "Warning: Log is currently very verbose due to debugging reasons.");
 		sys.log("MAIN", InfoType.INFO, "Will be reduced within alpha versions.");
 		if (vmArgs.contains("--enable-deprecated")) {
-			//Load legacy external commands
-			sys.log("MAIN", InfoType.STATUS, "{Deprecated} Loading external commands...");
-			try { Global.setExtCommands(CommandLoader.loadCommands()); }
-			catch (AccessDeniedException ade) { sys.log("MAIN", InfoType.WARN, "Access to the destination file is denied."); }
-			catch (NoSuchFileException nsfe) { sys.log("MAIN", InfoType.WARN, "External commands not found."); }
-			catch (IOException ioe) {
-			sys.log("MAIN", InfoType.WARN, "Unhandled IOException while loading external commands.");
-			ioe.printStackTrace();
-			}
+			sys.log("MAIN", InfoType.STATUS, "No deprecated features to enable.");
 		}
 		try {
 			sys.log("MAIN", InfoType.INFO, "Loading startup script");

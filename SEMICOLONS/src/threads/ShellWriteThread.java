@@ -9,6 +9,7 @@ import internalCommands.System_Cause_Error_Termination;
 import libraries.Global;
 import main.Main;
 import shell.DoubleTextBuffer;
+import shell.Shell;
 
 public class ShellWriteThread implements InternalThread {
 	// Double buffer principle: One part is written to while the other one is handled by shellWriteThread.
@@ -43,7 +44,7 @@ public class ShellWriteThread implements InternalThread {
 				}
 				// =========================== WRITE TO SHELL END ===========================
 				
-				Main.jfxWinloader.triggerScrollUpdate();
+				Shell.triggerScrollUpdate();
 				writeBuffer.clearActive();
 			}
 		}

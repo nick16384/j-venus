@@ -70,13 +70,6 @@ public class System_Debug {
 		else
 			Shell.print(AWTANSI.B_Red, "INACTIVE\n");
 		
-		//Check User Input Thread
-		Shell.print(AWTANSI.D_Yellow, "\tCheck User Input Thread [CUIT] status: ");
-		if (ThreadAllocation.isCUITActive())
-			Shell.print(AWTANSI.D_Green, "ACTIVE\n");
-		else
-			Shell.print(AWTANSI.B_Red, "INACTIVE\n");
-		
 		//Command Manager Thread
 		Shell.print(AWTANSI.D_Yellow, "\tCommand Manager Thread [CMGR] status: ");
 		if (ThreadAllocation.isCMGRActive())

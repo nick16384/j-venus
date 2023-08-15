@@ -74,12 +74,6 @@ public final class WatchdogThread implements InternalThread {
 									+ "Obviously, the shell can't be used when no feedback is coming from the system,\n"
 									+ "and because of this, we have to shutdown. Try reinstalling, if this issue persists.");
 							break;
-						} else if (!ThreadAllocation.getCUIT().isRunning() && !nonCriticalAlreadyDisplayed) {
-							Shell.println(AWTANSI.B_Yellow, "Warning: the internal \"User Input Detection Thread\" has stopped,\n"
-									+ "and therefore, some control signals like CTRL + C may not work anymore.\n"
-									+ "This is not a critical error, but might indicate a problem and you should try to restart.\n"
-									+ "If that does not get rid of the problem, consider reinstalling.");
-							nonCriticalAlreadyDisplayed = true;
 						} else if (!ThreadAllocation.getCMGR().isRunning()) {
 							stopWithError(1, 15000, "The Command Management Thread is inactive. This will cause no commands to\n"
 									+ "be executed anymore unless you have enabled deprecated methods and disabled multithreading.\n"

@@ -8,12 +8,15 @@ import java.nio.file.StandardOpenOption;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.InlineCssTextArea;
 
+import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -29,6 +32,7 @@ import javafx.stage.Stage;
 import libraries.Global;
 import main.Main;
 import shell.Shell;
+import threads.ThreadAllocation;
 
 public class JFxWinloader extends Application {
 	//private TextArea Main.cmdLine;
@@ -118,10 +122,23 @@ public class JFxWinloader extends Application {
 				}
 			});
 			
+			Main.cmdLine.setOnKeyPressed((event) -> {
+				if (new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN).match(event)) {
+					sys.log("JFX", InfoType.DEBUG, "User pressed CTRL + C");
+					Shell.print(AWTANSI.D_Cyan, "^C");
+					ThreadAllocation.getCMGR().killCurrentIfRunning();
+				}
+			});
+			
+			// Possible Completion Overlay
+			CompletionOverlay.configureElements();
+			
+			
 			// Finalization and stage showing
 			StackPane root = new StackPane();
 			root.getChildren().add(Main.cmdLine);
 			root.getChildren().add(new VirtualizedScrollPane<InlineCssTextArea>(Main.cmdLine));
+			//root.getChildren().add(CompletionOverlay.getOverlayArea());
 			Scene scene = new Scene(root, 900, 550);
 			configureCssStylesheet(scene);
 			primaryStage.setScene(scene);
@@ -137,13 +154,6 @@ public class JFxWinloader extends Application {
 	
 	public InlineCssTextArea getCmdLine() {
 		return Main.cmdLine;
-	}
-	
-	public void triggerScrollUpdate() {
-		Platform.runLater(() -> {
-			Main.cmdLine.requestFollowCaret();
-			Platform.requestNextPulse();
-		});
 	}
 	
 	public void appendText(String text, Color color) {
@@ -169,15 +179,6 @@ public class JFxWinloader extends Application {
 		} else {
 			sys.log("JFX", InfoType.WARN, "Appending text not possible, because Main.cmdLine is null.");
 		}
-	}
-	
-	/**
-	 * Clears Main.cmdLine (set text to "")
-	 */
-	public void clearCmdLine() {
-		Platform.runLater(() -> {
-			Main.cmdLine.clear();
-		});
 	}
 	
 	private void configureCssStylesheet(Scene scene) {
