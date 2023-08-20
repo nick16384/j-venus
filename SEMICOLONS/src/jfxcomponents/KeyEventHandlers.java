@@ -9,6 +9,8 @@ import java.util.Arrays;
 
 import engine.InfoType;
 import engine.sys;
+import filesystem.InternalFiles;
+import filesystem.VirtualFile;
 import libraries.Err;
 import libraries.VariableInitializion;
 import libraries.Global;
@@ -82,22 +84,15 @@ public class KeyEventHandlers {
 			//=========================ADD FULLCMD TO HISTORY===============================
 			main.Main.commandHistory.add(fullCommand);
 			try {
-				String history = Files.readString(Paths.get(
-						Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"));
-				int max_history_size = Integer.parseInt(Files.readString(Paths.get(
-						Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history_max_length")).trim());
+				String history = InternalFiles.getCmdHistory().readContents();
+				int max_history_size = Integer.parseInt(
+						Global.getDataDir().newVirtualFile("/cmd_history_max_length").readContents().trim());
 				//Remove first entry of history until size of entries is below count in cmd_history_max_length
 				while (history.split("\n").length > max_history_size) {
-					Files.writeString(Paths.get(
-							Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"),
-							history.replaceFirst(history.split("\n")[0], ""),
-							StandardOpenOption.WRITE);
+					InternalFiles.getCmdHistory().writeString(
+							history.replaceFirst(history.split("\n")[0], ""), StandardOpenOption.WRITE);
 				}
-				Files.writeString(Paths.get(
-						Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"),
-						fullCommand + "\n", StandardOpenOption.APPEND);
-			} catch (IOException ioe) {
-				sys.log("MAIN", InfoType.ERR, "IOException while writing to cmd history.");
+				InternalFiles.getCmdHistory().writeString(fullCommand + "\n", StandardOpenOption.APPEND);
 			} catch (NumberFormatException nfe) {
 				sys.log("MAIN", InfoType.ERR, "Parsing cmd_history_max_length failed. Check file exists" +
 						" and contains a number below 2.147.483.647");
@@ -117,37 +112,7 @@ public class KeyEventHandlers {
 		main.Main.tabCountInRow++;
 		Shell.showPrompt();
 		
-		main.Main.commandHistory.clear();
-		try {
-			//Add all entries of cmd_history to LinkedList main.Main.commandHistory
-			main.Main.commandHistory.addAll(Arrays.asList(Files.readString(Paths.get(
-					Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history")).split("\n")));
-		} catch (IOException ioe) {
-			//TODO edit command history and TAB repeating further
-			sys.log("MAIN", InfoType.ERR, "CMD History read fail. main.Main.commandHistory<LinkedList> is empty now.");
-		}
-		
-		if (main.Main.tabCountInRow > main.Main.commandHistory.size()) {
-			Toolkit.getDefaultToolkit().beep();
-			sys.log("MAIN", InfoType.DEBUG, "Command history end reached");
-		} else if (main.Main.tabCountInRow == 1) {
-			//Write out last command without it getting protected (..., true)
-			sys.log("REPEAT", InfoType.DEBUG, "Command repeat: "
-					+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
-			Shell.print(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
-		} else {
-			//TODO Find some sort of replaceLast() \/ -------------------
-			/*try {
-				WindowMain.cmdLine.getStyledDocument().remove(
-						WindowMain.cmdLine.getText().indexOf(main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow + 1)),
-						main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow + 1).length());
-			} catch (BadLocationException ble) {
-				OpenLib.logWrite("MAIN", 3, "Command repeat error: Could not remove old command");
-			}*/
-			sys.log("REPEAT", InfoType.DEBUG, "Command repeat(" + main.Main.tabCountInRow + "): "
-					+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
-			Shell.print(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
-		}
+		Shell.print("DEBUG:" + main.Main.tabCountInRow);
 		//========================================COMMAND REPEAT END============================================
 	}
 }

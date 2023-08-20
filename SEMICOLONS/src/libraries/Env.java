@@ -108,7 +108,7 @@ public class Env {
 			changeEnv("$FSROOT", Global.getFSRoot());
 			changeEnv("$USERNAME", Global.username);
 			changeEnv("$HOSTNAME", Global.hostname);
-			changeEnv("$VENUS_ROOT", Global.getDefaultDir().getAbsolutePath());
+			changeEnv("$VENUS_ROOT", Global.getRootDir().getAbsolutePath());
 			changeEnv("$VENUS_TMP", Global.getTempDir().getAbsolutePath());
 			changeEnv("$VENUS_BIN", Global.getBinDir().getAbsolutePath());
 			changeEnv("$VENUS_CMD", Global.getCmdDir().getAbsolutePath());
@@ -130,7 +130,7 @@ public class Env {
 			} else if (envName.equals("$HOSTNAME")) {
 				changeEnv("$HOSTNAME", Global.hostname);
 			} else if (envName.equals("$JDOS_ROOT")) {
-				changeEnv("$VENUS_ROOT", Global.getDefaultDir().getAbsolutePath());
+				changeEnv("$VENUS_ROOT", Global.getRootDir().getAbsolutePath());
 			} else if (envName.equals("$JDOS_TMP")) {
 				changeEnv("$VENUS_TMP", Global.getTempDir().getAbsolutePath());
 			} else if (envName.equals("$JDOS_BIN")) {

@@ -13,6 +13,7 @@ import javax.swing.text.BadLocationException;
 
 import engine.InfoType;
 import engine.sys;
+import filesystem.InternalFiles;
 import libraries.Err;
 import libraries.VariableInitializion;
 import libraries.Global;
@@ -100,22 +101,16 @@ public class KeyListenerAttacher {
 						//=========================ADD FULLCMD TO HISTORY===============================
 						main.Main.commandHistory.add(fullCommand);
 						try {
-							String history = Files.readString(Paths.get(
-									Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"));
-							int max_history_size = Integer.parseInt(Files.readString(Paths.get(
-									Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history_max_length")).trim());
+							String history = InternalFiles.getCmdHistory().readContents();
+							int max_history_size =
+									Integer.parseInt(
+											InternalFiles.getCmdHistoryMaxLength().readContents().trim());
 							//Remove first entry of history until size of entries is below count in cmd_history_max_length
 							while (history.split("\n").length > max_history_size) {
-								Files.writeString(Paths.get(
-										Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"),
-										history.replaceFirst(history.split("\n")[0], ""),
-										StandardOpenOption.WRITE);
+								InternalFiles.getCmdHistory().writeString(
+										history.replaceFirst(history.split("\n")[0], ""), StandardOpenOption.WRITE);
 							}
-							Files.writeString(Paths.get(
-									Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history"),
-									fullCommand + "\n", StandardOpenOption.APPEND);
-						} catch (IOException ioe) {
-							sys.log("MAIN", InfoType.WARN, "IOException while writing to cmd history.");
+							InternalFiles.getCmdHistory().writeString(fullCommand + "\n", StandardOpenOption.APPEND);
 						} catch (NumberFormatException nfe) {
 							sys.log("MAIN", InfoType.WARN, "Parsing cmd_history_max_length failed. Check file exists" +
 									" and contains a number below 2.147.483.647");
@@ -140,14 +135,10 @@ public class KeyListenerAttacher {
 					}
 					Shell.showPrompt();
 					main.Main.commandHistory.clear();
-					try {
-						//Add all entries of cmd_history to LinkedList main.Main.commandHistory
-						main.Main.commandHistory.addAll(Arrays.asList(Files.readString(Paths.get(
-								Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history")).split("\n")));
-					} catch (IOException ioe) {
-						//TODO edit command history and TAB repeating further
-						sys.log("MAIN", InfoType.ERR, "CMD History read fail. main.Main.commandHistory<LinkedList> is empty now.");
-					}
+					//Add all entries of cmd_history to LinkedList main.Main.commandHistory
+					main.Main.commandHistory.addAll(
+							Arrays.asList(
+									InternalFiles.getCmdHistory().readContents().split("\n")));
 					
 					if (main.Main.tabCountInRow > main.Main.commandHistory.size()) {
 						Toolkit.getDefaultToolkit().beep();

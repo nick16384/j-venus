@@ -1,4 +1,4 @@
-package libraries;
+package filesystem;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.nio.file.attribute.PosixFileAttributeView;
 
 import engine.InfoType;
 import engine.sys;
+import libraries.Global;
 
 /**
  * This class contains utilities for the following file checks:

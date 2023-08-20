@@ -7,6 +7,7 @@ module jfx.windowManager {
 	requires java.compiler;
 	requires org.fxmisc.richtext;
 	requires org.fxmisc.flowless;
+	requires javafx.graphics;
 
 	opens jfxcomponents to javafx.graphics, java.desktop, javax.tools, org.fxmisc.richtext;
 

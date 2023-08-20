@@ -113,50 +113,39 @@ public class Logging {
 		// permissions)
 		// 5: Irreversible critical error(fatal) (Damages still persist after SEMICOLONS
 		// shutdown)
+		String statusMessage = "";
 		long runtime;
 		try {
 			runtime = System.currentTimeMillis() - ThreadAllocation.getWDT().getTimeStart();
 		} catch (NullPointerException npe) {
 			runtime = -1;
 		}
+		
 		if (status.equals(InfoType.ERR) && status.isEnabled()) {
-			System.out.println("[ " + runtime + ", -1/ERR, " + auth + " ]: " + message);
+			statusMessage = "[ " + runtime + ", -1/ERR, " + auth + " ]: " + message;
 		} else if (status.asInt() == 0 && status.isEnabled()) {
-			System.out.println("[ " + runtime + ", " + auth + " ]: " + message);
+			statusMessage = "[ " + runtime + ", 0/DEBUG, " + auth + " ]: " + message;
 		} else if (status.equals(InfoType.INFO) && status.isEnabled()) {
-			System.out.println("[ " + runtime + ", " + "1/INFO, " + auth + " ]: " + message);
+			statusMessage = "[ " + runtime + ", " + "1/INFO, " + auth + " ]: " + message;
 		} else if (status.equals(InfoType.WARN) && status.isEnabled()) {
-			System.err.println("[ " + runtime + ", " + "2/WARN, " + auth + " ]: " + message);
+			statusMessage = "[ " + runtime + ", " + "2/WARN, " + auth + " ]: " + message;
 		} else if (status.equals(InfoType.NONCRIT) && status.isEnabled()) {
-			System.err.println("[ " + runtime + ", " + "3/NONCRIT, " + auth + " ]: " + message);
+			statusMessage = "[ " + runtime + ", " + "3/NONCRIT, " + auth + " ]: " + message;
 		} else if (status.equals(InfoType.CRIT) && status.isEnabled()) {
-			System.err.println("[ " + runtime + ", " + "4/CRIT, " + auth + " ]: " + message);
+			statusMessage = "[ " + runtime + ", " + "4/CRIT, " + auth + " ]: " + message;
 		} else if (status.equals(InfoType.FATAL) && status.isEnabled()) {
-			System.err.println("[ " + runtime + ", " + "5/FATAL, " + auth + " ]: " + message.toUpperCase());
+			statusMessage = "[ " + runtime + ", " + "5/FATAL, " + auth + " ]: " + message.toUpperCase();
 		}
-
-		if (Global.consoleLogStream != null) {
-			if (status.equals(InfoType.ERR) && status.isEnabled()) {
-				Global.consoleLogStream
-						.println("[ " + Global.getDateTime(false) + ", -1/ERR, " + auth + " ]: " + message);
-			} else if (status.asInt() == 0 && status.isEnabled()) {
-				Global.consoleLogStream.println("[ " + Global.getDateTime(false) + ", " + auth + " ]: " + message);
-			} else if (status.equals(InfoType.INFO) && status.isEnabled()) {
-				Global.consoleLogStream
-						.println("[ " + Global.getDateTime(false) + ", " + "1/INFO, " + auth + " ]: " + message);
-			} else if (status.equals(InfoType.WARN) && status.isEnabled()) {
-				Global.consoleLogStream
-						.println("[ " + Global.getDateTime(false) + ", " + "2/WARN, " + auth + " ]: " + message);
-			} else if (status.equals(InfoType.NONCRIT) && status.isEnabled()) {
-				Global.consoleLogStream
-						.println("[ " + Global.getDateTime(false) + ", " + "3/NONCRIT, " + auth + " ]: " + message);
-			} else if (status.equals(InfoType.CRIT) && status.isEnabled()) {
-				Global.consoleLogStream.println(
-						"[ " + Global.getDateTime(false) + ", " + "4/CRIT, " + auth + " ]: " + message.toUpperCase());
-			} else if (status.equals(InfoType.FATAL) && status.isEnabled()) {
-				Global.consoleLogStream.println(
-						"[ " + Global.getDateTime(false) + ", " + "5/FATAL, " + auth + " ]: " + message.toUpperCase());
-			}
-		}
+		
+		if (statusMessage.isBlank())
+			return;
+		
+		if (status.asInt() == -1 || status.asInt() >= 3)
+			System.err.println(statusMessage);
+		else
+			System.out.println(statusMessage);
+		
+		if (Global.consoleLogStream != null)
+			Global.consoleLogStream.println(statusMessage);
 	}
 }

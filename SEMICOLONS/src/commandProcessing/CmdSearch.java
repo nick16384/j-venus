@@ -46,7 +46,7 @@ public class CmdSearch {
 		case "genStacktrace": ex(System_Generate_Stacktrace.generateStacktrace(params, null)); break;
 		
 		//Internal affecting commands
-		case "reload": ex(Reload.reload(params, null)); break;
+		case "restart": ex(Restart.restart(params, null)); break;
 		case "exit":
 		case "stop":
 		case "terminate": ex(Terminate.terminate(params, null)); break;

@@ -56,7 +56,7 @@ public class Cipher_Encrypt {
       Map<String, String> shiftOrder = new HashMap<>();
       Map<String, String> shiftOrderAfter = new HashMap<>();
       sys.log("ENCRYPT", InfoType.STATUS, "Reading SHIFTLIST.txt to assign shift order"); 
-      try { shiftlist = Files.readString((new File(String.valueOf(Global.getDefaultDir().toString()) + "\\Program Sources\\Shift2C\\SHIFTLIST.txt")).toPath()); }
+      try { shiftlist = Files.readString((new File(String.valueOf(Global.getRootDir().toString()) + "\\Program Sources\\Shift2C\\SHIFTLIST.txt")).toPath()); }
       catch (IOException ioe) { sys.log("ENCRYPT", InfoType.ERR, "Error reading SHIFTLIST.txt, aborting"); return null; }
        sys.log("ENCRYPT", InfoType.ERR, shiftlist);
       shiftlist = shiftlist.trim();
@@ -105,8 +105,8 @@ public class Cipher_Encrypt {
         sys.log("ENCRYPT", InfoType.INFO, "Key: " + key);
       } 
       sys.log("ENCRYPT", InfoType.INFO, "Saving files to 'key.txt' and 'out.txt'");
-      File outFile = new File(String.valueOf(Global.getDefaultDir().toString()) + "\\Program Sources\\Shift2C\\out.txt");
-      File keyFile = new File(String.valueOf(Global.getDefaultDir().toString()) + "\\Program Sources\\Shift2C\\key.txt"); 
+      File outFile = new File(String.valueOf(Global.getRootDir().toString()) + "\\Program Sources\\Shift2C\\out.txt");
+      File keyFile = new File(String.valueOf(Global.getRootDir().toString()) + "\\Program Sources\\Shift2C\\key.txt"); 
       try { outFile.createNewFile(); } catch (IOException ioe) { sys.log("ENCRYPT", InfoType.ERR, "Could not create output file."); }
        try { keyFile.createNewFile(); } catch (IOException ioe) { sys.log("ENCRYPT", InfoType.ERR, "Could not create key file."); }
        try { Files.writeString(outFile.toPath(), ciphertext, new OpenOption[] { StandardOpenOption.APPEND }); }

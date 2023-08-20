@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
+import filesystem.VirtualFile;
 import shell.Shell;
 
 public class Err {
@@ -18,7 +19,7 @@ public class Err {
 			Shell.println("Warning: Error message suppressed. See more information in log at \"ERRMSG\".");
 			return;
 		}
-		String dumpStr = "";
+		String stacktrace = "";
 		
 		if (errName == null) {
 			sys.log("ERR", InfoType.CRIT, "ERROR (DEF)");
@@ -27,17 +28,17 @@ public class Err {
 		}
 		Shell.print(4, "ERR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
 				+ ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-		dumpStr += "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+		stacktrace += "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
 				+ ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
 		if (errType == null) {
 			Shell.print(4, "ERR", "Runtime error (def):\n");
-			dumpStr += "Runtime error (default):\n";
+			stacktrace += "Runtime error (default):\n";
 		} else {
 			Shell.print(4, "ERR", errType + "\n");
-			dumpStr += errType + "\n";
+			stacktrace += errType + "\n";
 		}
 		Shell.print(4, "ERR", ex.getClass() + ": ");
-		dumpStr += ex.getClass() + ": ";
+		stacktrace += ex.getClass() + ": ";
 		if (!ex.getMessage().equalsIgnoreCase(ex.getLocalizedMessage())) {
 			Shell.print(4, "ERR", ex.getMessage() + "\n");
 			Shell.print(4, "ERR", "\t" + ex.getLocalizedMessage() + "\n");
@@ -45,13 +46,13 @@ public class Err {
 			Shell.print(4, "ERR", ex.getMessage() + "\n");
 		}
 		
-		dumpStr += ex.getMessage() + " [Message]" + "\n\t"
+		stacktrace += ex.getMessage() + " [Message]" + "\n\t"
 				+ ex.getLocalizedMessage() + " [Localized Message]\n";
 		Shell.print(4, "ERR", "Cause: " + ex.getCause() + "\n");
-		dumpStr += "Cause: " + ex.getCause() + "\n";
+		stacktrace += "Cause: " + ex.getCause() + "\n";
 		ex.printStackTrace();
 		Shell.print(4, "ERR", "Full Stacktrace:\n");
-		dumpStr += "Full Stacktrace:\n";
+		stacktrace += "Full Stacktrace:\n";
 		
 		for (StackTraceElement traceElement : ex.getStackTrace()) {
 			Shell.print(4, "ERR", "-> ");
@@ -59,24 +60,17 @@ public class Err {
 					+ "." + traceElement.getMethodName() + "();\n");
 			Shell.print(4, "ERR", "\t" + traceElement.getFileName()
 					+ ", Line " + traceElement.getLineNumber() + "\n");
-			dumpStr += "-> ";
-			dumpStr += traceElement.getClassName() + "." + traceElement.getMethodName() + "()\n";
-			dumpStr += "\t" + traceElement.getFileName() + ", at Line " + traceElement.getLineNumber() + "\n";
+			stacktrace += "-> ";
+			stacktrace += traceElement.getClassName() + "." + traceElement.getMethodName() + "()\n";
+			stacktrace += "\t" + traceElement.getFileName() + ", at Line " + traceElement.getLineNumber() + "\n";
 		}
 		
-		Path dumpFile = Paths.get(Global.getDataDir() + Global.fsep + "dumps-ex"
-				+ Global.fsep + "dump_" + Global.getDateTime(true) + ".txt");
-		try {
-			Files.createFile(dumpFile);
-			Files.writeString(dumpFile, dumpStr, StandardOpenOption.WRITE);
-		} catch (IOException ioe) {
-			sys.log("ERR", InfoType.ERR, "Could not create or write to dump file at '" + dumpFile.toFile().getAbsolutePath() + "'");
-			ioe.printStackTrace();
-			Shell.println(AWTANSI.D_Yellow,
-					"Could not create or write to dump file at '" + dumpFile.toFile().getAbsolutePath() + "'");
-			return;
-		}
-		sys.log("Stacktrace saved at " + dumpFile.toFile().getAbsolutePath());
-		Shell.println(AWTANSI.D_Green, "Stacktrace saved at " + dumpFile.toFile().getAbsolutePath());
+		VirtualFile stacktraceFile = Global.getDataDir().newVirtualFile(
+				"/stacktraces/stacktrace_" + Global.getDateTime(true) + ".txt");
+		stacktraceFile.createOnFilesystem();
+		stacktraceFile.writeString(stacktrace, StandardOpenOption.WRITE);
+		
+		sys.log("Stacktrace saved at " + stacktraceFile.getAbsolutePath());
+		Shell.println(AWTANSI.D_Green, "Stacktrace saved at " + stacktraceFile.getAbsolutePath());
 	}
 }

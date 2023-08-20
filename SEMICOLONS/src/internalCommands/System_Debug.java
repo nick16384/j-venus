@@ -26,7 +26,7 @@ public class System_Debug {
 		Shell.print(AWTANSI.D_Cyan, "Directories:\n");
 		Shell.print(AWTANSI.D_Yellow,
 		  "\tCurrent        : " + Global.getCurrentDir() + "\n"
-		+ "\tVexus root     : " + Global.getDefaultDir().getAbsolutePath() + "\n"
+		+ "\tVexus root     : " + Global.getRootDir().getAbsolutePath() + "\n"
 		+ "\tVexus data     : " + Global.getDataDir().getAbsolutePath() + "\n"
 		+ "\tVexus binary   : " + Global.getBinDir().getAbsolutePath() + "\n"
 		+ "\tVexus temporary: " + Global.getTempDir().getAbsolutePath() + "\n"

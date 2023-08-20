@@ -141,7 +141,7 @@ public final class WatchdogThread implements InternalThread {
 				//====================================== CHECKING END ======================================
 
 				long activeTime = System.currentTimeMillis() - timeStart;
-				sys.log("STOPPING", InfoType.STATUS, "Vexus active time: " + activeTime + "ms");
+				sys.log("STOPPING", InfoType.STATUS, "Active time: " + activeTime + "ms");
 				sys.log("STOPPING", InfoType.STATUS, "Saving log file to: /var/J-Vexus_logs/ ");
 
 				// String logFilePath = "/var/J-Vexus_logs/" + "logfile1.txt";

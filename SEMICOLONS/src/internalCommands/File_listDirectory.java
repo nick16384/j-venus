@@ -2,6 +2,7 @@ package internalCommands;
 
 import engine.InfoType;
 import engine.sys;
+import filesystem.FileCheckUtils;
 import jfxcomponents.JFXANSI;
 
 import java.io.File;
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
-import libraries.FileCheckUtils;
 import libraries.Global;
 import shell.Shell;
 

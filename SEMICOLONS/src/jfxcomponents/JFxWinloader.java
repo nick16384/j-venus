@@ -1,7 +1,7 @@
 package jfxcomponents;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
@@ -12,8 +12,13 @@ import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
+import filesystem.VirtualFile;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -24,10 +29,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.image.Image;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import libraries.Global;
 import main.Main;
@@ -71,10 +72,10 @@ public class JFxWinloader extends Application {
 	        Main.cmdLine.setCache(true);
 			
 			Image icon = null;
-			sys.log("JFX", InfoType.INFO,
-					"Icon path: " + Global.getDataDir().getAbsolutePath() + Global.fsep + "semicolons-icon.png");
+			VirtualFile iconFile = Global.getDataDir().newVirtualFile("/semicolons-icon.png");
+			sys.log("JFX", InfoType.DEBUG, "Icon path: " + iconFile.getAbsolutePath());
 			try { icon = new Image(
-					"file:" + Global.getDataDir().getAbsolutePath() + Global.fsep + "semicolons-icon.png"); }
+					"file:" + iconFile.getAbsolutePath()); }
 			catch (Exception ex) { ex.printStackTrace(); }
 			primaryStage.getIcons().add(icon);
 			
@@ -132,17 +133,22 @@ public class JFxWinloader extends Application {
 			
 			// Possible Completion Overlay
 			CompletionOverlay.configureElements();
-			
+			/*Main.cmdLine.setPopupWindow(CompletionOverlay.getOverlay());
+			Main.cmdLine.setPopupAlignment(PopupAlignment.CARET_CENTER);
+			Main.cmdLine.setPopupAnchorOffset(new Point2D(4, 0));*/
 			
 			// Finalization and stage showing
 			StackPane root = new StackPane();
 			root.getChildren().add(Main.cmdLine);
 			root.getChildren().add(new VirtualizedScrollPane<InlineCssTextArea>(Main.cmdLine));
-			//root.getChildren().add(CompletionOverlay.getOverlayArea());
 			Scene scene = new Scene(root, 900, 550);
 			configureCssStylesheet(scene);
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			
+			CompletionOverlay.getOverlay().show(primaryStage);
+			primaryStage.requestFocus();
+			//CompletionOverlay.getOverlay().hide();
 			
 			sys.log("JFX", InfoType.DEBUG, "start(primaryStage) method end reached.");
 			
@@ -182,8 +188,7 @@ public class JFxWinloader extends Application {
 	}
 	
 	private void configureCssStylesheet(Scene scene) {
-		File cssFile = new File(Global.getDataDir() + Global.fsep
-				+ "consoleStyle" + Global.fsep + "default-stylesheet.css");
+		File cssFile = Global.getDataDir().newVirtualFile("/consoleStyle/default-stylesheet.css");
 		
 		createCssStylesheetFileIfNotExisting(cssFile);
 		scene.getStylesheets().clear();
@@ -208,7 +213,7 @@ public class JFxWinloader extends Application {
 				+ "	-fx-translate-x: 4;\n"
 				+ "}";
 		
-		if (!libraries.FileCheckUtils.exists(cssFile)) {
+		if (!filesystem.FileCheckUtils.exists(cssFile)) {
 			try {
 				sys.log("JFX:CSS", InfoType.INFO, "External CSS stylesheet does not exist. Creating default file.");
 				cssFile.createNewFile();

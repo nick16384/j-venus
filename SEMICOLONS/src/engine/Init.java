@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import filesystem.InternalFiles;
+import filesystem.VirtualFile;
 import libraries.Env;
 import libraries.Global;
 import threads.ThreadAllocation;
@@ -99,13 +101,11 @@ public class Init {
 		Env.updateEnv("$$ALL");
 		sys.log("MAIN", InfoType.INFO, "Done.");
 		sys.log("MAIN", InfoType.INFO, "Backing up cmd_history to cmd_history_bak...");
-		try {
-			Files.writeString(Paths.get(Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history_bak"),
-					Files.readString(Paths.get(Global.getDataDir().getAbsolutePath() + Global.fsep + "cmd_history")),
-					StandardOpenOption.SYNC);
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		InternalFiles.setCmdHistory(Global.getDataDir().newVirtualFile("/cmd_history"));
+		InternalFiles.setCmdHistoryBackup(Global.getDataDir().newVirtualFile("/cmd_history_bak"));
+		InternalFiles.getCmdHistoryBackup().writeString(
+				InternalFiles.getCmdHistory().readContents(), StandardOpenOption.APPEND);
+		
 		sys.log("MAIN", InfoType.INFO, "Done.");
 		
 		/*sys.log("Initializing main frame...");

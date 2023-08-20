@@ -21,13 +21,13 @@ public class Console_ChangeDirectory {
 		} else if (params.get(0).equals("..")) {
 			sys.log("CHDIR", InfoType.INFO, "Going up one layer.");
 			Global.setCurrentDir(
-					(new File(Global.getCurrentDir().replace(Global.getCurrentDir().split(Global.fsep)[1], "")))
+					(new File(Global.getCurrentDir().replace(Global.getCurrentDir().split(sys.fsep)[1], "")))
 							.getAbsolutePath());
 
-		} else if ((new File(Global.getCurrentDir() + Global.fsep + params.get(0))).isDirectory()) {
+		} else if ((new File(Global.getCurrentDir() + sys.fsep + params.get(0))).isDirectory()) {
 			sys.log("CHDIR", InfoType.INFO, "CD'ing into directory of current directory.");
 			Global.setCurrentDir(
-					(new File(Global.getCurrentDir() + Global.fsep + (String) params.get(0))).getAbsolutePath());
+					(new File(Global.getCurrentDir() + sys.fsep + (String) params.get(0))).getAbsolutePath());
 		} else if ((new File(params.get(0))).isDirectory()) {
 			sys.log("CHDIR", InfoType.INFO, "Changing directory to absolute path.");
 			Global.setCurrentDir((new File(params.get(0))).getAbsolutePath());
@@ -38,14 +38,14 @@ public class Console_ChangeDirectory {
 						&& !(new File(params.get(0)).exists())
 						|| !(new File(params.get(0)).getCanonicalFile().exists())) {
 					
-					if (!(new File(Global.getCurrentDir() + Global.fsep + params.get(0)).isDirectory())
-							|| !(new File(Global.getCurrentDir() + Global.fsep + params.get(0)).getCanonicalFile().isDirectory())) {
-						if (Global.getCurrentDir().equals(Global.fsep))
+					if (!(new File(Global.getCurrentDir() + sys.fsep + params.get(0)).isDirectory())
+							|| !(new File(Global.getCurrentDir() + sys.fsep + params.get(0)).getCanonicalFile().isDirectory())) {
+						if (Global.getCurrentDir().equals(sys.fsep))
 							sys.log("LSDIR", InfoType.DEBUG, "Found a path break inside current dir: \n"
 									+ checkPathBreak(Global.getCurrentDir() + params.get(0)) + " does not exist.");
 						else
 							sys.log("LSDIR", InfoType.DEBUG, "Found a path break inside current dir: \n"
-									+ checkPathBreak(Global.getCurrentDir() + Global.fsep + params.get(0)) + " does not exist.");
+									+ checkPathBreak(Global.getCurrentDir() + sys.fsep + params.get(0)) + " does not exist.");
 					} else {
 						sys.log("LSDIR", InfoType.DEBUG, "Found a path break: " + checkPathBreak(params.get(0)) + " does not exist.");
 					}
@@ -72,13 +72,13 @@ public class Console_ChangeDirectory {
 		try {
 			sys.log("LSDIR", InfoType.WARN, "Provided directory doesn't exist. Trying to figure out, where the tree brakes.");
 			String addedBrackets = Global.getFSRoot();
-			for (String bracket : location.split(Global.fsep)) {
+			for (String bracket : location.split(sys.fsep)) {
 				
 				//TODO Check if this folder is really a folder and only then print path breaks
 				if ((new File(addedBrackets).exists() || new File(addedBrackets).getCanonicalFile().exists())
 						&& new File(addedBrackets).isDirectory() || new File(addedBrackets).getCanonicalFile().isDirectory()) {
 					if (!bracket.equals(Global.getFSRoot()))
-						addedBrackets = addedBrackets.concat(bracket + Global.fsep);
+						addedBrackets = addedBrackets.concat(bracket + sys.fsep);
 				} else {
 					Shell.println(AWTANSI.B_Yellow, "Can't change into the folder:");
 					Shell.println(AWTANSI.B_Green, location);

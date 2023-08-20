@@ -20,13 +20,11 @@ public class AWTWinload {
 		//Set icon image for mainFrame
 		try {
 			Main.mainFrameAWT.setIconImage(ImageIO.read(
-					new File(Global.fsep + "etc" + Global.fsep +
-							"venus" + Global.fsep + "data" + Global.fsep + "venus-icon.png")));
+					Global.getDataDir().newVirtualFile("/semicolons-icon.png")));
 		} catch (IOException e) {
 			sys.log("MAIN", InfoType.ERR, "Could not set icon image. The file probably doesn't exist or is not a supported image file.");
-			sys.log("MAIN", InfoType.ERR, "Icon path: " +
-					Global.fsep + "etc" + Global.fsep +
-					"venus" + Global.fsep + "data" + Global.fsep + "venus-icon.png");
+			sys.log("MAIN", InfoType.ERR, "Icon path: "
+					+ Global.getDataDir().newVirtualFile("/semicolons-icon.png").getAbsolutePath());
 		}
 		Main.mainFrameAWT.setName("J-Vexus " + Global.getVersion());
 		sys.log("MAIN", InfoType.DEBUG, "Done.");

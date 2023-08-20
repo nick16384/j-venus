@@ -18,6 +18,9 @@ import java.util.Calendar;
 import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
+import filesystem.FileCheckUtils;
+import filesystem.VirtualFile;
+import filesystem.VirtualizedLocation;
 import main.Main;
 import threads.ThreadAllocation;
 
@@ -51,8 +54,7 @@ public class VariableInitializion {
 		}
 		// Define log file, and create log stream
 		String logfileName = Global.getDateTime(true).replace("|", "_") + ".log";
-		Global.logfile = new File(
-				Global.getDataDir().getAbsolutePath() + Global.fsep + "logs" + Global.fsep + logfileName);
+		Global.logfile = Global.getDataDir().newVirtualFile("/logs/" + logfileName);
 		try {
 			Global.consoleLogStream = new PrintStream(Global.getLogFile());
 		} catch (FileNotFoundException fnfe) {
@@ -93,23 +95,24 @@ public class VariableInitializion {
 		if (Arrays.asList(Main.argsMain).contains("--root-folder")
 				&& Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1] != null)
 			try {
-				Global.DfltDir = new File(Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
+				Global.RootDir = new VirtualizedLocation(
+						Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
 			} catch (Exception ex) {
 				sys.log("");
 				ex.printStackTrace();
 			}
 
-		if (!FileCheckUtils.isDir(Global.DfltDir))
-			Global.DfltDir = new File(Global.fsep + "etc" + Global.fsep + "semicolons");
+		if (Global.RootDir == null || !FileCheckUtils.isDir(Global.RootDir.getActualFile()))
+			Global.RootDir = new VirtualizedLocation("/etc/semicolons");
 		// === SPECIAL ROOT FOLDER SPECIFIED END ===
 
-		Global.TempDir = new File(Global.DfltDir.getAbsolutePath() + Global.fsep + "temp");
-		Global.BinDir = new File(Global.DfltDir.getAbsolutePath() + Global.fsep + "bin");
-		Global.CmdDir = new File(Global.DfltDir.getAbsolutePath() + Global.fsep + "commands");
-		Global.DataDir = new File(Global.DfltDir.getAbsolutePath() + Global.fsep + "data");
-		Global.HomeDir = new File(System.getProperty("user.home"));
+		Global.TempDir = new VirtualizedLocation(Global.RootDir.getAbsolutePath() + "/temp");
+		Global.BinDir = new VirtualizedLocation(Global.RootDir.getAbsolutePath() + "/bin");
+		Global.CmdDir = new VirtualizedLocation(Global.RootDir.getAbsolutePath() + "/commands");
+		Global.DataDir = new VirtualizedLocation(Global.RootDir.getAbsolutePath() + "/data");
+		Global.HomeDir = new VirtualizedLocation(System.getProperty("user.home"));
 		Global.path = "/";
-		Global.javaExec = new File(Global.getJavaHome().getAbsoluteFile() + Global.fsep + "bin" + Global.fsep + "java");
+		Global.javaExec = new File(Global.getJavaHome().getAbsoluteFile() + "/bin/java");
 	}
 
 	private static final void initializeForWindows() {
@@ -120,25 +123,27 @@ public class VariableInitializion {
 		if (Arrays.asList(Main.argsMain).contains("--root-folder")
 				&& Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1] != null)
 			try {
-				Global.DfltDir = new File(Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
+				Global.RootDir = new VirtualizedLocation(
+						Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
 			} catch (Exception ex) {
 				sys.log("");
 				ex.printStackTrace();
 			}
 
-		if (!FileCheckUtils.isDir(Global.DfltDir))
-			Global.DfltDir = new File("C:" + Global.fsep + "Program Files" + Global.fsep + "SEMICOLONS");
+		if (!FileCheckUtils.isDir(Global.RootDir.getActualFile()))
+			Global.RootDir = new VirtualizedLocation(
+					"C:\\Program Files\\SEMICOLONS");
 		// === SPECIAL ROOT FOLDER SPECIFIED END ===
 
-		Global.DfltDir = new File("C:" + Global.fsep + "Program Files" + Global.fsep + "SEMICOLONS");
-		Global.TempDir = new File(Global.DfltDir.getAbsolutePath() + Global.fsep + "temp");
-		Global.BinDir = new File(Global.DfltDir.getAbsolutePath() + Global.fsep + "bin");
-		Global.CmdDir = new File(Global.DfltDir.getAbsolutePath() + Global.fsep + "commands");
-		Global.DataDir = new File(Global.DfltDir.getAbsolutePath() + Global.fsep + "data");
-		Global.HomeDir = new File(System.getProperty("user.home"));
+		Global.RootDir = new VirtualizedLocation("C:\\Program Files\\SEMICOLONS");
+		Global.TempDir = new VirtualizedLocation(Global.RootDir.getAbsolutePath() + "\\temp");
+		Global.BinDir = new VirtualizedLocation(Global.RootDir.getAbsolutePath() + "\\bin");
+		Global.CmdDir = new VirtualizedLocation(Global.RootDir.getAbsolutePath() + "\\commands");
+		Global.DataDir = new VirtualizedLocation(Global.RootDir.getAbsolutePath() + "\\data");
+		Global.HomeDir = new VirtualizedLocation(System.getProperty("user.home"));
 		Global.path = System.getenv("SYSTEMROOT") + "\\";
 		Global.javaExec = new File(
-				Global.getJavaHome().getAbsoluteFile() + Global.fsep + "bin" + Global.fsep + "java.exe");
+				Global.getJavaHome().getAbsoluteFile() + "\\bin\\java.exe");
 	}
 	
 	/**
@@ -146,13 +151,7 @@ public class VariableInitializion {
 	 */
 	private static final void fetchMOTD() {
 		sys.log("INITVARS", InfoType.INFO, "Fetching MOTD (message of the day)...");
-		String motdRaw = "";
-		try {
-			motdRaw = Files.readString(Paths.get(Global.getDataDir().getAbsolutePath() + Global.fsep + "motd"));
-		} catch (IOException | NullPointerException e) {
-			sys.log("VARLIB", InfoType.ERR, "Cannot read motd file. Using default message.");
-			e.printStackTrace();
-		}
+		String motdRaw = Global.getDataDir().newVirtualFile("/motd").readContents();
 		if (motdRaw != "") {
 			Global.motd = "";
 			Global.motd = motdRaw;
@@ -188,7 +187,7 @@ public class VariableInitializion {
 		Env.addEnv("$FSROOT", Global.getFSRoot());
 		Env.addEnv("$USERNAME", Global.username);
 		Env.addEnv("$HOSTNAME", Global.hostname);
-		Env.addEnv("$VENUS_ROOT", Global.getDefaultDir().getAbsolutePath());
+		Env.addEnv("$VENUS_ROOT", Global.getRootDir().getAbsolutePath());
 		Env.addEnv("$VENUS_TMP", Global.getTempDir().getAbsolutePath());
 		Env.addEnv("$VENUS_BIN", Global.getBinDir().getAbsolutePath());
 		Env.addEnv("$VENUS_CMD", Global.getCmdDir().getAbsolutePath());

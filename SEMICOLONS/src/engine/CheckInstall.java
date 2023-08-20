@@ -27,7 +27,7 @@ public class CheckInstall {
 			fs = "/";
 			fsroot = "/";
 		} else {
-			fs = Global.fsep;
+			fs = "/"; //Global.fsep
 			fsroot = Global.getFSRoot();
 		}
 		

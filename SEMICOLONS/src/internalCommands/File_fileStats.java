@@ -7,7 +7,7 @@ import java.util.Map;
 import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
-import libraries.FileCheckUtils;
+import filesystem.FileCheckUtils;
 import libraries.Global;
 import shell.Shell;
 
@@ -34,11 +34,11 @@ public class File_fileStats {
 					+ params.get(0) + "\": " + FileCheckUtils.getPermissions(new File(params.get(0))));
 		}
 		//Check if element exists locally (inside working directory)
-		else if (FileCheckUtils.exists(new File(Global.getCurrentDir() + Global.fsep + params.get(0)))) {
+		else if (FileCheckUtils.exists(new File(Global.getCurrentDir() + sys.fsep + params.get(0)))) {
 			sys.log("FSTAT", InfoType.DEBUG, "File \"" + params.get(0) +  "\" exists inside working directory as \""
-					+ Global.getCurrentDir() + Global.fsep + params.get(0) + "\".");
+					+ Global.getCurrentDir() + sys.fsep + params.get(0) + "\".");
 			Shell.println(AWTANSI.B_Green, "Element \""
-					+ Global.getCurrentDir() + Global.fsep + params.get(0)
+					+ Global.getCurrentDir() + sys.fsep + params.get(0)
 					+ "\": " + FileCheckUtils.getPermissions(new File(params.get(0))));
 		}
 		//Supplied file / folder name not valid
