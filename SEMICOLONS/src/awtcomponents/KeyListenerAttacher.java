@@ -101,16 +101,16 @@ public class KeyListenerAttacher {
 						//=========================ADD FULLCMD TO HISTORY===============================
 						main.Main.commandHistory.add(fullCommand);
 						try {
-							String history = InternalFiles.getCmdHistory().readContents();
+							String history = InternalFiles.getCmdHistoryASCII().readContents();
 							int max_history_size =
 									Integer.parseInt(
-											InternalFiles.getCmdHistoryMaxLength().readContents().trim());
+											InternalFiles.getCmdHistoryASCIIMaxLength().readContents().trim());
 							//Remove first entry of history until size of entries is below count in cmd_history_max_length
 							while (history.split("\n").length > max_history_size) {
-								InternalFiles.getCmdHistory().writeString(
+								InternalFiles.getCmdHistoryASCII().writeString(
 										history.replaceFirst(history.split("\n")[0], ""), StandardOpenOption.WRITE);
 							}
-							InternalFiles.getCmdHistory().writeString(fullCommand + "\n", StandardOpenOption.APPEND);
+							InternalFiles.getCmdHistoryASCII().writeString(fullCommand + "\n", StandardOpenOption.APPEND);
 						} catch (NumberFormatException nfe) {
 							sys.log("MAIN", InfoType.WARN, "Parsing cmd_history_max_length failed. Check file exists" +
 									" and contains a number below 2.147.483.647");
@@ -138,7 +138,7 @@ public class KeyListenerAttacher {
 					//Add all entries of cmd_history to LinkedList main.Main.commandHistory
 					main.Main.commandHistory.addAll(
 							Arrays.asList(
-									InternalFiles.getCmdHistory().readContents().split("\n")));
+									InternalFiles.getCmdHistoryASCII().readContents().split("\n")));
 					
 					if (main.Main.tabCountInRow > main.Main.commandHistory.size()) {
 						Toolkit.getDefaultToolkit().beep();

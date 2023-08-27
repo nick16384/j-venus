@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import awtcomponents.AWTANSI;
 import engine.InfoType;
@@ -18,6 +20,8 @@ import shell.Shell;
 import threads.ThreadAllocation;
 
 public class CommandManager implements threads.InternalThread {
+	public static final int MAX_COMMAND_QUEUE_SIZE = 64;
+	
 	//
 	//-> Successfully executed commands return null.
 	private Map<Command, String> returnValues;
@@ -28,10 +32,8 @@ public class CommandManager implements threads.InternalThread {
 	//private static boolean disableParallelExecution = false;
 	//private static boolean SIGTERM = false; //If on, command may detect and shutdown (if supported)
 	//private static boolean stopExec = false; //If on, execThread will stop and has to be restarted to work again
-	private String command;
-	private LinkedList<commandProcessing.Command> cmdQueue;
-	public ArrayList<String> commandQueue; 
-	private ArrayList<String> params;
+	private Command currentCommand;
+	private BlockingQueue<Command> commandQueue;
 	private Thread commandManagerThread;
 	
 	public CommandManager() {
@@ -39,69 +41,62 @@ public class CommandManager implements threads.InternalThread {
 		silentExecution = false;
 		noPrompt = false;
 		suspend = false;
-		command = "";
-		cmdQueue = new LinkedList<>();
-		params = new ArrayList<>();
+		currentCommand = null;
+		commandQueue = new ArrayBlockingQueue<>(MAX_COMMAND_QUEUE_SIZE);
 		
 		commandManagerThread = new Thread(null, new Runnable() {
 			public final void run() {
-				//Separate thread waiting for cmdQueue to run through, while main/Main can do other stuff
+				//Separate thread waiting for commandQueue to run through, while main/Main can do other stuff
 				
 				while (!ThreadAllocation.isShutdownSignalActive() && !suspend) {
-					if (cmdQueue.isEmpty()) {
-						try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
+					try {
+						currentCommand = commandQueue.take();
+					} catch (InterruptedException ie) {
+						sys.log("CMGR", InfoType.WARN, "Waiting for command input has been interrupted.");
+						ie.printStackTrace();
+						continue; // Do not execute, since no command is available for sure.
+					}
+					
+					//==================================== COMMAND EXECUTION ====================================
+					sys.log("CMGR", InfoType.DEBUG,
+							"---\nRunning command : " + currentCommand.getFullCommand() + "\n---");
+					
+					isCommandRunning = true;
+					try {
+						returnValues.put(currentCommand,
+								CmdSearch.findCommandAndExecute(
+										currentCommand.getCommand(),
+										currentCommand.getParams()));
+					} catch (Exception ex) {
+						returnValues.put(currentCommand, "RuntimeErr");
+						Err.shellPrintErr(ex, "Command Runtime error",
+								"While the command executed, an exception occurred.");
+						ex.printStackTrace();
+					}
+					isCommandRunning = false;
+					
+					//ERROR CHECKING =======================================
+					if (returnValues.get(currentCommand) == null) {
+						cleanup(currentCommand);
 						continue;
 					}
-					//If commands ARE in cmdQueue:
-					//======================================= COMMAND EXECUTION =======================================
-					for (Command cmdCurrent : cmdQueue) {
-						sys.log("---\nRunning new command: " + cmdCurrent.getFullCommand() + "\n---");
-						//Assign internal variables
-						try {
-							sys.log("CMDMGR", InfoType.DEBUG, "Mapping parameters to internal variables.");
-							command = cmdCurrent.getCommand();
-							params = cmdCurrent.getParams();
-						} catch (ClassCastException cce) {
-							returnValues.put(cmdCurrent, "ParseErr_MapFail");
-							command = null;
-						}
-						
-						//EXECUTE COMMAND =======================================
-						isCommandRunning = true;
-						try {
-							if (command != null) {
-								returnValues.put(cmdCurrent, commandProcessing.CmdSearch.findCommandAndExecute(command, params));
-							} else {
-								sys.log("CMGR", InfoType.WARN, "A previous error prevents the command from running.");
-							}
-						} catch (Exception e) {
-							returnValues.put(cmdCurrent, "RuntimeErr");
-							Err.shellPrintErr(e, "Command Runtime error", "While the command executed, an exception occurred.");
-							e.printStackTrace();
-						}
-						isCommandRunning = false;
-						
-						//ERROR CHECKING =======================================
-						if (returnValues.get(cmdCurrent) != null) {
-							Shell.print("\"" + cmdCurrent.getCommand() + "\": ");
-							if (ErrCodes.getErrDesc(returnValues.get(cmdCurrent)) == null) {
-								//Unknown error
-								sys.log("Command error not found in main.ErrCodes: " + returnValues.get(cmdCurrent));
-								Shell.print(AWTANSI.B_Red, "Unknown error (not specified in main.ErrCodes): "
-								+ returnValues.get(cmdCurrent));
-							} else {
-								//Known error
-								sys.log("CMDMGR", InfoType.INFO, "Command error found in main.ErrCodes: " + returnValues.get(cmdCurrent));
-								sys.log("CMDMGR", InfoType.INFO, "Error description: " + ErrCodes.getErrDesc(returnValues.get(cmdCurrent)));
-								Shell.println(ErrCodes.valueOf(returnValues.get(cmdCurrent)) + " : "
-										+ ErrCodes.getErrDesc(returnValues.get(cmdCurrent)));
-							}
-						}
-						
-						//Clear up, and write new shell line =======================================
-						cleanup(cmdCurrent);
+					// There was an error at this point
+					Shell.print("Exception in \"" + currentCommand.getCommand() + "\" : ");
+					if (ErrCodes.getErrDesc(returnValues.get(currentCommand)) != null) {
+						// Known error
+						sys.log("CMGR", InfoType.DEBUG,
+								"Error type \"" + returnValues.get(currentCommand) + "\" found.");
+						Shell.print(AWTANSI.B_Yellow, ErrCodes.getErrDesc(returnValues.get(currentCommand)));
+					} else {
+						// Unknown error
+						sys.log("CMGR", InfoType.WARN,
+								"Command error not found in libraries.ErrCodes: "
+										+ returnValues.get(currentCommand));
+						Shell.print(AWTANSI.B_Red,
+								"Non-regular error code : " + returnValues.get(currentCommand));
 					}
-					//======================================= COMMAND EXECUTION END =======================================
+					cleanup(currentCommand);
+					//================================== COMMAND EXECUTION END ==================================
 				}
 				sys.log("Command Manager Thread shutdown");
 			}
@@ -117,34 +112,25 @@ public class CommandManager implements threads.InternalThread {
 		}
 	}
 	/**
-	 * Adds cmd to cmdQueue, which will eventually be executed,
+	 * Adds cmd to commandQueue, which will eventually be executed,
 	 * if not cleared by clearCmdQueue();
 	 * @param fullCommand
 	 */
 	public void invokeCommand(Command cmd) {
-		cmdQueue.add(cmd);
+		boolean insertionSuccess;
+		insertionSuccess = commandQueue.offer(cmd);
+		if (!insertionSuccess)
+			sys.log("CMGR", InfoType.WARN,
+					"Command " + cmd.getCommand() + " not added to queue, because the capacity limit was reached.");
 	}
 	public void invokeCommand(String cmd) {
-		cmdQueue.add(new Command(cmd));
-	}
-	/**
-	 * Swaps first Command in cmdQueue with the provided one (cmd)
-	 * If cmd is not in cmdQueue, it is added and the swapped with the first one
-	 * @param cmd
-	 */
-	public void executeImmediately(Command cmd) {
-		if (cmdQueue.contains(cmd)) {
-			Collections.swap(cmdQueue, 0, cmdQueue.indexOf(cmd));
-		} else {
-			cmdQueue.add(cmd);
-			Collections.swap(cmdQueue, 0, cmdQueue.lastIndexOf(cmd));
-		}
+		invokeCommand(new Command(cmd));
 	}
 	/**
 	 * Clears command queue, execution will stop after current command
 	 */
 	public void clearCmdQueue() {
-		cmdQueue.clear();
+		commandQueue.clear();
 	}
 	
 	@Override
@@ -153,7 +139,8 @@ public class CommandManager implements threads.InternalThread {
 	}
 	
 	public void suspend() {
-		sys.log("CMGR", InfoType.ERR, "Suspend method not implemented (not in use for this class).");
+		sys.log("CMGR", InfoType.INFO, "Suspending Command Manager after current command is finished.");
+		suspend = true;
 	}
 	
 	public boolean isCommandRunning() {
@@ -166,17 +153,16 @@ public class CommandManager implements threads.InternalThread {
 	 * @param currentCommand
 	 */
 	private void cleanup(Command currentCommand) {
-		cmdQueue.remove(currentCommand);
-		if (cmdQueue.isEmpty() && !params.contains("--noPrompt")) {
+		commandQueue.remove(currentCommand);
+		if (commandQueue.isEmpty() && !currentCommand.getParams().contains("--noPrompt")) {
 			//If empty after clearing last command, disable noPrompt
 			noPrompt = false;
 		} else {
 			noPrompt = true;
 		}
 		sys.log("CMGR", InfoType.DEBUG, "NoPrompt is enabled: " + noPrompt);
-		//Wait 500ms for any text printing to finish -> CmdLine will scroll to last line eventually
-		try { Thread.sleep(100); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		if (!noPrompt) {
+			Shell.print("\n");
 			Shell.showPrompt();
 		}
 	}
@@ -185,7 +171,7 @@ public class CommandManager implements threads.InternalThread {
 		if (isCommandRunning) {
 			sys.log("CMGR", InfoType.DEBUG, "Killing current command.");
 			System_Exec.forceKill();
-			cleanup(cmdQueue.getFirst());
+			cleanup(currentCommand);
 		} else {
 			if (!noPrompt)
 				Shell.showPrompt();

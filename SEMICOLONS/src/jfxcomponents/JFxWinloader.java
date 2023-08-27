@@ -36,6 +36,9 @@ import shell.Shell;
 import threads.ThreadAllocation;
 
 public class JFxWinloader extends Application {
+	public static final int CURSOR_WIDTH = 13;
+	public static final int WINDOW_WIDTH = 900;
+	public static final int WINDOW_HEIGHT = 550;
 	//private TextArea Main.cmdLine;
 	//private String Main.wqtest = "";
 	
@@ -87,6 +90,7 @@ public class JFxWinloader extends Application {
 				// Command execute and command repeat
 				if (event.getCode().equals(KeyCode.ENTER)) {
 					event.consume();
+					System.out.println("Enter was pressed");
 					try {
 						KeyEventHandlers.actionOnEnter();
 					} catch (Exception ex) {
@@ -98,11 +102,12 @@ public class JFxWinloader extends Application {
 				} else if (event.getCode().equals(KeyCode.UP)) {
 					event.consume();
 					try {
-						KeyEventHandlers.handleCommandRepeat();
+						KeyEventHandlers.handleCommandRepeat(true);
 					} catch (Exception ex) {
 						sys.log("JFX", InfoType.ERR, "Command repeat encountered an exception. This is an internal undefined error.");
 						Shell.print("You broke something. It's not healthy for your PC.");
 						Shell.showPrompt();
+						ex.printStackTrace();
 					}
 				}
 				
@@ -113,13 +118,6 @@ public class JFxWinloader extends Application {
 					sys.log("JFX", InfoType.DEBUG, "Shrinking shell font size.");
 					//Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
 					//TODO show big number on screen for font size change
-				}
-				
-				// Ignore text removal, if it would affect read-only text.
-				if (event.getCode().equals(KeyCode.BACK_SPACE)) {
-					if (Main.cmdLine.getCaretPosition() <= Main.cmdLine.getReadOnlyToIndex()
-							|| !Main.cmdLine.getSelectedText().equals(""))
-					event.consume();
 				}
 			});
 			
@@ -132,7 +130,7 @@ public class JFxWinloader extends Application {
 			});
 			
 			// Possible Completion Overlay
-			CompletionOverlay.configureElements();
+			CompletionOverlay.configureElements(primaryStage);
 			/*Main.cmdLine.setPopupWindow(CompletionOverlay.getOverlay());
 			Main.cmdLine.setPopupAlignment(PopupAlignment.CARET_CENTER);
 			Main.cmdLine.setPopupAnchorOffset(new Point2D(4, 0));*/
@@ -141,13 +139,13 @@ public class JFxWinloader extends Application {
 			StackPane root = new StackPane();
 			root.getChildren().add(Main.cmdLine);
 			root.getChildren().add(new VirtualizedScrollPane<InlineCssTextArea>(Main.cmdLine));
-			Scene scene = new Scene(root, 900, 550);
+			Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 			configureCssStylesheet(scene);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
-			CompletionOverlay.getOverlay().show(primaryStage);
-			primaryStage.requestFocus();
+			CompletionOverlay.showOverlay(primaryStage);
+			//primaryStage.requestFocus();
 			//CompletionOverlay.getOverlay().hide();
 			
 			sys.log("JFX", InfoType.DEBUG, "start(primaryStage) method end reached.");

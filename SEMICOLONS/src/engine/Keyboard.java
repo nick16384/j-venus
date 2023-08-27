@@ -1,6 +1,7 @@
 package engine;
 
 //Code from: https://stackoverflow.com/questions/18037576/how-do-i-check-if-the-user-is-pressing-a-key
+// Works for AWT only
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

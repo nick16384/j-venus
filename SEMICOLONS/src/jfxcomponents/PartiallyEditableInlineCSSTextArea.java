@@ -7,6 +7,8 @@ import org.fxmisc.richtext.InlineCssTextArea;
 import engine.InfoType;
 import engine.sys;
 import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import main.Main;
 
 /**
@@ -26,6 +28,15 @@ public class PartiallyEditableInlineCSSTextArea extends InlineCssTextArea {
 		readOnlyToIndex = 0;
 		lastWrittenText = "";
 		currentShellText = "";
+		
+		this.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			// Ignore text removal, if it would affect read-only text.
+			if (event.getCode().equals(KeyCode.BACK_SPACE)) {
+				if (this.getCaretPosition() <= readOnlyToIndex
+						|| !this.getSelectedText().equals(""))
+				event.consume();
+			}
+		});
 	}
 	
 	@Override
@@ -39,6 +50,13 @@ public class PartiallyEditableInlineCSSTextArea extends InlineCssTextArea {
 	public void clear() {
 		currentShellText = "";
 		super.clear();
+	}
+	
+	@Override
+	public void deletePreviousChar() {
+		if (this.getCaretPosition() <= readOnlyToIndex)
+			return;
+		super.deletePreviousChar();
 	}
 	
 	public String getLastWrittenText() {

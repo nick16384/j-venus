@@ -14,6 +14,7 @@ import shell.Shell;
 public class ShellWriteThread implements InternalThread {
 	// Double buffer principle: One part is written to while the other one is handled by shellWriteThread.
 	private static DoubleTextBuffer writeBuffer;
+	private static final Object swtMonitor = new Object();
 	
 	private Thread shellWriteThread = new Thread(() -> {
 		while (!Global.getCurrentPhase().equals(Runphase.RUN)
@@ -21,16 +22,24 @@ public class ShellWriteThread implements InternalThread {
 				|| Main.jfxWinloader.getCmdLine() == null) {
 			try { Thread.sleep(50); } catch (InterruptedException ie) {}
 		}
-		writeToShell(""); // Interrupt itself
+		// Interrupt itself to write text from writeBuffer before loop started.
+		// Normally, notify() is used, but a notify flag is not kept so by the time,
+		// the loop is reached, the notify signal is already gone.
+		selfInterrupt();
 		
 		while (!ThreadAllocation.isShutdownSignalActive()) {
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException ie) {
+			synchronized (swtMonitor) {
+				try {
+					swtMonitor.wait(500);
+				} catch (InterruptedException ie) {
+					ie.printStackTrace();
+				}
+				
+				if (writeBuffer.readFromInactive().isBlank())
+					continue;
+				
 				writeBuffer.swapActive();
 				sys.log("SWT", InfoType.DEBUG, "Swapped active buffer, writing to shell");
-				if (writeBuffer.readFromActive().isEmpty())
-					continue;
 				
 				// =========================== WRITE TO SHELL ===========================
 				if (Global.javafxEnabled) {
@@ -50,21 +59,29 @@ public class ShellWriteThread implements InternalThread {
 		}
 	});
 	
+	private void selfInterrupt() {
+		shellWriteThread.interrupt();
+	}
+	
 	public void writeToShell(String text) {
 		if (text == null)
 			return;
-		writeBuffer.appendToInactive(text);
-		shellWriteThread.interrupt();
+		synchronized (swtMonitor) {
+			writeBuffer.appendToInactive(text);
+			swtMonitor.notify();
+		}
 	}
 	
 	public void writeToShell(javafx.scene.paint.Color color, String text) {
 		if (text == null)
 			return;
-		writeBuffer.appendToInactive(text);
-		if (Global.getCurrentPhase().equals(Runphase.RUN)
-				&& Main.jfxWinloader != null
-				&& Main.jfxWinloader.getCmdLine() != null) {
-			shellWriteThread.interrupt();
+		synchronized (swtMonitor) {
+			writeBuffer.appendToInactive(text);
+			if (Global.getCurrentPhase().equals(Runphase.RUN)
+					&& Main.jfxWinloader != null
+					&& Main.jfxWinloader.getCmdLine() != null) {
+				swtMonitor.notify();
+			}
 		}
 	}
 	
@@ -92,6 +109,7 @@ public class ShellWriteThread implements InternalThread {
 		if (!shellWriteThread.isAlive()) {
 			writeBuffer = new DoubleTextBuffer();
 			shellWriteThread.setPriority(8);
+			shellWriteThread.setDaemon(true);
 			shellWriteThread.start();
 		}
 	}

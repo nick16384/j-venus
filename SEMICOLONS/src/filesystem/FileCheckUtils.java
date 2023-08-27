@@ -178,6 +178,13 @@ public class FileCheckUtils {
 		return true;
 	}
 	
+	public static boolean notLargerThan(File file, int megabytes) {
+		int bytes = megabytes * 1048576; // bytes = megabytes * 1024 * 1024
+		if (isFile(file) && file.length() < bytes)
+			return true;
+		return false;
+	}
+	
 	public static boolean isHidden(File file) {
 		try {
 			file = prefetchFile(file);

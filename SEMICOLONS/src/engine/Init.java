@@ -12,6 +12,7 @@ import filesystem.InternalFiles;
 import filesystem.VirtualFile;
 import libraries.Env;
 import libraries.Global;
+import shell.Shell;
 import threads.ThreadAllocation;
 
 /**
@@ -103,8 +104,7 @@ public class Init {
 		sys.log("MAIN", InfoType.INFO, "Backing up cmd_history to cmd_history_bak...");
 		InternalFiles.setCmdHistory(Global.getDataDir().newVirtualFile("/cmd_history"));
 		InternalFiles.setCmdHistoryBackup(Global.getDataDir().newVirtualFile("/cmd_history_bak"));
-		InternalFiles.getCmdHistoryBackup().writeString(
-				InternalFiles.getCmdHistory().readContents(), StandardOpenOption.APPEND);
+		Shell.initializeCommandHistory();
 		
 		sys.log("MAIN", InfoType.INFO, "Done.");
 		

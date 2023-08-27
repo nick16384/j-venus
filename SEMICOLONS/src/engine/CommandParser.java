@@ -11,7 +11,7 @@ public class CommandParser {
 	//Add second command (after |) to execution queue while executing first one
 	private static Command[] executionQueue = new Command[0];
 	
-	public static Object[] parseCmd(String fullCmd) {
+	public static synchronized Object[] parseCmd(String fullCmd) {
 		String command = "";
 		ArrayList<String> params = new ArrayList<>();
 		

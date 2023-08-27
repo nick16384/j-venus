@@ -11,6 +11,7 @@ import engine.InfoType;
 import engine.sys;
 import filesystem.InternalFiles;
 import filesystem.VirtualFile;
+import javafx.scene.input.KeyCode;
 import libraries.Err;
 import libraries.VariableInitializion;
 import libraries.Global;
@@ -30,8 +31,8 @@ public class KeyEventHandlers {
 	 * when enter has been pressed (meaning a new command has been submitted).
 	 */
 	
-	protected static void actionOnEnter() {
-		main.Main.tabCountInRow = 0;
+	protected static synchronized void actionOnEnter() {
+		Shell.getCommandHistory().resetRowStats();
 		//UPDATE SHELL STREAM ==============================================================================
 		ThreadAllocation.getSWT().updateShellStream();
 		//END UPDATE SHELL STREAM ==========================================================================
@@ -82,7 +83,7 @@ public class KeyEventHandlers {
 				}
 			}
 			//=========================ADD FULLCMD TO HISTORY===============================
-			main.Main.commandHistory.add(fullCommand);
+			Shell.getCommandHistory().add(fullCommand);
 			try {
 				String history = InternalFiles.getCmdHistory().readContents();
 				int max_history_size = Integer.parseInt(
@@ -107,12 +108,22 @@ public class KeyEventHandlers {
 	 * handleCommandRepeat() is responsible for adding the last-executed command
 	 * into the shell.
 	 */
-	protected static void handleCommandRepeat() {
+	protected static synchronized void handleCommandRepeat(boolean forwardRepeat) {
 		//========================================COMMAND REPEAT============================================
-		main.Main.tabCountInRow++;
-		Shell.showPrompt();
+		Shell.getCommandHistory().commandRepeatRequested(forwardRepeat);
 		
-		Shell.print("DEBUG:" + main.Main.tabCountInRow);
+		String insertion = Shell.getCommandHistory().getCurrent();
+		System.out.println("Insertion : " + insertion);
+		
+		// A command was repeated already, so it needs to be removed first
+		if (Shell.getCommandHistory().getRepeatInRow() >= 1) {
+			Main.cmdLine.deleteText(
+					Main.cmdLine.getText().length() - Main.cmdLine.getLastWrittenText().length(),
+					Main.cmdLine.getText().length());
+		}
+		
+		// Text needs to be applied directly, so user can edit it.
+		Main.jfxWinloader.getCmdLine().appendText(insertion);
 		//========================================COMMAND REPEAT END============================================
 	}
 }

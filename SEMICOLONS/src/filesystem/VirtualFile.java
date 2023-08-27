@@ -57,6 +57,8 @@ public class VirtualFile extends File {
 	public String readContents() {
 		String fileContent = null;
 		try {
+			if (!FileCheckUtils.notLargerThan(this, 512))
+				throw new IOException("File is too big to attempt read (more than 512 Megabytes).");
 			fileContent = Files.readString(this.toPath());
 		} catch (IOException ioe) {
 			sys.log("VIRTFILE", InfoType.ERR, "Cannot read from file " + this.getAbsolutePath());

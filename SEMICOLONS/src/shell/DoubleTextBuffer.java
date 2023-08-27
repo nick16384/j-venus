@@ -20,7 +20,7 @@ public class DoubleTextBuffer {
 		bufferZeroActive = true;
 	}
 	
-	public void appendToInactive(String text) {
+	public synchronized void appendToInactive(String text) {
 		if (text == null)
 			return;
 		
@@ -34,11 +34,15 @@ public class DoubleTextBuffer {
 		return (bufferZeroActive ? buffer0 : buffer1);
 	}
 	
-	public void swapActive() {
+	public String readFromInactive() {
+		return (bufferZeroActive ? buffer1 : buffer0);
+	}
+	
+	public synchronized void swapActive() {
 		bufferZeroActive = !bufferZeroActive;
 	}
 	
-	public void clearActive() {
+	public synchronized void clearActive() {
 		if (bufferZeroActive)
 			buffer0 = "";
 		else

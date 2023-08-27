@@ -88,6 +88,9 @@ public class WatchdogThread2 implements InternalThread {
 	
 	@Override
 	public void start() {
+		if (watchdogThread2.isAlive())
+			return;
+		watchdogThread2.setDaemon(true);
 		watchdogThread2.start();
 	}
 

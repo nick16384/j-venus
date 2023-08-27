@@ -12,6 +12,8 @@ import main.Main;
 import threads.ThreadAllocation;
 
 public class Logging {
+	private static final Object loggingMonitor = new Object();
+	
 	protected static void shell_write(int priority, String auth, String message) {
 		if (priority > 5) {
 			sys.log("LOWLEVEL", InfoType.ERR, ": priority out of range (1 - 5)");
@@ -140,12 +142,14 @@ public class Logging {
 		if (statusMessage.isBlank())
 			return;
 		
-		if (status.asInt() == -1 || status.asInt() >= 3)
-			System.err.println(statusMessage);
-		else
-			System.out.println(statusMessage);
-		
-		if (Global.consoleLogStream != null)
-			Global.consoleLogStream.println(statusMessage);
+		synchronized (loggingMonitor) {
+			if (status.asInt() == -1 || status.asInt() >= 3)
+				System.err.println(statusMessage);
+			else
+				System.out.println(statusMessage);
+			
+			if (Global.consoleLogStream != null)
+				Global.consoleLogStream.println(statusMessage);
+		}
 	}
 }

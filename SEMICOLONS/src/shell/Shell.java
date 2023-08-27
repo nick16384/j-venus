@@ -3,6 +3,7 @@ package shell;
 import java.awt.Color;
 
 import awtcomponents.AWTANSI;
+import components.CommandHistory;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
@@ -19,6 +20,8 @@ public class Shell {
 			+ "\u001B[1;32m$HOSTNAME\u001B[1;36m" + ":$PATH\u001B[1;37m$# "; // Color and shell combined
 	protected static String promptPattern = DEFAULT_PROMPT_PATTERN;
 	protected static String prompt = ">>";
+	
+	private static CommandHistory commandHistory;
 
 	public static String getPrompt() {
 		return prompt;
@@ -133,24 +136,24 @@ public class Shell {
 	 * @param message
 	 * @param noProtect
 	 */
-	public static void print(Color color, String message, boolean... noProtect) {
+	public static synchronized void print(Color color, String message, boolean... noProtect) {
 		if (libraries.Global.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			ThreadAllocation.getSWT().appendTextQueue(color, message, noProtect);
 		}
 	}
-	public static void println(Color color, String message, boolean... noProtect) {
+	public static synchronized void println(Color color, String message, boolean... noProtect) {
 		if (libraries.Global.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			ThreadAllocation.getSWT().appendTextQueue(color, message + "\n", noProtect);
 		}
 	}
-	public static void print(String message) {
+	public static synchronized void print(String message) {
 		ThreadAllocation.getSWT().appendTextQueue(AWTANSI.cReset, message);
 	}
-	public static void println(String message) {
+	public static synchronized void println(String message) {
 		ThreadAllocation.getSWT().appendTextQueue(AWTANSI.cReset, message + "\n");
 	}
 	/**
@@ -181,5 +184,16 @@ public class Shell {
 				Platform.requestNextPulse();
 			});
 		}
+	}
+	
+	public static void initializeCommandHistory() {
+		if (commandHistory != null)
+			return;
+		
+		commandHistory = new CommandHistory();
+	}
+	
+	public static CommandHistory getCommandHistory() {
+		return commandHistory;
 	}
 }

@@ -5,6 +5,8 @@ import java.lang.Exception;
 
 import javax.swing.JFrame;
 
+import components.CommandHistory;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -78,8 +80,6 @@ public class Main extends JFrame {
 		
 		//==================================== INIT END ====================================
 	}
-	public static LinkedList<String> commandHistory = new LinkedList<>();
-	public static int tabCountInRow = 0;
 	
 	public static awtcomponents.WindowMain mainFrameAWT;
 	
@@ -95,9 +95,9 @@ public class Main extends JFrame {
 		return Main.mainFrameAWT;
 	}
 	
-	//Getting some stats about Venus
+	//Getting some stats about SEMICOLONS
 	/**
-	 * Current Venus runtime in milliseconds since program start (idle watchdog).
+	 * Current SEMICOLONS runtime in milliseconds since program start (idle watchdog).
 	 * @return
 	 */
 	public static long getRuntime() {

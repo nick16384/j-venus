@@ -19,6 +19,9 @@ public enum Runphase {
 	public final String getDescription() {
 		return this.description;
 	}
+	public final boolean isBeforeRun() {
+		return (this.equals(PREINIT) || this.equals(INIT));
+	}
 	
 	/**
 	 * Gets the appropriate phase object from a name string

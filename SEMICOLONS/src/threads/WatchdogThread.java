@@ -142,7 +142,9 @@ public final class WatchdogThread implements InternalThread {
 
 				long activeTime = System.currentTimeMillis() - timeStart;
 				sys.log("STOPPING", InfoType.STATUS, "Active time: " + activeTime + "ms");
-				sys.log("STOPPING", InfoType.STATUS, "Saving log file to: /var/J-Vexus_logs/ ");
+				sys.log("STOPPING", InfoType.STATUS, "Saving log file to: "
+													+ Global.getLogFile().getAbsolutePath());
+				Shell.getCommandHistory().writeToFile();
 
 				// String logFilePath = "/var/J-Vexus_logs/" + "logfile1.txt";
 
@@ -158,6 +160,7 @@ public final class WatchdogThread implements InternalThread {
 		if (watchdogThread.isAlive()) {
 			sys.log("WATCHDOG", InfoType.WARN, "WatchdogThread already running.");
 		} else {
+			watchdogThread.setDaemon(true);
 			watchdogThread.start();
 		}
 	}
@@ -199,7 +202,7 @@ public final class WatchdogThread implements InternalThread {
 	 *                       shutdown
 	 * @param errMsg         Error message to display to the user
 	 */
-	protected static final void stopWithError(int exitCode, int waitBeforeStop, String errMsg) {
+	protected synchronized static final void stopWithError(int exitCode, int waitBeforeStop, String errMsg) {
 		try { Thread.sleep(1000); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		if (Global.javafxEnabled) {
 			Platform.runLater(() -> { Main.cmdLine.clear(); });
