@@ -22,7 +22,7 @@ public class Terminate {
 				sys.log("TERMINATE", InfoType.INFO, "Sending shutdown signal to global Thread Allocator...");
 				Shell.println(AWTANSI.B_Blue, "Exiting...");
 				Shell.setPromptPattern("$-");
-				ThreadAllocation.shutdownVexus(0);
+				sys.shutdown(0);
 			} else {
 				sys.log("TERMINATE", InfoType.WARN, "Watchdog Thread not started! If this problem persists, please reinstall!");
 				System.exit(1);

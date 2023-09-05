@@ -78,7 +78,7 @@ public class KeyListenerAttacher {
 								sys.log("MAIN", InfoType.DEBUG, "Running '" + fullCommand + "'");
 								sys.log("Subcommand: " + subCommand);
 								try {
-									commandProcessing.Command cmd = new commandProcessing.Command(subCommand);
+									commands.CommandOld cmd = new commands.CommandOld(subCommand);
 									cmd.start();
 									sys.log("New thread started (subCommand placed into cmdQueue)");
 									//For returnVal, try:
@@ -91,7 +91,7 @@ public class KeyListenerAttacher {
 						} else {
 							sys.log("MAIN", InfoType.DEBUG, "Sending '" + fullCommand + "' to Command Parser");
 							try {
-								new commandProcessing.Command(fullCommand).start();
+								new commands.CommandOld(fullCommand).start();
 								//For returnVal, try:
 								//CommandMain.executeCommand(new components.Command(fullCommand));
 							} catch (Exception ex) {

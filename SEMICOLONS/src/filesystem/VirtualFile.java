@@ -39,7 +39,7 @@ public class VirtualFile extends File {
 	 * @return
 	 */
 	public boolean createOnFilesystem() {
-		if (FileCheckUtils.exists(new File(this.getActualLocation()))) {
+		if (FileCheckUtils.exists(this.getAbsoluteFile())) {
 			sys.log("VIRTFILE", InfoType.DEBUG, "Virtual file " + this.getAbsolutePath() + " already exists.");
 			return true;
 		}

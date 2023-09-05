@@ -9,6 +9,7 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.InlineCssTextArea;
 
 import awtcomponents.AWTANSI;
+import commands.CommandManagement;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
@@ -109,6 +110,16 @@ public class JFxWinloader extends Application {
 						Shell.showPrompt();
 						ex.printStackTrace();
 					}
+				} else if (event.getCode().equals(KeyCode.DOWN)) {
+					event.consume();
+					try {
+						KeyEventHandlers.handleCommandRepeat(false);
+					} catch (Exception ex) {
+						sys.log("JFX", InfoType.ERR, "Command repeat encountered an exception. This is an internal undefined error.");
+						Shell.print("You broke something. It's not healthy for your PC.");
+						Shell.showPrompt();
+						ex.printStackTrace();
+					}
 				}
 				
 				if (event.getCode().equals(KeyCode.PAGE_UP)) {
@@ -125,7 +136,7 @@ public class JFxWinloader extends Application {
 				if (new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN).match(event)) {
 					sys.log("JFX", InfoType.DEBUG, "User pressed CTRL + C");
 					Shell.print(AWTANSI.D_Cyan, "^C");
-					ThreadAllocation.getCMGR().killCurrentIfRunning();
+					CommandManagement.killCurrentIfRunning();
 				}
 			});
 			

@@ -33,7 +33,7 @@ public class VariableInitializion {
 		if (System.getProperty("java.home") == null) {
 			System.err.println("INITVARS: The JAVA_HOME variable was not found.");
 			System.err.println("INITVARS: J-Vexus needs JDK installed in order to work. Exiting...");
-			ThreadAllocation.shutdownVexus(1);
+			sys.shutdown(1);
 		}
 		Global.javaHome = new File(System.getProperty("java.home"));
 		Global.osName = System.getProperty("os.name");
@@ -76,7 +76,7 @@ public class VariableInitializion {
 		// log path. Cannot save log."); }
 		if (Global.osName.equalsIgnoreCase("UnknownOS")) {
 			sys.log("LIB", InfoType.WARN, "INITVARS: Operating system not supported. Exiting...");
-			ThreadAllocation.shutdownVexus(1);
+			sys.shutdown(1);
 		}
 		
 		prepareEnvironment();

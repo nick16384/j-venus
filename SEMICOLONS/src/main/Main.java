@@ -20,6 +20,7 @@ import libraries.VariableInitializion;
 import shell.Shell;
 import libraries.Global;
 import threads.ThreadAllocation;
+import threads.WatchdogThread;
 
 public class Main extends JFrame {
 	public static String[] argsMain;
@@ -101,7 +102,7 @@ public class Main extends JFrame {
 	 * @return
 	 */
 	public static long getRuntime() {
-		return System.currentTimeMillis() - ThreadAllocation.getWDT().getTimeStart();
+		return System.currentTimeMillis() - WatchdogThread.getTimeStart();
 	}
 	
 	public static void restartVMIfSupported() {

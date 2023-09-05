@@ -6,11 +6,11 @@ import main.Main;
 import threads.InternalThread;
 import threads.ThreadAllocation;
 
-public class JFxGUIThread implements InternalThread {
-	private Thread jfxGUIThread;
-	private boolean isGUIActive;
+public class JFxGUIThread {
+	private static Thread jfxGUIThread;
+	private static volatile boolean isGUIActive;
 	
-	public JFxGUIThread() {
+	public static void initialize() {
 		jfxGUIThread = new Thread(null, () -> {
 			sys.log("JFXT", InfoType.INFO, "Starting JFx GUI thread.");
 			while (Main.jfxWinloader == null)
@@ -22,25 +22,22 @@ public class JFxGUIThread implements InternalThread {
 			//loadGUI() will not return until window is closed or Platform.exit() is called.
 			isGUIActive = false;
 			sys.log("JFXT", InfoType.INFO, "JavaFX window was closed. Stopping SEMICOLONS.");
-			ThreadAllocation.shutdownVexus(0);
+			sys.shutdown(0);
 		}, "JFXT");
+		
+		jfxGUIThread.setDaemon(true);
+		jfxGUIThread.start();
 	}
 	
-	@Override
-	public void start() {
-		if (!jfxGUIThread.isAlive())
-			jfxGUIThread.start();
-	}
-	@Override
-	public void suspend() {
+	public static void suspend() {
 		Main.jfxWinloader.stop();
 	}
-	@Override
-	public boolean isRunning() {
-		return jfxGUIThread.isAlive();
+	
+	public static boolean isRunning() {
+		return jfxGUIThread != null && jfxGUIThread.isAlive();
 	}
 	
-	public boolean isGUIActive() {
+	public static boolean isGUIActive() {
 		return isGUIActive;
 	}
 }

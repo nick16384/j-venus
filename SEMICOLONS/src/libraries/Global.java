@@ -36,6 +36,7 @@ public class Global {
 	protected static String username = "";
 	protected static String hostname = "";
 	public static final int CMDLINE_MAX_LINE_COUNT = 26;
+	public static final int DEFAULT_MAX_HISTORY_SIZE = 4096;
 	protected static String fsRoot = "";
 	public static PrintStream consoleLogStream = null;
 	public static String consoleString = "";

@@ -10,6 +10,7 @@ import javax.swing.text.StyledDocument;
 import libraries.Global;
 import main.Main;
 import threads.ThreadAllocation;
+import threads.WatchdogThread;
 
 public class Logging {
 	private static final Object loggingMonitor = new Object();
@@ -118,7 +119,7 @@ public class Logging {
 		String statusMessage = "";
 		long runtime;
 		try {
-			runtime = System.currentTimeMillis() - ThreadAllocation.getWDT().getTimeStart();
+			runtime = System.currentTimeMillis() - WatchdogThread.getTimeStart();
 		} catch (NullPointerException npe) {
 			runtime = -1;
 		}

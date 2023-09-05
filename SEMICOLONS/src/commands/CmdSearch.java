@@ -1,4 +1,4 @@
-package commandProcessing;
+package commands;
 
 import java.util.ArrayList;
 

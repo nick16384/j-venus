@@ -10,6 +10,7 @@ import engine.sys;
 import javafx.application.Platform;
 import libraries.Global;
 import main.Main;
+import threads.ShellWriteThread;
 import threads.ThreadAllocation;
 
 /**
@@ -113,19 +114,19 @@ public class Shell {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			if (priority == 0) { //Priority 0 / Just print, nothing important
-				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
+				ShellWriteThread.appendTextQueue(AWTANSI.D_White, message, noProtect);
 			} else if (priority == 1) { //Priority 1 / Info, Progress, etc.
-				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
+				ShellWriteThread.appendTextQueue(AWTANSI.D_White, message, noProtect);
 			} else if (priority == 2) { //Priority 2 / Warnings
-				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_Yellow, message, noProtect);
+				ShellWriteThread.appendTextQueue(AWTANSI.D_Yellow, message, noProtect);
 			} else if (priority == 3) { //Priority 3 / Non-Critical errors
-				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_Red, message, noProtect);
+				ShellWriteThread.appendTextQueue(AWTANSI.D_Red, message, noProtect);
 			} else if (priority == 4) { //Priority 4 / Critical errors
-				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.B_Red, message, noProtect);
+				ShellWriteThread.appendTextQueue(AWTANSI.B_Red, message, noProtect);
 			} else if (priority == 5) { //Priority 5 / Fatal or Non-recoverable errors
-				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.B_Red, message, noProtect);
+				ShellWriteThread.appendTextQueue(AWTANSI.B_Red, message, noProtect);
 			} else { //If priority out of range, choose default white
-				ThreadAllocation.getSWT().appendTextQueue(AWTANSI.D_White, message, noProtect);
+				ShellWriteThread.appendTextQueue(AWTANSI.D_White, message, noProtect);
 			}
 		}
 	}
@@ -140,21 +141,21 @@ public class Shell {
 		if (libraries.Global.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
-			ThreadAllocation.getSWT().appendTextQueue(color, message, noProtect);
+			ShellWriteThread.appendTextQueue(color, message, noProtect);
 		}
 	}
 	public static synchronized void println(Color color, String message, boolean... noProtect) {
 		if (libraries.Global.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
-			ThreadAllocation.getSWT().appendTextQueue(color, message + "\n", noProtect);
+			ShellWriteThread.appendTextQueue(color, message + "\n", noProtect);
 		}
 	}
 	public static synchronized void print(String message) {
-		ThreadAllocation.getSWT().appendTextQueue(AWTANSI.cReset, message);
+		ShellWriteThread.appendTextQueue(AWTANSI.cReset, message);
 	}
 	public static synchronized void println(String message) {
-		ThreadAllocation.getSWT().appendTextQueue(AWTANSI.cReset, message + "\n");
+		ShellWriteThread.appendTextQueue(AWTANSI.cReset, message + "\n");
 	}
 	/**
 	 * Direct shellWrite when in single-threaded mode. More efficient than going through shellWriteThread.

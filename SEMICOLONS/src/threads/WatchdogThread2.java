@@ -9,13 +9,13 @@ import shell.Shell;
 import awtcomponents.AWTANSI;
 import components.ProtectedTextComponent;
 
-public class WatchdogThread2 implements InternalThread {
-	private Thread watchdogThread2;
+public class WatchdogThread2 {
+	private static Thread watchdogThread2;
 
-	protected WatchdogThread2() {
+	protected static void initialize() {
 		watchdogThread2 = new Thread(null, new Runnable() {
 			public void run() {
-				Thread.currentThread().setPriority(4); //1 is MIN_PRIORITY, 10 is MAX_PRIORITY
+				Thread.currentThread().setPriority(Thread.MIN_PRIORITY); //1 is MIN_PRIORITY, 10 is MAX_PRIORITY
 				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException ie) {
@@ -63,11 +63,11 @@ public class WatchdogThread2 implements InternalThread {
 						break;
 					}
 				}
-				while (!ThreadAllocation.isShutdownSignalActive()) {
+				while (!sys.isShutdownSignalActive()) {
 					try { Thread.sleep(2000); } catch (InterruptedException ie) { ie.printStackTrace(); }
 					if (!ThreadAllocation.isWDTActive()) {
 						WatchdogThread.stopWithError(2, 15000, "[WDT2] Watchdog Thread 1 (WDT) is found inactive.\n"
-								+ "Because it cannot detect further errors, Vexus will be terminated.\n"
+								+ "Because it cannot detect further errors, termination will occur.\n"
 								+ "This is probably an internal error or bug. If this issue continues to persist\n"
 								+ "and is reproducible, try restarting or reinstalling, and if that still doesn't help,\n"
 								+ "contact me and I'll try to fix the problem.");
@@ -84,23 +84,18 @@ public class WatchdogThread2 implements InternalThread {
 				}
 			}
 		}, "WDT2");
-	}
-	
-	@Override
-	public void start() {
-		if (watchdogThread2.isAlive())
-			return;
+		
 		watchdogThread2.setDaemon(true);
 		watchdogThread2.start();
 	}
 
-	@Override
-	public void suspend() {
+	
+	public static void suspend() {
 		sys.log("WDT2", InfoType.WARN, "WatchdogThread2 cannot be suspended.");
 	}
 
-	@Override
-	public boolean isRunning() {
-		return watchdogThread2.isAlive();
+	
+	public static boolean isRunning() {
+		return watchdogThread2 != null && watchdogThread2.isAlive();
 	}
 }

@@ -17,6 +17,7 @@ import libraries.VariableInitializion;
 import libraries.Global;
 import main.Main;
 import shell.Shell;
+import threads.ShellWriteThread;
 import threads.ThreadAllocation;
 
 /**
@@ -34,7 +35,7 @@ public class KeyEventHandlers {
 	protected static synchronized void actionOnEnter() {
 		Shell.getCommandHistory().resetRowStats();
 		//UPDATE SHELL STREAM ==============================================================================
-		ThreadAllocation.getSWT().updateShellStream();
+		ShellWriteThread.updateShellStream();
 		//END UPDATE SHELL STREAM ==========================================================================
 		//Splitting WindowMain.cmdLine text into command
 		String[] lines = Main.cmdLine.getText().split("\n");
@@ -62,7 +63,7 @@ public class KeyEventHandlers {
 					sys.log("MAIN", InfoType.DEBUG, "Running '" + fullCommand + "'");
 					sys.log("Subcommand: " + subCommand);
 					try {
-						commandProcessing.Command cmd = new commandProcessing.Command(subCommand);
+						commands.Command cmd = new commands.Command(subCommand);
 						cmd.start();
 						sys.log("New thread started (subCommand placed into cmdQueue)");
 						//For returnVal, try:
@@ -75,7 +76,7 @@ public class KeyEventHandlers {
 			} else {
 				sys.log("MAIN", InfoType.DEBUG, "Sending '" + fullCommand + "' to Command Parser");
 				try {
-					new commandProcessing.Command(fullCommand).start();
+					new commands.Command(fullCommand).start();
 					//For returnVal, try:
 					//CommandMain.executeCommand(new components.Command(fullCommand));
 				} catch (Exception ex) {
@@ -84,20 +85,6 @@ public class KeyEventHandlers {
 			}
 			//=========================ADD FULLCMD TO HISTORY===============================
 			Shell.getCommandHistory().add(fullCommand);
-			try {
-				String history = InternalFiles.getCmdHistory().readContents();
-				int max_history_size = Integer.parseInt(
-						Global.getDataDir().newVirtualFile("/cmd_history_max_length").readContents().trim());
-				//Remove first entry of history until size of entries is below count in cmd_history_max_length
-				while (history.split("\n").length > max_history_size) {
-					InternalFiles.getCmdHistory().writeString(
-							history.replaceFirst(history.split("\n")[0], ""), StandardOpenOption.WRITE);
-				}
-				InternalFiles.getCmdHistory().writeString(fullCommand + "\n", StandardOpenOption.APPEND);
-			} catch (NumberFormatException nfe) {
-				sys.log("MAIN", InfoType.ERR, "Parsing cmd_history_max_length failed. Check file exists" +
-						" and contains a number below 2.147.483.647");
-			}
 			//============================END ADD FULLCMD TO HISTORY==============================
 		} else {
 			Shell.showPrompt();

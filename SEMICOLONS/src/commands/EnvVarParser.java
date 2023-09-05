@@ -1,4 +1,4 @@
-package commandProcessing;
+package commands;
 
 import engine.InfoType;
 import engine.sys;

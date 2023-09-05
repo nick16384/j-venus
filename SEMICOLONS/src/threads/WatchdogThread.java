@@ -6,30 +6,32 @@ import java.nio.file.Paths;
 
 import awtcomponents.AWTANSI;
 import awtcomponents.WindowMain;
+import commands.CommandManagement;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
+import jfxcomponents.JFxGUIThread;
 import libraries.Global;
 import main.Main;
 import shell.Shell;
 
-public final class WatchdogThread implements InternalThread {
-	protected boolean shutdownSignal;
-	private int exitCode;
-	private long timeStart;
+public final class WatchdogThread {
+	protected static boolean shutdownSignal;
+	private static int exitCode;
+	private static long timeStart;
 	//Indicated whether non-critical error message have already been displayed:
-	private boolean nonCriticalAlreadyDisplayed;
-	private Thread watchdogThread;
+	private static boolean nonCriticalAlreadyDisplayed;
+	private static Thread watchdogThread;
 
-	protected WatchdogThread() {
+	protected static void initialize() {
 		shutdownSignal = false;
 		exitCode = 0;
 		timeStart = System.currentTimeMillis();
 		nonCriticalAlreadyDisplayed = false;
 		
 		//TODO implement check for required threads as this probably now works.
-		String[] requiredThreads = new String[] { "WDT", "WDT2", "Thread-0", "SWT", "CMGR", "CUIT" };
+		String[] requiredThreads = new String[] { "WDT", "WDT2", "Thread-0", "SWT", "CMGR" };
 		System.err.println("Dev TODO: implement check for required threads as this probably now works.");
 
 		watchdogThread = new Thread(null, new Runnable() {
@@ -59,13 +61,14 @@ public final class WatchdogThread implements InternalThread {
 						}
 						
 						//Threads status
-						if (!ThreadAllocation.getWDT2().isRunning()) {
+						// FIXME Complains about WDT2 not running after WDT starts
+						if (!WatchdogThread2.isRunning()) {
 							stopWithError(1, 15000, "Watchdog thread 2 is not running, and in the event of this thread\n"
 									+ "(\"Watchdog Thread 1\") malfunctioning, there won't be any detection of internal\n"
 									+ "errors anymore, so vexus has to shutdown. If this error reoccurs, some file might\n"
 									+ "be missing and try to reinstall.");
 							break;
-						} else if (!ThreadAllocation.getSWT().isRunning()) {
+						} else if (!ShellWriteThread.isRunning()) {
 							WindowMain.cmdLine.setText("Fatal error: ShellWriteThread not running, causing no more shell\n"
 									+ "output to be displayed. If this issue persists, try reinstalling.");
 							//This error message might not display due to SWT inactivity
@@ -74,7 +77,7 @@ public final class WatchdogThread implements InternalThread {
 									+ "Obviously, the shell can't be used when no feedback is coming from the system,\n"
 									+ "and because of this, we have to shutdown. Try reinstalling, if this issue persists.");
 							break;
-						} else if (!ThreadAllocation.getCMGR().isRunning()) {
+						} else if (!CommandManagement.isRunning()) {
 							stopWithError(1, 15000, "The Command Management Thread is inactive. This will cause no commands to\n"
 									+ "be executed anymore unless you have enabled deprecated methods and disabled multithreading.\n"
 									+ "This shell can't be used when no commands are getting processed, so this process will\n"
@@ -149,53 +152,46 @@ public final class WatchdogThread implements InternalThread {
 				// String logFilePath = "/var/J-Vexus_logs/" + "logfile1.txt";
 
 				sys.log("WATCHDOG", InfoType.STATUS, "Threads stopping...");
-				if (Global.javafxEnabled && ThreadAllocation.getJFXT().isGUIActive()) Main.jfxWinloader.stop();
+				if (Global.javafxEnabled && JFxGUIThread.isGUIActive()) Main.jfxWinloader.stop();
 				System.exit(exitCode);
 			}
 		}, "WDT");
+		
+		watchdogThread.setPriority(Thread.MIN_PRIORITY);
+		watchdogThread.setDaemon(true);
+		watchdogThread.start();
+	}
+	
+	public static final boolean isRunning() {
+		return watchdogThread != null && watchdogThread.isAlive();
 	}
 
-	@Override
-	public final void start() {
-		if (watchdogThread.isAlive()) {
-			sys.log("WATCHDOG", InfoType.WARN, "WatchdogThread already running.");
-		} else {
-			watchdogThread.setDaemon(true);
-			watchdogThread.start();
-		}
+	
+	public static final void suspend() {
+		sys.log("WDT", InfoType.NONCRIT, "Watchdog thread cannot be suspended.");
 	}
 
-	@Override
-	public final boolean isRunning() {
-		return watchdogThread.isAlive();
-	}
-
-	@Override
-	public final void suspend() {
-		sys.log("WTT", InfoType.NONCRIT, "Watchdog thread cannot be suspended.");
-	}
-
-	protected final void shutdownVexus(int exitCode) {
+	public static final void shutdown(int exitCode) {
 		sys.log("[WDT] Got shutdown command. Exit code: " + exitCode);
-		this.exitCode = exitCode;
+		WatchdogThread.exitCode = exitCode;
 		shutdownSignal = true;
 	}
 
-	public final String[] getStats() {
-		final String[] currentStats = new String[] { Long.toString(System.currentTimeMillis() - this.timeStart) };
+	public static final String[] getStats() {
+		final String[] currentStats = new String[] { Long.toString(System.currentTimeMillis() - timeStart) };
 		return currentStats;
 	}
 	
-	public long getTimeStart() {
+	public static long getTimeStart() {
 		return timeStart;
 	}
 
-	public final boolean isShutdownSignalActive() {
+	public static final boolean isShutdownSignalActive() {
 		return shutdownSignal;
 	}
 	
 	/**
-	 * Is called, when WTT or WTT2 detect some kind of error.
+	 * Is called, when WDT or WDT2 detect some kind of error.
 	 * 
 	 * @param exitCode       Exit code to suspend JVM with
 	 * @param waitBeforeStop How many milliseconds to wait from error display to VM
@@ -247,6 +243,6 @@ public final class WatchdogThread implements InternalThread {
 				sys.log("Error stop wait was interrupted.");
 			}
 		}
-		ThreadAllocation.getWDT().shutdownVexus(exitCode);
+		WatchdogThread.shutdown(exitCode);
 	}
 }

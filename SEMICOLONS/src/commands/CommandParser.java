@@ -1,16 +1,12 @@
-package engine;
+package commands;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import commandProcessing.Command;
-import commandProcessing.EnvVarParser;
+import engine.sys;
 
 public class CommandParser {
-	//Add second command (after |) to execution queue while executing first one
-	private static Command[] executionQueue = new Command[0];
-	
 	public static synchronized Object[] parseCmd(String fullCmd) {
 		String command = "";
 		ArrayList<String> params = new ArrayList<>();
@@ -69,20 +65,5 @@ public class CommandParser {
 		}
 		
 		return new Object[] {command, params};
-	}
-	
-	public static Object[] getExecutionQueue() {
-		return executionQueue;
-	}
-	
-	//TODO work further with executionQueue
-	//TODO work on startupscripts
-	public static String getExecutionQueueStr() {
-		String out = "";
-		for (Command cmd : executionQueue) {
-			out += cmd.getFullCommand() + "\n";
-		}
-		out = out + "\n";
-		return out;
 	}
 }

@@ -81,14 +81,14 @@ public class Init {
 		
 		libraries.VariableInitializion.initializeAll();
 		
-		sys.log("MAIN", InfoType.STATUS, "Done.");
-		sys.log("MAIN", InfoType.INFO, "Warning: Log is currently very verbose due to debugging reasons.");
-		sys.log("MAIN", InfoType.INFO, "Will be reduced within alpha versions.");
+		sys.log("INIT", InfoType.STATUS, "Done.");
+		sys.log("INIT", InfoType.INFO, "Warning: Log is currently very verbose due to debugging reasons.");
+		sys.log("INIT", InfoType.INFO, "Will be reduced within alpha versions.");
 		if (vmArgs.contains("--enable-deprecated")) {
-			sys.log("MAIN", InfoType.STATUS, "No deprecated features to enable.");
+			sys.log("INIT", InfoType.STATUS, "No deprecated features to enable.");
 		}
 		try {
-			sys.log("MAIN", InfoType.INFO, "Loading startup script");
+			sys.log("INIT", InfoType.INFO, "Loading startup script");
 			boolean error = threads.LoadStartup.loadAndExecute();
 			if (error) {
 				//TODO next: fix startupscripts(ext cmds, startupscr)
@@ -98,15 +98,31 @@ public class Init {
 			sys.log("STARTUPSCRIPTRUN", InfoType.ERR, "Error when loading startup script: IOException");
 			ioe.printStackTrace();
 		}
-		sys.log("MAIN", InfoType.INFO, "Reinitializing environment...");
-		Env.updateEnv("$$ALL");
-		sys.log("MAIN", InfoType.INFO, "Done.");
-		sys.log("MAIN", InfoType.INFO, "Backing up cmd_history to cmd_history_bak...");
+		
+		sys.log("INIT", InfoType.INFO, "Creating virtual files...");
+		// Virtual files are only set up to prevent NullPointerExceptions.
+		// Any class is allowed at any time to change whatever file to a more recent version.
 		InternalFiles.setCmdHistory(Global.getDataDir().newVirtualFile("/cmd_history"));
 		InternalFiles.setCmdHistoryBackup(Global.getDataDir().newVirtualFile("/cmd_history_bak"));
-		Shell.initializeCommandHistory();
+		InternalFiles.setCmdHistoryMaxLength(Global.getDataDir().newVirtualFile("/cmd_history_max_length"));
+		InternalFiles.setMotd(Global.getDataDir().newVirtualFile("/motd"));
+		InternalFiles.setMotdBackup(Global.getDataDir().newVirtualFile("/motd_bak"));
+		InternalFiles.setSemicolonsIcon(Global.getDataDir().newVirtualFile("/semicolons-icon.jpg"));
+		// Create any non-existing files:
+		InternalFiles.getCmdHistory().createOnFilesystem();
+		InternalFiles.getCmdHistoryBackup().createOnFilesystem();
+		InternalFiles.getCmdHistoryMaxLength().createOnFilesystem();
+		InternalFiles.getMotd().createOnFilesystem();
+		InternalFiles.getMotdBackup().createOnFilesystem();
+		InternalFiles.getSemicolonsIcon().createOnFilesystem();
 		
-		sys.log("MAIN", InfoType.INFO, "Done.");
+		sys.log("INIT", InfoType.INFO, "Reinitializing environment...");
+		Env.updateEnv("$$ALL");
+		sys.log("INIT", InfoType.INFO, "Done.");
+		
+		sys.log("INIT", InfoType.INFO, "Enabling command history...");
+		Shell.initializeCommandHistory();
+		sys.log("INIT", InfoType.INFO, "Done.");
 		
 		/*sys.log("Initializing main frame...");
 		Main mainWindow = new Main();
@@ -114,7 +130,7 @@ public class Init {
 		new modules.ProtectedTextComponent(mainWindow.getMain().getMainWindow().cmdLine).unprotectAllText();*/
 		//mainWindow.getMainWindow().cmdLine.setText("");
 		//OpenLib.cmdLinePrepare();
-		sys.log("MAIN", InfoType.INFO, "Finished initialization part.");
+		sys.log("INIT", InfoType.INFO, "Finished initialization part.");
 		return true;
 	}
 }

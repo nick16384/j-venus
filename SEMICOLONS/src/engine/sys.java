@@ -29,4 +29,12 @@ public class sys {
 		}
 		fsep = newFSep;
 	}
+	
+	public static void shutdown(int exitCode) {
+		threads.WatchdogThread.shutdown(exitCode);
+	}
+	
+	public static boolean isShutdownSignalActive() {
+		return threads.WatchdogThread.isShutdownSignalActive();
+	}
 }
