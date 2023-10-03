@@ -3,6 +3,7 @@ package threads;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
+import jfxcomponents.GUIManager;
 import libraries.Global;
 import main.Main;
 import shell.Shell;
@@ -16,17 +17,15 @@ public class WatchdogThread2 {
 		watchdogThread2 = new Thread(null, new Runnable() {
 			public void run() {
 				Thread.currentThread().setPriority(Thread.MIN_PRIORITY); //1 is MIN_PRIORITY, 10 is MAX_PRIORITY
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-				}
+				
+				Global.waitUntilReady();
+				
 				while (true) {
 					if (Global.getCurrentPhase().equals(Runphase.RUN)) {
 						if (ThreadAllocation.isWDTActive()) {
 							
 							try {
-								if (Global.javafxEnabled && Main.jfxWinloader.getCmdLine() != null)
+								if (Global.javafxEnabled && GUIManager.getCmdLine() != null)
 									sys.log("WDT2", InfoType.INFO, "Not setting caret to last position");
 									// set jfx caret to last pos
 								else
@@ -41,7 +40,7 @@ public class WatchdogThread2 {
 							// This check often fails for no reason, so it is left out.
 							// TODO Prevent the shell from blanking out during start 50% of the time!!!
 							if (Global.javafxEnabled
-									&& Main.cmdLine.getText().equals("SHELL INIT")) {
+									&& GUIManager.getCmdLine().getText().equals("SHELL INIT")) {
 								System.err.println("What have I done to you?!");
 								System.err.println("The shell didn't initialize properly.");
 								//WatchdogThread.stopWithError(1, 15000, "The shell didn't initialize properly. Try again.");

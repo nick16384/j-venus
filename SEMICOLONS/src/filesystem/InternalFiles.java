@@ -7,6 +7,7 @@ public class InternalFiles {
 	private static VirtualFile motd;
 	private static VirtualFile motdBackup;
 	private static VirtualFile semicolonsIcon;
+	private static VirtualFile logFile;
 	public static VirtualFile getCmdHistory() {
 		return cmdHistory;
 	}
@@ -42,5 +43,11 @@ public class InternalFiles {
 	}
 	public static void setSemicolonsIcon(VirtualFile semicolonsIcon) {
 		InternalFiles.semicolonsIcon = semicolonsIcon;
+	}
+	public static VirtualFile getLogFile() {
+		return logFile;
+	}
+	public static void setLogFile(VirtualFile logFile) {
+		InternalFiles.logFile = logFile;
 	}
 }

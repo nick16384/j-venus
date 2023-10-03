@@ -23,6 +23,7 @@ public class CommandManagement {
 	private static Executor commandExecutor;
 	private static Map<Command, String> returnValues;
 	private static Command currentCommand;
+	private static volatile boolean disablePrompt;
 	
 	private static volatile boolean suspend = false;
 	
@@ -30,6 +31,7 @@ public class CommandManagement {
 		commandQueue = new ArrayBlockingQueue<>(MAX_COMMAND_QUEUE_SIZE);
 		commandExecutor = Executors.newSingleThreadExecutor();
 		returnValues = new HashMap<>();
+		disablePrompt = false;
 		
 		commandManagementThread = new Thread(() -> {
 			while (!sys.isShutdownSignalActive() && !suspend) {
@@ -100,13 +102,14 @@ public class CommandManagement {
 		if (lastCommand != null && !lastCommand.equals(currentCommand))
 			sys.log("CMGR", InfoType.CRIT, "Last command executed does not match queue head!");
 		
-		if (!currentCommand.getParams().contains("--noPrompt")) {
+		if (!disablePrompt) {
 			sys.log("CMGR", InfoType.STATUS, "Command "
 					+ currentCommand.getCommand()
 					+ " requested no prompt to be shown.");
 			Shell.print("\n");
 			Shell.showPrompt();
 		}
+		disablePrompt = false;
 	}
 	
 	public static void killCurrentIfRunning() {
@@ -122,6 +125,11 @@ public class CommandManagement {
 		boolean insertionSuccess = commandQueue.offer(cmd);
 		sys.log("CMGR", InfoType.DEBUG, "Command invokation: "
 				+ cmd.getCommand() + " : " + (insertionSuccess ? "SUCCESS" : "FAIL"));
+	}
+	
+	public static void invokeCommand(Command cmd, boolean disablePromptTemporary) {
+		disablePrompt = true;
+		invokeCommand(cmd);
 	}
 	
 	public static synchronized String waitForReturnValue(Command cmd) {

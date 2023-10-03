@@ -11,6 +11,7 @@ import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
+import jfxcomponents.GUIManager;
 import jfxcomponents.JFxGUIThread;
 import libraries.Global;
 import main.Main;
@@ -37,13 +38,10 @@ public final class WatchdogThread {
 		watchdogThread = new Thread(null, new Runnable() {
 			public final void run() {
 				sys.log("WDT", InfoType.STATUS, "Watchdog enabled.");
-				Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
+				Thread.currentThread().setPriority(1);
 
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException ie) {
-					sys.log("WATCHDOG", InfoType.ERR, "Watchdog startup sleep has been interrupted.");
-				}
+				Global.waitUntilReady();
+				
 				sys.log("WATCHDOG", InfoType.STATUS, "Watchdog idle now.");
 
 				while (Global.getCurrentPhase().equals(Runphase.INIT)) {
@@ -144,7 +142,7 @@ public final class WatchdogThread {
 				//====================================== CHECKING END ======================================
 
 				long activeTime = System.currentTimeMillis() - timeStart;
-				sys.log("STOPPING", InfoType.STATUS, "Active time: " + activeTime + "ms");
+				sys.log("STOPPING", InfoType.STATUS, "Total runtime: " + activeTime + "ms");
 				sys.log("STOPPING", InfoType.STATUS, "Saving log file to: "
 													+ Global.getLogFile().getAbsolutePath());
 				Shell.getCommandHistory().writeToFile();
@@ -152,7 +150,7 @@ public final class WatchdogThread {
 				// String logFilePath = "/var/J-Vexus_logs/" + "logfile1.txt";
 
 				sys.log("WATCHDOG", InfoType.STATUS, "Threads stopping...");
-				if (Global.javafxEnabled && JFxGUIThread.isGUIActive()) Main.jfxWinloader.stop();
+				if (Global.javafxEnabled && JFxGUIThread.isGUIActive()) Platform.exit();
 				System.exit(exitCode);
 			}
 		}, "WDT");
@@ -201,7 +199,7 @@ public final class WatchdogThread {
 	protected synchronized static final void stopWithError(int exitCode, int waitBeforeStop, String errMsg) {
 		try { Thread.sleep(1000); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		if (Global.javafxEnabled) {
-			Platform.runLater(() -> { Main.cmdLine.clear(); });
+			Platform.runLater(() -> { GUIManager.getCmdLine().clear(); });
 		} else {
 			new components.ProtectedTextComponent(Main.mainFrameAWT.getCmdLine()).unprotectAllText();
 			Main.mainFrameAWT.getCmdLine().setText("");

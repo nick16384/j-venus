@@ -38,7 +38,7 @@ public class KeyEventHandlers {
 		ShellWriteThread.updateShellStream();
 		//END UPDATE SHELL STREAM ==========================================================================
 		//Splitting WindowMain.cmdLine text into command
-		String[] lines = Main.cmdLine.getText().split("\n");
+		String[] lines = GUIManager.getCmdLine().getText().split("\n");
 		
 		String lastLine = lines[lines.length - 1];
 		
@@ -104,13 +104,14 @@ public class KeyEventHandlers {
 		
 		// A command was repeated already, so it needs to be removed first
 		if (Shell.getCommandHistory().getRepeatInRow() >= 1) {
-			Main.cmdLine.deleteText(
-					Main.cmdLine.getText().length() - Main.cmdLine.getLastWrittenText().length(),
-					Main.cmdLine.getText().length());
+			GUIManager.getCmdLine().deleteText(
+					GUIManager.getCmdLine().getText().length()
+					- GUIManager.getCmdLine().getLastWrittenText().length(),
+					GUIManager.getCmdLine().getText().length());
 		}
 		
 		// Text needs to be applied directly, so user can edit it.
-		Main.jfxWinloader.getCmdLine().appendText(insertion);
+		GUIManager.getCmdLine().appendText(insertion);
 		//========================================COMMAND REPEAT END============================================
 	}
 }

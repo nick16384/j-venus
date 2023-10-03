@@ -1,5 +1,5 @@
 /**
- * This class contains useful utilities and stores a variety of variables
+ * This class's sole purpose is to initialize all global variables at startup.
  */
 
 package libraries;
@@ -19,6 +19,7 @@ import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
 import filesystem.FileCheckUtils;
+import filesystem.InternalFiles;
 import filesystem.VirtualFile;
 import filesystem.VirtualizedLocation;
 import main.Main;
@@ -32,7 +33,7 @@ public class VariableInitializion {
 
 		if (System.getProperty("java.home") == null) {
 			System.err.println("INITVARS: The JAVA_HOME variable was not found.");
-			System.err.println("INITVARS: J-Vexus needs JDK installed in order to work. Exiting...");
+			System.err.println("INITVARS: SEMICOLONS needs JDK installed in order to work. Exiting...");
 			sys.shutdown(1);
 		}
 		Global.javaHome = new File(System.getProperty("java.home"));
@@ -54,7 +55,8 @@ public class VariableInitializion {
 		}
 		// Define log file, and create log stream
 		String logfileName = Global.getDateTime(true).replace("|", "_") + ".log";
-		Global.logfile = Global.getDataDir().newVirtualFile("/logs/" + logfileName);
+		if (InternalFiles.getLogFile() == null)
+			InternalFiles.setLogFile(Global.getDataDir().newVirtualFile("/logs/" + logfileName));
 		try {
 			Global.consoleLogStream = new PrintStream(Global.getLogFile());
 		} catch (FileNotFoundException fnfe) {
@@ -88,19 +90,25 @@ public class VariableInitializion {
 	}
 
 	private static final void initializeForLinux() {
-		Global.fsRoot = "/";
+		Global.FSRoot = new VirtualizedLocation("/");
 
 		// Check if another root folder was specified
 		// === SPECIAL ROOT FOLDER SPECIFIED ===
-		if (Arrays.asList(Main.argsMain).contains("--root-folder")
-				&& Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1] != null)
+		if (Main.argsMain.contains("--root-folder")
+				&& Main.argsMain.get(Main.argsMain.indexOf("--root-folder") + 1) != null)
 			try {
 				Global.RootDir = new VirtualizedLocation(
-						Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
+						Main.argsMain.get(Main.argsMain.indexOf("--root-folder") + 1));
 			} catch (Exception ex) {
 				sys.log("");
 				ex.printStackTrace();
 			}
+		if (Main.argsMain.contains("--log-file")
+				&& Main.argsMain.get(Main.argsMain.indexOf("--log-file") + 1) != null) {
+			sys.log("Specified log file location: " + Main.argsMain.get(Main.argsMain.indexOf("--log-file") + 1));
+			InternalFiles.setLogFile(
+					Global.FSRoot.newVirtualFile(Main.argsMain.get(Main.argsMain.indexOf("--log-file") + 1)));
+		}
 
 		if (Global.RootDir == null || !FileCheckUtils.isDir(Global.RootDir.getActualFile()))
 			Global.RootDir = new VirtualizedLocation("/etc/semicolons");
@@ -116,19 +124,25 @@ public class VariableInitializion {
 	}
 
 	private static final void initializeForWindows() {
-		Global.fsRoot = System.getenv("SYSTEMROOT") + "\\";
+		Global.FSRoot = new VirtualizedLocation(System.getenv("SYSTEMROOT") + "\\");
 
 		// Check if another root folder was specified
 		// === SPECIAL ROOT FOLDER SPECIFIED ===
-		if (Arrays.asList(Main.argsMain).contains("--root-folder")
-				&& Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1] != null)
+		if (Main.argsMain.contains("--root-folder")
+				&& Main.argsMain.get(Main.argsMain.indexOf("--root-folder") + 1) != null)
 			try {
 				Global.RootDir = new VirtualizedLocation(
-						Main.argsMain[Arrays.asList(Main.argsMain).indexOf("--root-folder") + 1]);
+						Main.argsMain.get(Main.argsMain.indexOf("--root-folder") + 1));
 			} catch (Exception ex) {
 				sys.log("");
 				ex.printStackTrace();
 			}
+		if (Main.argsMain.contains("--log-file")
+				&& Main.argsMain.get(Main.argsMain.indexOf("--log-file") + 1) != null) {
+			sys.log("Specified log file location: " + Main.argsMain.get(Main.argsMain.indexOf("--log-file") + 1));
+			InternalFiles.setLogFile(
+					Global.FSRoot.newVirtualFile(Main.argsMain.get(Main.argsMain.indexOf("--log-file") + 1)));
+		}
 
 		if (!FileCheckUtils.isDir(Global.RootDir.getActualFile()))
 			Global.RootDir = new VirtualizedLocation(

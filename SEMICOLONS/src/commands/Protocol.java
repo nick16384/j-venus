@@ -14,9 +14,9 @@ import engine.sys;
 public class Protocol {
 	private String name = "";
 	private int severity = 0;
-	private CommandOld[] commands;
+	private Command[] commands;
 	//private String returnVal = "";
-	public Protocol(String name, int severity, CommandOld[] commands) {
+	public Protocol(String name, int severity, Command[] commands) {
 		this.name = name;
 		this.severity = severity;
 		if (commands != null)
@@ -46,9 +46,9 @@ public class Protocol {
 		//Launch
 		//int index = 0;
 		sys.log("PRTCL", InfoType.DEBUG, "Command to execute after each other:");
-		for (CommandOld cmd : commands) { sys.log("PRTCL", InfoType.DEBUG, "> " + cmd.getFullCommand()); }
+		for (Command cmd : commands) { sys.log("PRTCL", InfoType.DEBUG, "> " + cmd.getFullCommand()); }
 		sys.log("PRTCL", InfoType.DEBUG, "Executing...");
-		for (CommandOld cmd : commands) {
+		for (Command cmd : commands) {
 			try {
 				cmd.start();
 			} catch (IOException ioe) {

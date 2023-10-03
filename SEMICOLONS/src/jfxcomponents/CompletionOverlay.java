@@ -38,24 +38,35 @@ import threads.ThreadAllocation;
 
 public class CompletionOverlay {
 	private static OverlayPopup overlayPopup;
-	
-	private static boolean currentCommandTypingIsFinished;
 
 	public static void configureElements(Stage primaryStage) {
 		overlayPopup = new OverlayPopup(primaryStage);
 		
-		currentCommandTypingIsFinished = false;
+		overlayPopup.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			if (!event.getCode().equals(KeyCode.ENTER)
+					&& !event.getCode().equals(KeyCode.BACK_SPACE)
+					&& !event.getCode().equals(KeyCode.TAB))
+			showOverlay(primaryStage); // Only works, if hiddenLock is false
+		});
 		
 		// TODO Show overlay again, if next command is being typed
 		// Maybe use main.Main.commandRepeatInRow
 	}
 
-	protected static Popup getOverlay() {
+	protected static OverlayPopup getOverlay() {
 		return overlayPopup;
 	}
 	
 	protected static void showOverlay(Stage primaryStage) {
+		overlayPopup.show(primaryStage);
+	}
+	
+	protected static void disableLockAndShowOverlay(Stage primaryStage) {
 		overlayPopup.unlockHidden();
 		overlayPopup.show(primaryStage);
+	}
+	
+	protected static void commandTypingIsFinished() {
+		overlayPopup.unlockHidden();
 	}
 }

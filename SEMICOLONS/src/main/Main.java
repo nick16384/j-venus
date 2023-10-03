@@ -5,35 +5,21 @@ import java.lang.Exception;
 
 import javax.swing.JFrame;
 
-import components.CommandHistory;
-
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.List;
 
 import engine.InfoType;
 import engine.sys;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import jfxcomponents.JFxWinloader;
-import jfxcomponents.PartiallyEditableInlineCSSTextArea;
-import libraries.VariableInitializion;
 import shell.Shell;
 import libraries.Global;
-import threads.ThreadAllocation;
 import threads.WatchdogThread;
 
 public class Main extends JFrame {
-	public static String[] argsMain;
-	
-	public static PartiallyEditableInlineCSSTextArea cmdLine;
-	public static Font shellFont;
-	public static final Color DEFAULT_SHELL_COLOR = Color.LIME;
-	
-	public static JFxWinloader jfxWinloader;
+	public static List<String> argsMain;
 	
 	public static void main(String[] args) {
 		//==================================== INIT ====================================
-		argsMain = args;
+		argsMain = Arrays.asList(args);
 		sys.log("MAIN", InfoType.INFO, "Commandline used for this VM (if empty, probably running on Windows):\n"
 				+ ProcessHandle.current().info().commandLine().get());
 		sys.log("MAIN", InfoType.INFO, "Parent(s) launch info:");
@@ -67,8 +53,6 @@ public class Main extends JFrame {
 		} else {
 			sys.log("MAIN", InfoType.INFO, "Using default JavaFX window loader.");
 			try {
-				jfxWinloader = new JFxWinloader();
-				//TODO load GUI in thread
 				Global.javafxEnabled = true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -96,7 +80,6 @@ public class Main extends JFrame {
 		return Main.mainFrameAWT;
 	}
 	
-	//Getting some stats about SEMICOLONS
 	/**
 	 * Current SEMICOLONS runtime in milliseconds since program start (idle watchdog).
 	 * @return

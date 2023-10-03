@@ -1,17 +1,11 @@
 package jfxcomponents;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.InlineCssTextArea;
 
 import awtcomponents.AWTANSI;
 import commands.CommandManagement;
 import engine.InfoType;
-import engine.Runphase;
 import engine.sys;
 import filesystem.VirtualFile;
 import javafx.application.Application;
@@ -28,52 +22,43 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import libraries.Global;
 import main.Main;
 import shell.Shell;
-import threads.ThreadAllocation;
 
-public class JFxWinloader extends Application {
-	public static final int CURSOR_WIDTH = 13;
-	public static final int WINDOW_WIDTH = 900;
-	public static final int WINDOW_HEIGHT = 550;
-	//private TextArea Main.cmdLine;
-	//private String Main.wqtest = "";
+public class WindowGUI extends Application {
 	
-	public void loadGUI(String[] args) {
-		sys.log("JFX", InfoType.DEBUG, "Running JavaFX init()...");
-		try { init(); } catch (Exception ex) { ex.printStackTrace(); }
-		sys.log("JFX", InfoType.INFO, "Starting JavaFX application...");
-		Application.launch(args);
-	}
-	
-	public void stop() {
-		sys.log("JFX", InfoType.INFO, "Stopping JavaFX application...");
-		Platform.exit();
-		sys.log("JFX", InfoType.INFO, "Stopping JavaFX application done.");
+	protected void launch() {
+		// Convert args List to Array
+		Application.launch(Main.argsMain.stream().toArray(String[]::new));
 	}
 	
 	@Override
-	public void start(Stage primaryStage) {
+	public void init() {
+		sys.log("GUI", InfoType.DEBUG, "Window init currently not necessary (empty).");
+	}
+	
+	@Override
+	public void start(Stage primaryStage) throws Exception {
 		sys.log("JFX", InfoType.INFO, "Loading JavaFX window :)");
 		
 		try {
 			primaryStage.setTitle("S.E.M.I.C.O.L.O.N. Shell " + Global.getVersion());
 			
-			Main.cmdLine = new PartiallyEditableInlineCSSTextArea("SHELL INIT");
+			GUIManager.cmdLine = new PartiallyEditableInlineCSSTextArea("SHELL INIT");
 			
-			Main.cmdLine.setWrapText(true);
-			Main.cmdLine.setBackground(new Background(
+			GUIManager.cmdLine.setWrapText(true);
+			GUIManager.cmdLine.setBackground(new Background(
 					new BackgroundFill(Paint.valueOf("BLACK"), CornerRadii.EMPTY, Insets.EMPTY)));
 			
 			// The cursor is the mouse symbol when hovering
-			Main.cmdLine.setCursor(Cursor.TEXT);
+			GUIManager.cmdLine.setCursor(Cursor.TEXT);
 			
 	        //Main.cmdLine.setEffect(new GaussianBlur(0));
-	        Main.cmdLine.setCache(true);
+			// Increases performance in shell for more RAM usage
+	        GUIManager.cmdLine.setCache(true);
 			
 			Image icon = null;
 			VirtualFile iconFile = Global.getDataDir().newVirtualFile("/semicolons-icon.png");
@@ -83,16 +68,15 @@ public class JFxWinloader extends Application {
 			catch (Exception ex) { ex.printStackTrace(); }
 			primaryStage.getIcons().add(icon);
 			
+			GUIManager.cmdLine.relocate(0, 0);
 			
-			Main.cmdLine.relocate(0, 0);
-			
-			Main.cmdLine.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			GUIManager.cmdLine.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				
 				// Command execute and command repeat
 				if (event.getCode().equals(KeyCode.ENTER)) {
 					event.consume();
-					System.out.println("Enter was pressed");
 					try {
+						CompletionOverlay.commandTypingIsFinished();
 						KeyEventHandlers.actionOnEnter();
 					} catch (Exception ex) {
 						sys.log("JFX", InfoType.ERR, "Exception in command extractor / formatter: "
@@ -120,6 +104,10 @@ public class JFxWinloader extends Application {
 						Shell.showPrompt();
 						ex.printStackTrace();
 					}
+				} else if (event.getCode().equals(KeyCode.TAB)) {
+					// Command suggestion is requested
+					event.consume();
+					CompletionOverlay.disableLockAndShowOverlay(primaryStage);
 				}
 				
 				if (event.getCode().equals(KeyCode.PAGE_UP)) {
@@ -130,9 +118,12 @@ public class JFxWinloader extends Application {
 					//Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
 					//TODO show big number on screen for font size change
 				}
+				
+				if (!CompletionOverlay.getOverlay().isShowing())
+					CompletionOverlay.getOverlay().fireEvent(event);
 			});
 			
-			Main.cmdLine.setOnKeyPressed((event) -> {
+			GUIManager.cmdLine.setOnKeyPressed((event) -> {
 				if (new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN).match(event)) {
 					sys.log("JFX", InfoType.DEBUG, "User pressed CTRL + C");
 					Shell.print(AWTANSI.D_Cyan, "^C");
@@ -148,10 +139,10 @@ public class JFxWinloader extends Application {
 			
 			// Finalization and stage showing
 			StackPane root = new StackPane();
-			root.getChildren().add(Main.cmdLine);
-			root.getChildren().add(new VirtualizedScrollPane<InlineCssTextArea>(Main.cmdLine));
-			Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-			configureCssStylesheet(scene);
+			root.getChildren().add(GUIManager.cmdLine);
+			root.getChildren().add(new VirtualizedScrollPane<InlineCssTextArea>(GUIManager.cmdLine));
+			Scene scene = new Scene(root, GUIManager.WINDOW_WIDTH, GUIManager.WINDOW_HEIGHT);
+			GUIManager.configureCssStylesheet(scene);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
@@ -167,70 +158,9 @@ public class JFxWinloader extends Application {
 		}
 	}
 	
-	public InlineCssTextArea getCmdLine() {
-		return Main.cmdLine;
-	}
-	
-	public void appendText(String text, Color color) {
-		sys.log("JFX", InfoType.DEBUG, "Appending new text to cmdLine with " + text.length() + " characters.");
-		
-		if (Global.getCurrentPhase().equals(Runphase.RUN) && Main.cmdLine != null) {
-			// Enqueue cmdLine write in JavaFX thread
-			Platform.runLater(() -> {
-				try {
-					Main.cmdLine.appendText(text);
-					Main.cmdLine.setReadOnlyTo(Main.cmdLine.getText().length());
-					sys.log("JFX", InfoType.DEBUG, "Text write color hex: (0x)" + color.toString().substring(2, 8));
-					// Apply text color on new segment:
-					Main.cmdLine.setStyle(Main.cmdLine.getText().length() - text.length(),
-										  Main.cmdLine.getText().length(),
-										  "-fx-fill: #" + color.toString().substring(2, 8) + ";");
-				} catch (Exception ex) {
-					sys.log("JFX", InfoType.WARN, "Writing text to cmdLine failed.");
-					ex.printStackTrace();
-				}
-			});
-			Platform.requestNextPulse();
-		} else {
-			sys.log("JFX", InfoType.WARN, "Appending text not possible, because Main.cmdLine is null.");
-		}
-	}
-	
-	private void configureCssStylesheet(Scene scene) {
-		File cssFile = Global.getDataDir().newVirtualFile("/consoleStyle/default-stylesheet.css");
-		
-		createCssStylesheetFileIfNotExisting(cssFile);
-		scene.getStylesheets().clear();
-		sys.log("JFX", InfoType.INFO, "Loading external stylesheet...");
-		scene.getStylesheets().add("file:///" + cssFile.getAbsolutePath().replace("\\", "/"));
-	}
-	
-	private void createCssStylesheetFileIfNotExisting(File cssFile) {
-		String cssData =
-				".root {\n"
-				+ "	-fx-font-family: \"Terminus (TTF)\";\n"
-				+ "	-fx-font: 12pt \"Terminus (TTF)\";\n"
-				+ "}\n"
-				+ "\n"
-				+ ".caret {\n"
-				+ "	-fx-fill: #00ff00;\n"
-				+ "	-fx-stroke: #00ff00;\n"
-				+ "	-fx-scale-x: 8;\n"
-				+ "	-fx-scale-y: 0.9;\n"
-				+ "	\n"
-				+ "	/*Move caret to right so it does not overlap with text*/\n"
-				+ "	-fx-translate-x: 4;\n"
-				+ "}";
-		
-		if (!filesystem.FileCheckUtils.exists(cssFile)) {
-			try {
-				sys.log("JFX:CSS", InfoType.INFO, "External CSS stylesheet does not exist. Creating default file.");
-				cssFile.createNewFile();
-				Files.writeString(cssFile.toPath(), cssData, StandardOpenOption.WRITE);
-			} catch (IOException ioe) {
-				sys.log("JFX:CSS", InfoType.ERR, "Error creating new default CSS stylesheet.");
-				sys.log("JFX:CSS", InfoType.ERR, "Running in fallback color mode.");
-			}
-		}
+	public void stop() {
+		sys.log("JFX", InfoType.INFO, "Stopping JavaFX application...");
+		Platform.exit();
+		sys.log("JFX", InfoType.INFO, "Stopping JavaFX application done.");
 	}
 }

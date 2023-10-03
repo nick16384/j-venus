@@ -16,7 +16,9 @@ import javax.swing.text.Element;
 import awtcomponents.AWTANSI;
 import engine.Runphase;
 import engine.sys;
+import filesystem.InternalFiles;
 import filesystem.VirtualizedLocation;
+import jfxcomponents.GUIManager;
 import main.Main;
 
 /**
@@ -24,10 +26,10 @@ import main.Main;
  */
 
 public class Global {
-	protected static final String VERSION = "23.08 IOTA";
+	protected static final String VERSION = "23.10 IOTA";
 	//Message of the day -> start msg before any commands e.g. Welcome to ...
 	protected static String motd = "J-Venus Version " + VERSION + " Warning: Beta state, problems may occur.\n"
-			+ "Copyleft () 2021 - 2023 The J-Venus Project. All rights reserved.\n"
+			+ "Copyleft () 2021 - 2023 The SEMICOLONS Project. All rights reserved.\n"
 			+ "GNU General Public License v3. Created with Eclipse Oracle.\n"
 			+ "Warning: Log is currently very verbose due to debugging reasons.\n"
 			+ "Will be reduced within alpha versions.\n";
@@ -37,13 +39,13 @@ public class Global {
 	protected static String hostname = "";
 	public static final int CMDLINE_MAX_LINE_COUNT = 26;
 	public static final int DEFAULT_MAX_HISTORY_SIZE = 4096;
-	protected static String fsRoot = "";
 	public static PrintStream consoleLogStream = null;
 	public static String consoleString = "";
 	protected static Thread mainThread;
 	public final static String fsep = FileSystems.getDefault().getSeparator();
 	protected static String osName = "UnknownOS";
 	protected static Map<String, File> extCommands = new HashMap<>();
+	protected static VirtualizedLocation FSRoot;
 	protected static VirtualizedLocation RootDir;
 	protected static VirtualizedLocation TempDir;
 	protected static VirtualizedLocation BinDir;
@@ -53,10 +55,11 @@ public class Global {
 	
 	protected static VirtualizedLocation DataDir;
 	protected static VirtualizedLocation HomeDir;
+	
+	@Deprecated
 	protected static File javaHome;
+	@Deprecated
 	protected static File javaExec;
-	//Log file to save consoleLogStream to
-	protected static File logfile;
 	protected static Runphase currentPhase = Runphase.PREINIT;
 	// Program arguments:
 	public static boolean fullscreen = false;
@@ -89,7 +92,7 @@ public class Global {
 		return HomeDir;
 	}
 	public static File getLogFile() {
-		return logfile;
+		return InternalFiles.getLogFile();
 	}
 	public static Map<String, File> getExtCommands() {
 		return extCommands;
@@ -107,7 +110,7 @@ public class Global {
 		return mainThread;
 	}
 	public static String getFSRoot() {
-		return fsRoot;
+		return FSRoot.getAbsolutePath();
 	}
 	public static void setCurrentDir(String newDir) {
 		path = newDir;
@@ -142,6 +145,9 @@ public class Global {
 	
 	public static void setNextRunphase() {
 		currentPhase = Runphase.getNextPhase(currentPhase);
+		if (currentPhase.equals(Runphase.RUN)) {
+			synchronized (Runphase.RUN) { Runphase.RUN.notifyAll(); }
+		}
 		sys.log("--- RUNPHASE CHANGED: " + currentPhase.toString() + " ---\n"
 				+ currentPhase.getDescription());
 	}
@@ -154,5 +160,15 @@ public class Global {
 	
 	public static Runphase getCurrentPhase() {
 		return currentPhase;
+	}
+	
+	public static void waitUntilReady() {
+		while (!currentPhase.equals(Runphase.RUN)
+				|| GUIManager.getCmdLine() == null) {
+			synchronized (Runphase.RUN) {
+				try { Runphase.RUN.wait(50); }
+				catch (InterruptedException ie) { ie.printStackTrace(); }
+			}
+		}
 	}
 }

@@ -2,15 +2,20 @@ package jfxcomponents;
 
 import static org.reactfx.EventStreams.nonNullValuesOf;
 
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Random;
 
 import org.reactfx.EventStream;
 import org.reactfx.EventStreams;
 import org.reactfx.value.Var;
 
+import engine.InfoType;
+import engine.sys;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -27,9 +32,8 @@ import javafx.stage.Window;
 import main.Main;
 
 public class OverlayPopup extends Popup {
-	private Stage primaryStage;
-	private TextArea overlayArea;
-	private int selectionIndex;
+	private ListView<String> selectionListView;
+	private volatile int selectionIndex;
 	private boolean hiddenLock;
 	
 	public OverlayPopup(Stage primaryStage) {
@@ -38,31 +42,38 @@ public class OverlayPopup extends Popup {
 		this.setAnchorLocation(AnchorLocation.CONTENT_BOTTOM_LEFT);
 		this.setAutoFix(true);
 		
-		this.hiddenLock = true;
-		this.primaryStage = primaryStage;
-		this.selectionIndex = 0;
+		this.hiddenLock = false;
+		selectionIndex = 0;
 		
-		// The overlay steals focus of primaryStage, so text needs to be transferred.
+		// The overlay steals focus of cmdLine, so text needs to be transferred.
 		this.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-			// Applying text the direct way to save some time. (Instead of using SWT)
-			// Note that ENTER needs no extra text to be appended,
-			// since the KeyEvent is handled in JFxWinloader
-			if (!event.getCode().equals(KeyCode.ENTER)
-					&& !event.getCode().equals(KeyCode.BACK_SPACE)
-					&& !event.getCode().equals(KeyCode.TAB))
-				Main.cmdLine.appendText(event.getText());
+			if (!this.isShowing())
+				return;
 			
 			if (event.getCode().equals(KeyCode.BACK_SPACE)) {
-				Main.cmdLine.deletePreviousChar();
-				this.hide();
+				event.consume();
+				this.hideUntilReactivated();
 			}
 			
 			if (event.getCode().equals(KeyCode.TAB)) {
-				event.consume(); // Consume to not trigger JFxWinloader's command repeat
-				addOption("se4a8nt9zaw t9a");
+				event.consume();
+				addOption("SEL" + (new Random().nextInt(100000)));
 				select(selectionIndex + 1);
 				addSelectionToCmdline();
 			}
+			
+			if (event.getCode().equals(KeyCode.UP)) {
+				event.consume();
+				select(selectionIndex - 1);
+				addSelectionToCmdline();
+			} else if (event.getCode().equals(KeyCode.DOWN)) {
+				event.consume();
+				select(selectionIndex + 1);
+				addSelectionToCmdline();
+			}
+			
+			// If event is none of the above:
+			Platform.runLater(() -> GUIManager.getCmdLine().fireEvent(event));
 		});
 		
 		// Hide suggestions on BACKSPACE and SHIFT + TAB
@@ -77,33 +88,29 @@ public class OverlayPopup extends Popup {
 		// It is strongly shrinked and modified, so here is the link of the original demo if you're interested:
 		// https://github.com/FXMisc/RichTextFX/blob/master/richtextfx-demos/src/main/java/org/fxmisc/richtext/demo/PopupDemo.java
 		
-		EventStream<Optional<Bounds>> caretBounds = nonNullValuesOf(Main.cmdLine.caretBoundsProperty());
+		EventStream<Optional<Bounds>> caretBounds = nonNullValuesOf(GUIManager.getCmdLine().caretBoundsProperty());
 		
 		EventStreams.combine(caretBounds, Var.newSimpleVar(true).values())
 				.subscribe(tuple3 -> {
 					Optional<Bounds> opt = tuple3._1;
 					if (opt.isPresent()) {
 						Bounds b = opt.get();
-						this.setX(b.getMaxX() - JFxWinloader.CURSOR_WIDTH);
+						this.setX(b.getMaxX() - GUIManager.CURSOR_WIDTH);
 						this.setY(b.getMaxY() + 0);
 					}
 				});
 		
 		// Mystery caret follow code ends here.
 
-		overlayArea = new TextArea();
-		overlayArea.setText("OVERLAY TEST");
-		overlayArea.setOpacity(1.0);
-		overlayArea.setBackground(
+		selectionListView = new ListView<>();
+		selectionListView.setBackground(
 				new Background(
 						new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-		overlayArea.setMinSize(200, 100);
-		overlayArea.setMaxSize(200, 100);
-		overlayArea.setEditable(false);
-		// TODO Place overlay below cursor (or prompt)
-		// overlayArea.setTranslateX(-400);
+		selectionListView.setMinSize(200, 100);
+		selectionListView.setMaxSize(200, 100);
+		selectionListView.setEditable(false);
 
-		this.getContent().add(overlayArea);
+		this.getContent().add(selectionListView);
 	}
 	
 	@Override
@@ -124,45 +131,59 @@ public class OverlayPopup extends Popup {
 	public void show(Window owner) {
 		if (hiddenLock)
 			return;
+		select(0);
 		Platform.runLater(() -> {
 			super.show(owner);
 		});
 	}
 	
-	public void addOption(String suggestion) {
-		if (suggestion.trim().contains("\n"))
-			return;
-		overlayArea.appendText("\n" + suggestion.trim());
+	public void changeOption(int index, String newSuggestion) {
+		index = getValidIndexFrom(index);
+		// TODO Implement changeable option
 	}
 	
-	public void select(int fromUpToDown) {
-		selectionIndex = fromUpToDown;
+	public void addOption(String suggestion) {
+		if (suggestion == null || suggestion.isBlank() || suggestion.trim().contains("\n"))
+			return;
+		selectionListView.getItems().add(suggestion.trim());
+	}
+	
+	/**
+	 * Returns a valid index inside the selectionListView.
+	 * @apiNote A selection index of -1 causes the index to wrap around to the selectionListView end.
+	 *  If the index is one above the selectionListView max index, then 0 will be returned.
+	 */
+	private int getValidIndexFrom(int index) {
+		// Check for wrap around
+		index = index == -1 ? selectionListView.getItems().size() - 1 : index;
+		index = index == selectionListView.getItems().size() ? 0 : index;
 		
-		overlayArea.deselect();
-		String[] lines = overlayArea.getText().split("\n");
+		// Filter any invalid numbers (out of range)
+		index = index <= 0 ? 0 : index;
+		index = index > selectionListView.getItems().size() - 1 ? selectionListView.getItems().size() - 1 : index;
 		
-		int selectionStart = 0;
-		int selectionEnd = 0;
-		
-		for (int i = 0; i < fromUpToDown - 1; i++) {
-			selectionStart += lines[i].length() + 1;
+		if (index < 0 || index > selectionListView.getItems().size() - 1) {
+			sys.log("POPUP", InfoType.WARN, "Nothing to select in completion overlay.");
+			return 0;
 		}
 		
-		for (int i = 0; i < fromUpToDown; i++) {
-			selectionEnd += lines[i].length() + 1;
-		}
-		
-		overlayArea.selectRange(selectionStart, selectionEnd);
+		return index;
 	}
 	
 	private String getCurrentSelection() {
-		return overlayArea.getSelectedText().trim();
+		return selectionListView.getSelectionModel().getSelectedItem();
+	}
+	
+	private void select(int index) {
+		index = getValidIndexFrom(index);
+		selectionIndex = index;
+		selectionListView.getSelectionModel().select(index);
 	}
 	
 	private void addSelectionToCmdline() {
-		Main.cmdLine.deleteText(
-				Main.cmdLine.getReadOnlyToIndex(),
-				Main.cmdLine.getText().length());
-		Main.cmdLine.appendText(this.getCurrentSelection());
+		GUIManager.getCmdLine().deleteText(
+				GUIManager.getCmdLine().getReadOnlyToIndex(),
+				GUIManager.getCmdLine().getText().length());
+		GUIManager.getCmdLine().appendText(this.getCurrentSelection());
 	}
 }

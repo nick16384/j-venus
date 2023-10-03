@@ -46,7 +46,7 @@ public class JFXANSI {
 				|| Global.getCurrentPhase().equals(Runphase.INIT))
 			return;
 		
-		if (Main.cmdLine != null)
+		if (GUIManager.getCmdLine() != null)
 			insertNewString(s, c); //Private method
 	}
 
@@ -171,7 +171,7 @@ public class JFXANSI {
 	 * @param aset
 	 */
 	private static void insertNewString(String s, Color c) {
-		try { Main.jfxWinloader.appendText(s, c); } 
+		try { GUIManager.appendText(s, c); } 
 		catch (Exception e) {
 			sys.log("JFXANSI", InfoType.ERR, "Shell text write failed. Stacktrace below:");
 			e.printStackTrace();

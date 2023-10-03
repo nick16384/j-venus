@@ -8,6 +8,7 @@ import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
+import jfxcomponents.GUIManager;
 import libraries.Global;
 import main.Main;
 import threads.ShellWriteThread;
@@ -171,17 +172,17 @@ public class Shell {
 	 * Clears Main.cmdLine (set text to "")
 	 */
 	public static void clearCmdLine() {
-		if (Main.cmdLine != null) {
+		if (GUIManager.getCmdLine() != null) {
 			Platform.runLater(() -> {
-				Main.cmdLine.clear();
+				GUIManager.getCmdLine().clear();
 			});
 		}
 	}
 	
 	public static void triggerScrollUpdate() {
-		if (Main.cmdLine != null) {
+		if (GUIManager.getCmdLine() != null) {
 			Platform.runLater(() -> {
-				Main.cmdLine.requestFollowCaret();
+				GUIManager.getCmdLine().requestFollowCaret();
 				Platform.requestNextPulse();
 			});
 		}

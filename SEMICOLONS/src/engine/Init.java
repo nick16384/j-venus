@@ -56,6 +56,7 @@ public class Init {
 			System.out.println("\t--root-folder \t Set another root folder instead of the default defined one.");
 			System.out.println("\t--debug, -v, --verbose  Enable debugging and status messages.");
 			System.out.println("\t--silent, --quiet \t Only show warnings and errors.");
+			System.out.println("\t--log-file \t\t Set the log file location on the filesystem.");
 			System.exit(0);
 		}
 		if (vmArgs.contains("--single-threaded")) {

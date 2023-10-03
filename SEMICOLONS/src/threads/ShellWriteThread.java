@@ -6,6 +6,7 @@ import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import internalCommands.System_Cause_Error_Termination;
+import jfxcomponents.GUIManager;
 import libraries.Global;
 import main.Main;
 import shell.DoubleTextBuffer;
@@ -20,11 +21,9 @@ public class ShellWriteThread {
 	
 	protected static void initialize() {
 		shellWriteThread = new Thread(() -> {
-			while (!Global.getCurrentPhase().equals(Runphase.RUN)
-					|| Main.jfxWinloader == null
-					|| Main.jfxWinloader.getCmdLine() == null) {
-				try { Thread.sleep(50); } catch (InterruptedException ie) {}
-			}
+			
+			Global.waitUntilReady();
+			
 			// Interrupt itself to write text from writeBuffer before loop started.
 			// Normally, notify() is used, but a notify flag is not kept so by the time,
 			// the loop is reached, the notify signal is already gone.
@@ -41,13 +40,15 @@ public class ShellWriteThread {
 					if (writeBuffer.readFromInactive().isBlank())
 						continue;
 					
+					// jfx.GUIManager is now static so change accordingly in all other classes
+					
 					writeBuffer.swapActive();
 					sys.log("SWT", InfoType.DEBUG, "Swapped active buffer, writing to shell");
 					
 					// =========================== WRITE TO SHELL ===========================
 					if (Global.javafxEnabled) {
 						jfxcomponents.JFXANSI.appendANSI(
-								Main.jfxWinloader.getCmdLine(), writeBuffer.readFromActive());
+								GUIManager.getCmdLine(), writeBuffer.readFromActive());
 					} else {
 						try { awtcomponents.AWTANSI.appendANSI(
 								Main.mainFrameAWT.getCmdLine(), writeBuffer.readFromActive());
@@ -87,8 +88,7 @@ public class ShellWriteThread {
 		synchronized (swtMonitor) {
 			writeBuffer.appendToInactive(text);
 			if (Global.getCurrentPhase().equals(Runphase.RUN)
-					&& Main.jfxWinloader != null
-					&& Main.jfxWinloader.getCmdLine() != null) {
+					&& GUIManager.getCmdLine() != null) {
 				swtMonitor.notify();
 			}
 		}
