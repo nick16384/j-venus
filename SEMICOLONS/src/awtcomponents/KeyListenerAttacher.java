@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import javax.swing.text.BadLocationException;
 
+import commands.Command;
 import engine.InfoType;
 import engine.sys;
 import filesystem.InternalFiles;
@@ -37,9 +38,8 @@ public class KeyListenerAttacher {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-					main.Main.tabCountInRow = 0;
 					//UPDATE SHELL STREAM ==============================================================================
-					ThreadAllocation.getSWT().updateShellStream();
+					sys.log("AWT", InfoType.DEBUG, "Not updating shell stream.");
 					//END UPDATE SHELL STREAM ==========================================================================
 					//Splitting WindowMain.cmdLine text into command
 					String[] lines = WindowMain.cmdLine.getText().split("\n");
@@ -78,7 +78,7 @@ public class KeyListenerAttacher {
 								sys.log("MAIN", InfoType.DEBUG, "Running '" + fullCommand + "'");
 								sys.log("Subcommand: " + subCommand);
 								try {
-									commands.CommandOld cmd = new commands.CommandOld(subCommand);
+									Command cmd = new Command(subCommand);
 									cmd.start();
 									sys.log("New thread started (subCommand placed into cmdQueue)");
 									//For returnVal, try:
@@ -99,68 +99,14 @@ public class KeyListenerAttacher {
 							}
 						}
 						//=========================ADD FULLCMD TO HISTORY===============================
-						main.Main.commandHistory.add(fullCommand);
-						try {
-							String history = InternalFiles.getCmdHistoryASCII().readContents();
-							int max_history_size =
-									Integer.parseInt(
-											InternalFiles.getCmdHistoryASCIIMaxLength().readContents().trim());
-							//Remove first entry of history until size of entries is below count in cmd_history_max_length
-							while (history.split("\n").length > max_history_size) {
-								InternalFiles.getCmdHistoryASCII().writeString(
-										history.replaceFirst(history.split("\n")[0], ""), StandardOpenOption.WRITE);
-							}
-							InternalFiles.getCmdHistoryASCII().writeString(fullCommand + "\n", StandardOpenOption.APPEND);
-						} catch (NumberFormatException nfe) {
-							sys.log("MAIN", InfoType.WARN, "Parsing cmd_history_max_length failed. Check file exists" +
-									" and contains a number below 2.147.483.647");
-						}
+						sys.log("AWT", InfoType.WARN, "Command repeat in AWT disabled.");
 						//============================END ADD FULLCMD TO HISTORY==============================
 					} else {
 						Shell.showPrompt();
 					}
 				} else if (e.getKeyChar() == KeyEvent.VK_TAB) {
 					//========================================COMMAND REPEAT============================================
-					main.Main.tabCountInRow++;
-					try {
-						new components.ProtectedTextComponent(WindowMain.cmdLine).unprotectAllText();
-						//Remove last edited line in WindowMain.cmdLine, reappend without last entered command
-						WindowMain.cmdLine.getStyledDocument().remove(WindowMain.cmdLine.getText().lastIndexOf("\n") + 1,
-								WindowMain.cmdLine.getText().substring(WindowMain.cmdLine.getText().lastIndexOf("\n")).length());
-						new components.ProtectedTextComponent(WindowMain.cmdLine).protectText(0, WindowMain.cmdLine.getText().length());
-					} catch (BadLocationException ble) {
-						sys.log("KLA", InfoType.ERR, "Command repeat error: Could not remove last line.");
-					} catch (NullPointerException npe) {
-						sys.log("KLA", InfoType.ERR, "Command repeat error: main.mainFrame is null.");
-					}
-					Shell.showPrompt();
-					main.Main.commandHistory.clear();
-					//Add all entries of cmd_history to LinkedList main.Main.commandHistory
-					main.Main.commandHistory.addAll(
-							Arrays.asList(
-									InternalFiles.getCmdHistoryASCII().readContents().split("\n")));
-					
-					if (main.Main.tabCountInRow > main.Main.commandHistory.size()) {
-						Toolkit.getDefaultToolkit().beep();
-						sys.log("MAIN", InfoType.INFO, "Command history end reached");
-					} else if (main.Main.tabCountInRow == 1) {
-						//Write out last command without it getting protected (..., true)
-						sys.log("REPEAT", InfoType.DEBUG, "Command repeat: "
-								+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
-						Shell.print(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
-					} else {
-						//TODO Find some sort of replaceLast() \/ -------------------
-						/*try {
-							WindowMain.cmdLine.getStyledDocument().remove(
-									WindowMain.cmdLine.getText().indexOf(main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow + 1)),
-									main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow + 1).length());
-						} catch (BadLocationException ble) {
-							OpenLib.logWrite("MAIN", 3, "Command repeat error: Could not remove old command");
-						}*/
-						sys.log("REPEAT", InfoType.DEBUG, "Command repeat(" + main.Main.tabCountInRow + "): "
-								+ main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow));
-						Shell.print(1, "HIDDEN", main.Main.commandHistory.get(main.Main.commandHistory.size() - main.Main.tabCountInRow), true);
-					}
+					sys.log("AWT", InfoType.WARN, "Command repeat in AWT disabled.");
 					//========================================COMMAND REPEAT END============================================
 				}
 			}

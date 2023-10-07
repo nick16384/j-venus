@@ -8,11 +8,7 @@ import java.nio.file.attribute.PosixFileAttributeView;
 
 import engine.InfoType;
 import engine.sys;
-<<<<<<< HEAD
 import libraries.Global;
-=======
-import libraries.VarLib;
->>>>>>> 90664cc5e3f79d38ab54e22e5d5fe99879274032
 
 /**
  * This class contains utilities for the following file checks:
