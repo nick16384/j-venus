@@ -1,7 +1,10 @@
 ## S.E.M.I.C.O.L.O.N.S.
+An advanced Java written shell / console for any operating system.
+
+## What does the abbreviation mean?
 <img align="right" src="https://meinwebserver.non3dd1yd61r0h6y.myfritz.net/for-external-access/semicolons-icon.png">
 <!-- This text segment has to be HTML formatted, because it's right next to the image -->
-or: <br>
+Well, <br>
 <b>S</b>uper <br>
 <b>E</b>nhanced <br>
 <b>M</b>ultithreaded <br>
@@ -56,14 +59,16 @@ semicolons/data/cmd_history_max_length\
 ## Current development status:
 The following list lists all current issues and features to be implemented.
 Be aware, that it might not be fully up to date, because this list isn't updated daily.
-- [ ] ⛔ \[Feature] Add "undo" command for file operation (after e.g. accidental file deletion)
-- [ ] ⛔ \[Feature] Add support for command interaction (Bi-directional streams)
-- [ ] 🔁 \[Feature] Live syntax highlighting, as user types (JavaFX only, if.)
-- [x] ✔️ \[Bug/Issue] Make command executable, even if caret is on the middle of it
-- [x] ✔️ \[Bug/Issue] Don't allow shell text to be edited by the user
-- [ ] ⛔ \[Feature] Bi-Directional Network communication (User types and the other shell on another machine sees it)
-- [ ] ⛔ \[Feature] Slight transparency for window on systems, that support it
-- [ ] 🔁 \[Feature] Add keyboard shortcuts (e.g. CTRL + C for SIGTERM)
+- [ ] 1. ⛔ \[Feature] Add "undo" command for file operation (after e.g. accidental file deletion)
+- [ ] 2. ⛔ \[Feature] Add support for command interaction (Bi-directional streams)
+- [ ] 3. 🔁 \[Feature] Live syntax highlighting, as user types (JavaFX only, if.)
+- [x] 4. ✔️ \[Bug/Issue] Make command executable, even if caret is on the middle of it
+- [x] 5. ✔️ \[Bug/Issue] Don't allow shell text to be edited by the user
+- [ ] 6. ⛔ \[Feature] Bi-Directional Network communication (User types and the other shell on another machine sees it)
+- [ ] 7. ⛔ \[Feature] Slight transparency for window on systems, that support it
+- [ ] 8. 🔁 \[Feature] Add keyboard shortcuts (e.g. CTRL + C for SIGTERM)
+- [ ] 9. 🔁 \[Feature] Add CLI support (don't launch another window)
+- [ ] 10. 🔁 \[Feature] Overlay suggesting possible command completions
 
 **Legend**: \
 ✔️ = Fully implemented and functional \

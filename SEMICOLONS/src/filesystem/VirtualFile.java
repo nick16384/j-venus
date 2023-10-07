@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
-import java.nio.file.StandardOpenOption;
 
 import engine.InfoType;
 import engine.sys;
@@ -32,6 +31,7 @@ public class VirtualFile extends File {
 				VirtualizedLocation.convertToCurrentOSFormat(rootLocation.getAbsolutePath() + virtualPath);
 		return FileCheckUtils.exists(new File(actualFile)) ? actualFile : null;
 	}
+	
 	
 	/**
 	 * Creates an actual file on the filesystem, if this file doesn't exist yet.

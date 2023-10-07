@@ -13,6 +13,14 @@ import libraries.Global;
 /**
  * An ordinary file object, but the root folder for the object is not the actual root folder.
  * Can be used by Global for each File object more convenient  
+=======
+import engine.sys;
+import libraries.VarLib;
+
+/**
+ * An ordinary file object, but the root folder for the object is not the actual root folder.
+ * Can be used by VarLib for each File object more convenient  
+>>>>>>> 90664cc5e3f79d38ab54e22e5d5fe99879274032
  * Emulates a "virtual" directory inside a real root directory.
  * The internal directory *must* be accessed with unix format regardless of the underlying OS.
  * Conversion from actual OS location to virtual Linux location (and vice versa) is done internally.

@@ -89,13 +89,13 @@ public class Main extends JFrame {
 	}
 	
 	public static void restartVMIfSupported() {
-		sys.log("Trying JVM restart: Subprocess output will not be piped back to this one!");
+		sys.log("Trying JVM restart.");
 		ProcessHandle.current().info().commandLine().ifPresentOrElse(
 				(cmdLineArg) -> { try { Runtime.getRuntime().exec(cmdLineArg.split(" ")); System.exit(0); }
 				catch (IOException ioe) { ioe.printStackTrace(); }},
 				() -> { sys.log("VM restart not supported. Probably on Windows."); });
 	}
-
+	
 	/**
 	 * Recursive function to print info about all JVM process parents.
 	 * @param process

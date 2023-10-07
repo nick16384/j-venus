@@ -39,19 +39,6 @@ public class Cipher_Encrypt {
       sys.log("ENCRYPT", InfoType.INFO, "Using given key.");
       key = paramsWithValues.get("key");
 
-
-
-
-
-
-
-
-
-
-
-
-
-      
       String shiftlist = "";
       Map<String, String> shiftOrder = new HashMap<>();
       Map<String, String> shiftOrderAfter = new HashMap<>();
@@ -103,7 +90,7 @@ public class Cipher_Encrypt {
       if (ciphertext.length() < 100) {
         sys.log("ENCRYPT", InfoType.INFO, "Output/Ciphertext: " + ciphertext);
         sys.log("ENCRYPT", InfoType.INFO, "Key: " + key);
-      } 
+      }
       sys.log("ENCRYPT", InfoType.INFO, "Saving files to 'key.txt' and 'out.txt'");
       File outFile = new File(String.valueOf(Global.getRootDir().toString()) + "\\Program Sources\\Shift2C\\out.txt");
       File keyFile = new File(String.valueOf(Global.getRootDir().toString()) + "\\Program Sources\\Shift2C\\key.txt"); 

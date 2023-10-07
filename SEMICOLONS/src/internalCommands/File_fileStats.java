@@ -8,8 +8,12 @@ import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
 import filesystem.FileCheckUtils;
+<<<<<<< HEAD
 import libraries.Global;
 import shell.Shell;
+=======
+import libraries.VarLib;
+>>>>>>> 90664cc5e3f79d38ab54e22e5d5fe99879274032
 
 /**
  * Displays information about files / folders

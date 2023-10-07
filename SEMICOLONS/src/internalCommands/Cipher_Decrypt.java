@@ -13,8 +13,6 @@ import engine.InfoType;
 import engine.sys;
 import libraries.Global;
  
- 
- 
 public class Cipher_Decrypt
  {
    public static String decrypt(ArrayList<String> params, Map<String, String> paramsWithValues) {

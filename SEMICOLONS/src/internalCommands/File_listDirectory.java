@@ -3,15 +3,22 @@ package internalCommands;
 import engine.InfoType;
 import engine.sys;
 import filesystem.FileCheckUtils;
+<<<<<<< HEAD
 import jfxcomponents.JFXANSI;
+=======
+>>>>>>> 90664cc5e3f79d38ab54e22e5d5fe99879274032
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
+<<<<<<< HEAD
 import awtcomponents.AWTANSI;
 import libraries.Global;
 import shell.Shell;
+=======
+import libraries.VarLib;
+>>>>>>> 90664cc5e3f79d38ab54e22e5d5fe99879274032
 
 public class File_listDirectory {
 	public static String listDirectory(ArrayList<String> params, Map<String, String> paramsWithValues) {

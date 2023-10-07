@@ -39,7 +39,7 @@ public final class WatchdogThread {
 			public final void run() {
 				sys.log("WDT", InfoType.STATUS, "Watchdog enabled.");
 				Thread.currentThread().setPriority(1);
-
+				
 				Global.waitUntilReady();
 				
 				sys.log("WATCHDOG", InfoType.STATUS, "Watchdog idle now.");
@@ -212,9 +212,9 @@ public final class WatchdogThread {
 					"\n\n===============================================\n"
 							+ "There was an operation-critical error and execution cannot proceed.\n\n"
 							+ errMsg + "\n\n"
-							+ "I'm very sorry for that, but Vexus is in beta and things like this happen all the time.\n"
-							+ "Please contact me, if this error is reproducible and bugs you around (a lot):\n"
-							+ "https://theophil.pudelkern.com/\n"
+							+ "I'm very sorry for that, but SEMICOLONS is in beta and things like this happen all the time.\n"
+							+ "If you're familiar with github and this error is reproducible, please open a new issue under:\n"
+							+ "https://github.com/nick16384/semicolons\n"
 							+ "===============================================");
 		});
 		if (!Global.javafxEnabled) { Main.mainFrameAWT.getCmdLine().setEditable(false); }
