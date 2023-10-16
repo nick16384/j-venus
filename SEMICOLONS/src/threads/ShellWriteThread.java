@@ -7,6 +7,7 @@ import engine.Runphase;
 import engine.sys;
 import internalCommands.System_Cause_Error_Termination;
 import jfxcomponents.GUIManager;
+import jfxcomponents.ANSI;
 import libraries.Global;
 import main.Main;
 import shell.DoubleTextBuffer;
@@ -43,11 +44,10 @@ public class ShellWriteThread {
 					// jfx.GUIManager is now static so change accordingly in all other classes
 					
 					writeBuffer.swapActive();
-					sys.log("SWT", InfoType.DEBUG, "Swapped active buffer, writing to shell");
 					
 					// =========================== WRITE TO SHELL ===========================
 					if (Global.javafxEnabled) {
-						jfxcomponents.JFXANSI.appendANSI(
+						jfxcomponents.ANSI.appendANSI(
 								GUIManager.getCmdLine(), writeBuffer.readFromActive());
 					} else {
 						try { awtcomponents.AWTANSI.appendANSI(
@@ -82,35 +82,25 @@ public class ShellWriteThread {
 		}
 	}
 	
-	public static void writeToShell(javafx.scene.paint.Color color, String text) {
+	/**
+	 * Appends text to the shell, whilst also removing color information.
+	 * If useDefaultColor is true, "JFXANSI.cReset" is used
+	 * @param text
+	 * @param useDefaultColor
+	 */
+	public static void writeToShell(String text, boolean useDefaultColor) {
 		if (text == null)
 			return;
 		synchronized (swtMonitor) {
-			writeBuffer.appendToInactive(text);
+			if (useDefaultColor)
+				writeBuffer.appendToInactive(ANSI.getANSIColorString(ANSI.cReset) + text);
+			else
+				writeBuffer.appendToInactive(text);
 			if (Global.getCurrentPhase().equals(Runphase.RUN)
 					&& GUIManager.getCmdLine() != null) {
 				swtMonitor.notify();
 			}
 		}
-	}
-	
-	public static void writeToShellAWT(java.awt.Color color, String text) {
-		sys.log("SWT", InfoType.DEBUG, "Received AWT color, converting to JavaFX format.");
-		javafx.scene.paint.Color jfxColor;
-		// Get a JavaFX compatible color from an AWT color
-		jfxColor = new javafx.scene.paint.Color(
-				color.getRed() / 255,
-				color.getBlue() / 255,
-				color.getGreen() / 255,
-				color.getTransparency() / 255);
-		writeToShell(jfxColor, text);
-	}
-	
-	@Deprecated
-	public static void appendTextQueue(java.awt.Color color, String text, boolean... noProtect) {
-		// Ignore noProtect
-		sys.log("SWT", InfoType.WARN, "Using old AWT-compliant appendTextQueue method with noProtect.");
-		writeToShellAWT(color, text);
 	}
 	
 	public static void suspend() {

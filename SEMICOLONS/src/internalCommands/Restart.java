@@ -6,7 +6,7 @@ import java.util.Map;
 import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
-import jfxcomponents.JFXANSI;
+import jfxcomponents.ANSI;
 import libraries.Env;
 import libraries.Global;
 import libraries.VariableInitializion;
@@ -16,10 +16,10 @@ import shell.Shell;
 public class Restart {
 	public static String restart (ArrayList<String> params, Map<String, String> paramsWithValues) {
 		
-		Shell.println(AWTANSI.B_Magenta, "Restarting session...");
+		Shell.println(ANSI.B_Magenta, "Restarting session...");
 		Main.restartVMIfSupported();
 		
-		Shell.println(AWTANSI.B_Magenta, "Shell restart not supported. Probably, your OS is Windows.");
+		Shell.println(ANSI.B_Magenta, "Shell restart not supported. Probably, your OS is Windows.");
 		
 		return null;
 	}

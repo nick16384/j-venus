@@ -57,15 +57,12 @@ public class GUIManager {
 	}
 	
 	public static void appendText(String text, Color color) {
-		sys.log("JFX", InfoType.DEBUG, "Appending new text to cmdLine with " + text.length() + " characters.");
-		
 		if (Global.getCurrentPhase().equals(Runphase.RUN) && cmdLine != null) {
 			// Enqueue cmdLine write in JavaFX thread
 			Platform.runLater(() -> {
 				try {
 					cmdLine.appendText(text);
 					cmdLine.setReadOnlyTo(cmdLine.getText().length());
-					sys.log("JFX", InfoType.DEBUG, "Text write color hex: (0x)" + color.toString().substring(2, 8));
 					// Apply text color on new segment:
 					cmdLine.setStyle(cmdLine.getText().length() - text.length(),
 										  cmdLine.getText().length(),

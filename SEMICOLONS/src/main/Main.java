@@ -14,11 +14,10 @@ import shell.Shell;
 import libraries.Global;
 import threads.WatchdogThread;
 
-public class Main extends JFrame {
+public class Main {
 	public static List<String> argsMain;
 	
 	public static void main(String[] args) {
-		//==================================== INIT ====================================
 		argsMain = Arrays.asList(args);
 		sys.log("MAIN", InfoType.INFO, "Commandline used for this VM (if empty, probably running on Windows):\n"
 				+ ProcessHandle.current().info().commandLine().get());
@@ -29,6 +28,8 @@ public class Main extends JFrame {
 			sys.log("MAIN", InfoType.CRIT, "This JVM instance has restarted itself too often. Shutting down.");
 			System.exit(1);
 		}
+		
+		//==================================== INIT ====================================
 		
 		System.out.println("[NoLog] Verifying installation files...");
 		if (Arrays.asList(args).contains("--no-check-install")) {

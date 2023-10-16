@@ -8,12 +8,9 @@ import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
 import filesystem.FileCheckUtils;
-<<<<<<< HEAD
+import jfxcomponents.ANSI;
 import libraries.Global;
 import shell.Shell;
-=======
-import libraries.VarLib;
->>>>>>> 90664cc5e3f79d38ab54e22e5d5fe99879274032
 
 /**
  * Displays information about files / folders
@@ -23,32 +20,32 @@ import libraries.VarLib;
 
 public class File_fileStats {
 	public static String fileStats (ArrayList<String> params, Map<String, String> paramsWithValues) {
-		Shell.println("Params are valid: " + LIB_Utils.checkValid(params));
-		if (!LIB_Utils.checkValid(params)) {
+		Shell.println("Params are valid: " + new ParameterChecker(params).checkValid());
+		if (!new ParameterChecker(params).checkValid()) {
 			sys.log("FSTAT", InfoType.STATUS, "No parameter given, reading working directory permission.");
-			Shell.println(AWTANSI.B_White, "Info: No file name supplied:\n"
+			Shell.println(ANSI.B_White, "Info: No file name supplied:\n"
 					+ "Checking permissions for working directory.");
-			Shell.println(AWTANSI.B_Green, "Element \"" + Global.getCurrentDir() + "\": "
+			Shell.println(ANSI.B_Green, "Element \"" + Global.getCurrentDir() + "\": "
 					+ FileCheckUtils.getPermissions(new File(Global.getCurrentDir())));
 		}
 		//Parameters are valid, check if element exists globally
 		else if (FileCheckUtils.exists(new File(params.get(0)))) {
 			sys.log("FSTAT", InfoType.DEBUG, "File \"" + params.get(0) + "\" exists at root level.");
-			Shell.println(AWTANSI.B_Green, "Element \""
+			Shell.println(ANSI.B_Green, "Element \""
 					+ params.get(0) + "\": " + FileCheckUtils.getPermissions(new File(params.get(0))));
 		}
 		//Check if element exists locally (inside working directory)
 		else if (FileCheckUtils.exists(new File(Global.getCurrentDir() + sys.fsep + params.get(0)))) {
 			sys.log("FSTAT", InfoType.DEBUG, "File \"" + params.get(0) +  "\" exists inside working directory as \""
 					+ Global.getCurrentDir() + sys.fsep + params.get(0) + "\".");
-			Shell.println(AWTANSI.B_Green, "Element \""
+			Shell.println(ANSI.B_Green, "Element \""
 					+ Global.getCurrentDir() + sys.fsep + params.get(0)
 					+ "\": " + FileCheckUtils.getPermissions(new File(params.get(0))));
 		}
 		//Supplied file / folder name not valid
 		else {
 			sys.log("FSTAT", InfoType.ERR, "Specified file \"" + params.get(0) + "\" does not exist.");
-			Shell.print(AWTANSI.B_Yellow, "The file or folder \"" + params.get(0) + "\" does not exist.");
+			Shell.print(ANSI.B_Yellow, "The file or folder \"" + params.get(0) + "\" does not exist.");
 			return "FileErr_NotFound";
 		}
 		return null;

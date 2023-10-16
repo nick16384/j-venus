@@ -6,6 +6,7 @@ import java.util.Map;
 import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
+import jfxcomponents.ANSI;
 import libraries.Global;
 import main.Main;
 import shell.Shell;
@@ -20,7 +21,7 @@ public class Terminate {
 		} else {
 			if (ThreadAllocation.isWDTActive()) {
 				sys.log("TERMINATE", InfoType.INFO, "Sending shutdown signal to global Thread Allocator...");
-				Shell.println(AWTANSI.B_Blue, "Exiting...");
+				Shell.println(ANSI.B_Blue, "Exiting...");
 				Shell.setPromptPattern("$-");
 				sys.shutdown(0);
 			} else {

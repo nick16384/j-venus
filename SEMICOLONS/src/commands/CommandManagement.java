@@ -5,11 +5,13 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
+import jfxcomponents.ANSI;
 import libraries.Err;
 import libraries.ErrCodes;
 import shell.Shell;
@@ -20,7 +22,7 @@ public class CommandManagement {
 	
 	private static Thread commandManagementThread;
 	private static BlockingQueue<Command> commandQueue;
-	private static Executor commandExecutor;
+	private static ExecutorService commandExecutor;
 	private static Map<Command, String> returnValues;
 	private static Command currentCommand;
 	private static volatile boolean disablePrompt;
@@ -84,13 +86,13 @@ public class CommandManagement {
 			// Known error
 			sys.log("CMGR", InfoType.DEBUG,
 					"Error type \"" + returnValues.get(currentCommand) + "\" found.");
-			Shell.print(AWTANSI.B_Yellow, ErrCodes.getErrDesc(returnValues.get(currentCommand)));
+			Shell.print(ANSI.B_Yellow, ErrCodes.getErrDesc(returnValues.get(currentCommand)));
 		} else {
 			// Unknown error
 			sys.log("CMGR", InfoType.WARN,
 					"Command error not found in libraries.ErrCodes: "
 							+ returnValues.get(currentCommand));
-			Shell.print(AWTANSI.B_Red,
+			Shell.print(ANSI.B_Red,
 					"Non-regular error code : " + returnValues.get(currentCommand));
 		}
 		cleanup();
@@ -112,7 +114,17 @@ public class CommandManagement {
 		disablePrompt = false;
 	}
 	
+	protected static ExecutorService getCommandExecutor() {
+		return commandExecutor;
+	}
+	
+	protected static void reinitializeExecutor() {
+		commandExecutor.shutdownNow();
+		commandExecutor = Executors.newSingleThreadExecutor();
+	}
+	
 	public static void killCurrentIfRunning() {
+		sys.log("CMGR", InfoType.INFO, "Terminating command execution.");
 		currentCommand.cancel(true);
 	}
 	

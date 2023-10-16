@@ -1,13 +1,13 @@
 package shell;
 
-import java.awt.Color;
-
 import awtcomponents.AWTANSI;
 import components.CommandHistory;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
+import javafx.scene.paint.Color;
+import jfxcomponents.ANSI;
 import jfxcomponents.GUIManager;
 import libraries.Global;
 import main.Main;
@@ -81,7 +81,8 @@ public class Shell {
 	public static String getDefaultPromptPattern() {
 		return DEFAULT_PROMPT_PATTERN;
 	}
-
+	
+	// TODO Make two-line prompt, if one line is too long
 	public static void showPrompt() {
 		if (!Global.javafxEnabled)
 			Main.mainFrameAWT.getCmdLine().setEditable(false);
@@ -95,7 +96,7 @@ public class Shell {
 		} else if (Global.getCurrentPhase().equals(Runphase.RUN)) {
 
 			prompt = getPromptWithPattern(promptPattern);
-			Shell.print(AWTANSI.B_Green, "\n" + prompt);
+			Shell.print(ANSI.B_Green, "\n" + prompt);
 
 		} else {
 			sys.log("LIB", InfoType.CRIT, "Shell prepare was called during pre-init. Doing nothing, but this");
@@ -115,19 +116,19 @@ public class Shell {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
 			if (priority == 0) { //Priority 0 / Just print, nothing important
-				ShellWriteThread.appendTextQueue(AWTANSI.D_White, message, noProtect);
+				ShellWriteThread.writeToShell(ANSI.getANSIColorString(ANSI.D_White) + message, false);
 			} else if (priority == 1) { //Priority 1 / Info, Progress, etc.
-				ShellWriteThread.appendTextQueue(AWTANSI.D_White, message, noProtect);
+				ShellWriteThread.writeToShell(ANSI.getANSIColorString(ANSI.D_White) + message, false);
 			} else if (priority == 2) { //Priority 2 / Warnings
-				ShellWriteThread.appendTextQueue(AWTANSI.D_Yellow, message, noProtect);
+				ShellWriteThread.writeToShell(ANSI.getANSIColorString(ANSI.D_Yellow) + message, false);
 			} else if (priority == 3) { //Priority 3 / Non-Critical errors
-				ShellWriteThread.appendTextQueue(AWTANSI.D_Red, message, noProtect);
+				ShellWriteThread.writeToShell(ANSI.getANSIColorString(ANSI.D_Red) + message, false);
 			} else if (priority == 4) { //Priority 4 / Critical errors
-				ShellWriteThread.appendTextQueue(AWTANSI.B_Red, message, noProtect);
+				ShellWriteThread.writeToShell(ANSI.getANSIColorString(ANSI.B_Red) + message, false);
 			} else if (priority == 5) { //Priority 5 / Fatal or Non-recoverable errors
-				ShellWriteThread.appendTextQueue(AWTANSI.B_Red, message, noProtect);
+				ShellWriteThread.writeToShell(ANSI.getANSIColorString(ANSI.B_Red) + message, false);
 			} else { //If priority out of range, choose default white
-				ShellWriteThread.appendTextQueue(AWTANSI.D_White, message, noProtect);
+				ShellWriteThread.writeToShell(ANSI.getANSIColorString(ANSI.D_White) + message, false);
 			}
 		}
 	}
@@ -138,31 +139,31 @@ public class Shell {
 	 * @param message
 	 * @param noProtect
 	 */
-	public static synchronized void print(Color color, String message, boolean... noProtect) {
+	public static void print(Color color, String message, boolean... noProtect) {
 		if (libraries.Global.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
-			ShellWriteThread.appendTextQueue(color, message, noProtect);
+			ShellWriteThread.writeToShell(ANSI.getANSIColorString(color) + message, false);
 		}
 	}
-	public static synchronized void println(Color color, String message, boolean... noProtect) {
+	public static void println(Color color, String message, boolean... noProtect) {
 		if (libraries.Global.singleThreaded) {
 			Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 		} else {
-			ShellWriteThread.appendTextQueue(color, message + "\n", noProtect);
+			ShellWriteThread.writeToShell("\n" + ANSI.getANSIColorString(color) + message, false);
 		}
 	}
-	public static synchronized void print(String message) {
-		ShellWriteThread.appendTextQueue(AWTANSI.cReset, message);
+	public static void print(String message) {
+		ShellWriteThread.writeToShell(message, true);
 	}
-	public static synchronized void println(String message) {
-		ShellWriteThread.appendTextQueue(AWTANSI.cReset, message + "\n");
+	public static void println(String message) {
+		ShellWriteThread.writeToShell("\n" + message, true);
 	}
 	/**
 	 * Direct shellWrite when in single-threaded mode. More efficient than going through shellWriteThread.
 	 * @param message
 	 */
-	public static void direct_shell_write(String message) {
+	public static synchronized void direct_shell_write(String message) {
 		Main.mainFrameAWT.getCmdLine().setText(Main.mainFrameAWT.getCmdLine().getText() + message);
 	}
 	

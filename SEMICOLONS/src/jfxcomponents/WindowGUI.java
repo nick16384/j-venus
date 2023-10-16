@@ -126,16 +126,13 @@ public class WindowGUI extends Application {
 			GUIManager.cmdLine.setOnKeyPressed((event) -> {
 				if (new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN).match(event)) {
 					sys.log("JFX", InfoType.DEBUG, "User pressed CTRL + C");
-					Shell.print(AWTANSI.D_Cyan, "^C");
+					Shell.print(ANSI.D_Cyan, "^C");
 					CommandManagement.killCurrentIfRunning();
 				}
 			});
 			
 			// Possible Completion Overlay
 			CompletionOverlay.configureElements(primaryStage);
-			/*Main.cmdLine.setPopupWindow(CompletionOverlay.getOverlay());
-			Main.cmdLine.setPopupAlignment(PopupAlignment.CARET_CENTER);
-			Main.cmdLine.setPopupAnchorOffset(new Point2D(4, 0));*/
 			
 			// Finalization and stage showing
 			StackPane root = new StackPane();
@@ -147,8 +144,6 @@ public class WindowGUI extends Application {
 			primaryStage.show();
 			
 			CompletionOverlay.showOverlay(primaryStage);
-			//primaryStage.requestFocus();
-			//CompletionOverlay.getOverlay().hide();
 			
 			sys.log("JFX", InfoType.DEBUG, "start(primaryStage) method end reached.");
 			

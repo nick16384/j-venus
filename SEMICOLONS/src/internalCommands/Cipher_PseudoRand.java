@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
+import jfxcomponents.ANSI;
 import main.Main;
 import shell.Shell;
 
@@ -23,7 +24,7 @@ public class Cipher_PseudoRand {
 	public static String pseudoRand(ArrayList<String> params) {
 		int seed = 0;
 		
-		if (LIB_Utils.checkValid(params)) {
+		if (new ParameterChecker(params).checkValid()) {
 			try {
 				seed = Integer.parseInt(params.get(0));
 			} catch (IllegalArgumentException iae) {
@@ -34,8 +35,8 @@ public class Cipher_PseudoRand {
 		} else {
 			seed = (int) main.Main.getRuntime(); //May result in overflow which increases unpredictability
 		}
-		Shell.println(AWTANSI.B_Yellow, "Warning: This computation is unsafe for cryptographic use!\n");
-		Shell.println(AWTANSI.B_Cyan, "Seed: " + seed);
+		Shell.println(ANSI.B_Yellow, "Warning: This computation is unsafe for cryptographic use!\n");
+		Shell.println(ANSI.B_Cyan, "Seed: " + seed);
 		Shell.println("Generating pseudo-random number:");
 		
 		//======================== RANDOM NUMBER GENERATION ===========================
@@ -57,7 +58,7 @@ public class Cipher_PseudoRand {
 		try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		Shell.println(""); //Line break
 		//At this point, "seed" is the generated random number
-		Shell.println(AWTANSI.B_White, "Result: " + seed);
+		Shell.println(ANSI.B_White, "Result: " + seed);
 		
 		return null;
 	}
@@ -91,7 +92,7 @@ public class Cipher_PseudoRand {
 			input = getLastNDigits(input, 8);
 		} catch (ArithmeticException | IllegalArgumentException e) {
 			sys.log("PSEUDORAND", InfoType.ERR, "Arithmetic error during calculation. Iteration count: " + iterationCount);
-			Shell.println(AWTANSI.B_Red, "Arithmetic error (probably divizion by zero) during calculation. "
+			Shell.println(ANSI.B_Red, "Arithmetic error (probably divizion by zero) during calculation. "
 					+ "Discarding changes.\n"
 					+ "Iteration number: " + iterationCount);
 			//Add some random number to mitigate chances of a recurring error

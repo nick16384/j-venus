@@ -10,6 +10,7 @@ import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
 import filesystem.VirtualFile;
+import jfxcomponents.ANSI;
 import shell.Shell;
 
 public class Err {
@@ -71,6 +72,6 @@ public class Err {
 		stacktraceFile.writeString(stacktrace, StandardOpenOption.WRITE);
 		
 		sys.log("Stacktrace saved at " + stacktraceFile.getAbsolutePath());
-		Shell.println(AWTANSI.D_Green, "Stacktrace saved at " + stacktraceFile.getAbsolutePath());
+		Shell.println(ANSI.D_Green, "Stacktrace saved at " + stacktraceFile.getAbsolutePath());
 	}
 }

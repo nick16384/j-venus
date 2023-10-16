@@ -8,6 +8,7 @@ import java.util.Map;
 import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.sys;
+import jfxcomponents.ANSI;
 import libraries.VariableInitializion;
 import shell.Shell;
 import libraries.Env;
@@ -80,10 +81,10 @@ public class Console_ChangeDirectory {
 					if (!bracket.equals(Global.getFSRoot()))
 						addedBrackets = addedBrackets.concat(bracket + sys.fsep);
 				} else {
-					Shell.println(AWTANSI.B_Yellow, "Can't change into the folder:");
-					Shell.println(AWTANSI.B_Green, location);
-					Shell.println(AWTANSI.B_Yellow, "because the following folder does not exist:");
-					Shell.println(AWTANSI.B_Cyan, addedBrackets + "\n");
+					Shell.println(ANSI.B_Yellow, "Can't change into the folder:");
+					Shell.println(ANSI.B_Green, location);
+					Shell.println(ANSI.B_Yellow, "because the following folder does not exist:");
+					Shell.println(ANSI.B_Cyan, addedBrackets + "\n");
 					return addedBrackets;
 				}
 			}

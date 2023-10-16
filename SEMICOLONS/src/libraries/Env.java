@@ -7,6 +7,7 @@ import awtcomponents.AWTANSI;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
+import jfxcomponents.ANSI;
 import shell.Shell;
 
 /**
@@ -59,16 +60,16 @@ public class Env {
 		if (getEnv(key) != null && getEnv(key).equals(val)) {
 			envMsgOut += "SUCCESS";
 			if (!Global.getCurrentPhase().equals(Runphase.INIT))
-				Shell.print(AWTANSI.B_Green, "Success: " + key + " -> " + val + "\n");
+				Shell.print(ANSI.B_Green, "Success: " + key + " -> " + val + "\n");
 		} else {
 			envMsgOut += "FAIL";
 			if (!Global.getCurrentPhase().equals(Runphase.INIT)) {
-				Shell.print(AWTANSI.B_Yellow, "Could not create envV. Information below:\n");
+				Shell.print(ANSI.B_Yellow, "Could not create envV. Information below:\n");
 				Shell.print("Created variable, but validation failed \\/\n"
 						+ "Method call key: " + key + "\n"
 						+ "Method call value: " + val + "\n"
 						+ "envV Value with getEnv() call: " + getEnv(key) + "\n");
-				Shell.print(AWTANSI.B_Magenta, "Try 'env' to see, if your envV exists or try again.\n");
+				Shell.print(ANSI.B_Magenta, "Try 'env' to see, if your envV exists or try again.\n");
 			}
 		}
 		sys.log("VARLIB", InfoType.DEBUG, envMsgOut);

@@ -3,6 +3,7 @@ package threads;
 import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
+import jfxcomponents.ANSI;
 import jfxcomponents.GUIManager;
 import libraries.Global;
 import main.Main;
@@ -46,7 +47,7 @@ public class WatchdogThread2 {
 								//WatchdogThread.stopWithError(1, 15000, "The shell didn't initialize properly. Try again.");
 							}
 						} else {
-							Shell.print(AWTANSI.B_Yellow, "Init fail.\n");
+							Shell.print(ANSI.B_Yellow, "Init fail.\n");
 							Global.setErrorRunphase();
 						}
 						

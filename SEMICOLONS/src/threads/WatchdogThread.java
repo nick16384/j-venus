@@ -11,6 +11,7 @@ import engine.InfoType;
 import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
+import jfxcomponents.ANSI;
 import jfxcomponents.GUIManager;
 import jfxcomponents.JFxGUIThread;
 import libraries.Global;
@@ -208,7 +209,7 @@ public final class WatchdogThread {
 		try { Thread.sleep(200); } catch (InterruptedException ie) { ie.printStackTrace(); }
 		sys.log("[WDT]", InfoType.CRIT, errMsg);
 		Platform.runLater(() -> {
-			Shell.println(AWTANSI.B_Yellow,
+			Shell.println(ANSI.B_Yellow,
 					"\n\n===============================================\n"
 							+ "There was an operation-critical error and execution cannot proceed.\n\n"
 							+ errMsg + "\n\n"
@@ -218,10 +219,10 @@ public final class WatchdogThread {
 							+ "===============================================");
 		});
 		if (!Global.javafxEnabled) { Main.mainFrameAWT.getCmdLine().setEditable(false); }
-		Shell.println(AWTANSI.B_Cyan, "Log file is at: " + Global.getLogFile().getAbsolutePath());
+		Shell.println(ANSI.B_Cyan, "Log file is at: " + Global.getLogFile().getAbsolutePath());
 		if (waitBeforeStop > 100 && waitBeforeStop < 60000) {
 			Platform.runLater(() -> {
-			Shell.println(AWTANSI.B_Green,
+			Shell.println(ANSI.B_Green,
 					"This JVM will be suspended in " + Double.toString(waitBeforeStop / 1000) + " seconds.");
 			});
 			try {
@@ -233,7 +234,7 @@ public final class WatchdogThread {
 			sys.log("WTT", InfoType.ERR, "Can't wait less than 100 or more than 60,000 milliseconds until VM suspension.");
 			sys.log("WTT", InfoType.ERR, "Defaulting to 10 seconds.");
 			Platform.runLater(() -> {
-				Shell.println(AWTANSI.B_Green, "This JVM will be suspended in 10 seconds.");
+				Shell.println(ANSI.B_Green, "This JVM will be suspended in 10 seconds.");
 			});
 			try {
 				Thread.sleep(waitBeforeStop);

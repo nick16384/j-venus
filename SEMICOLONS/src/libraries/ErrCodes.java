@@ -29,7 +29,8 @@ public enum ErrCodes {
 	ThreadErr_CM_Off ("Internal thread warn: Command Manager Thread inactive. Restart, commands won't work."),
 	ThreadErr_SWT_Off ("Internal thread warn: Shell Write Thread inactive. Restart, Shell output is interrupted. View log."),
 	ShellModeNonNormal ("Shell mode is not \"normal\". This could potentially mean, that an internal error occured. Restart."),
-	RuntimeErr ("Command runtime warn: Command exited with an exception.");
+	RuntimeErr ("Command runtime warn: Command exited with an exception."),
+	PrematureTermination ("Command execution was terminated prematurely, therefore the command could not finish.");
 	
 	public final String description;
 	

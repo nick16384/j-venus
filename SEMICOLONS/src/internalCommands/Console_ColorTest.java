@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import engine.sys;
-import jfxcomponents.JFXANSI;
+import jfxcomponents.ANSI;
 import libraries.Global;
 import shell.Shell;
 
 public class Console_ColorTest {
 	public static String colorTest(ArrayList<String> params) {
 		if (Global.javafxEnabled) {
-			Shell.println(Color.decode(JFXANSI.cReset.toString()) , "Testing JavaFX colors...");
+			Shell.println(ANSI.cReset , "Testing JavaFX colors...");
 			runJFxTest();
 		} else {
 			runAWTTest();
@@ -22,23 +22,23 @@ public class Console_ColorTest {
 	
 	private static void runJFxTest() {
 		
-		Shell.println(Color.decode(JFXANSI.B_Black.toString()) , "B_BLACK");
-		Shell.println(Color.decode(JFXANSI.B_Blue.toString()) , "B_BLUE");
-		Shell.println(Color.decode(JFXANSI.B_Cyan.toString()) , "B_CYAN");
-		Shell.println(Color.decode(JFXANSI.B_Green.toString()) , "B_GREEN");
-		Shell.println(Color.decode(JFXANSI.B_Magenta.toString()) , "B_MAGENTA");
-		Shell.println(Color.decode(JFXANSI.B_Red.toString()) , "B_RED");
-		Shell.println(Color.decode(JFXANSI.B_White.toString()) , "B_WHITE");
-		Shell.println(Color.decode(JFXANSI.B_Yellow.toString()) , "B_YELLOW");
+		Shell.println(ANSI.B_Black , "B_BLACK");
+		Shell.println(ANSI.B_Blue , "B_BLUE");
+		Shell.println(ANSI.B_Cyan , "B_CYAN");
+		Shell.println(ANSI.B_Green , "B_GREEN");
+		Shell.println(ANSI.B_Magenta , "B_MAGENTA");
+		Shell.println(ANSI.B_Red , "B_RED");
+		Shell.println(ANSI.B_White , "B_WHITE");
+		Shell.println(ANSI.B_Yellow , "B_YELLOW");
 		
-		Shell.println(Color.decode(JFXANSI.D_Black.toString()) , "D_BLACK");
-		Shell.println(Color.decode(JFXANSI.D_Blue.toString()) , "D_BLUE");
-		Shell.println(Color.decode(JFXANSI.D_Cyan.toString()) , "D_CYAN");
-		Shell.println(Color.decode(JFXANSI.D_Green.toString()) , "D_GREEN");
-		Shell.println(Color.decode(JFXANSI.D_Magenta.toString()) , "D_MAGENTA");
-		Shell.println(Color.decode(JFXANSI.D_Red.toString()) , "D_RED");
-		Shell.println(Color.decode(JFXANSI.D_White.toString()) , "D_WHITE");
-		Shell.println(Color.decode(JFXANSI.D_Yellow.toString()) , "D_YELLOW");
+		Shell.println(ANSI.D_Black , "D_BLACK");
+		Shell.println(ANSI.D_Blue , "D_BLUE");
+		Shell.println(ANSI.D_Cyan , "D_CYAN");
+		Shell.println(ANSI.D_Green , "D_GREEN");
+		Shell.println(ANSI.D_Magenta , "D_MAGENTA");
+		Shell.println(ANSI.D_Red , "D_RED");
+		Shell.println(ANSI.D_White , "D_WHITE");
+		Shell.println(ANSI.D_Yellow , "D_YELLOW");
 	}
 	
 	private static void runAWTTest() {

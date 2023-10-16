@@ -1,9 +1,12 @@
 /commands/
 /components/
 /engine/
+/essentialCommands/
 /filesystem/
-/internalCommands/
 /libraries/
 /main/
 /net/
 /threads/
+/jfxcomponents/
+/shell/
+/META-INF/

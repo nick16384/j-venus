@@ -45,10 +45,18 @@ public class OverlayPopup extends Popup {
 		this.hiddenLock = false;
 		selectionIndex = 0;
 		
-		// The overlay steals focus of cmdLine, so text needs to be transferred.
 		this.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 			if (!this.isShowing())
 				return;
+			
+			
+			
+			if (new KeyCodeCombination(KeyCode.TAB, KeyCombination.SHIFT_DOWN).match(event)) {
+				event.consume();
+				this.hideUntilReactivated();
+			}
+			
+			System.err.println("Key Event: " + event.getCode());
 			
 			if (event.getCode().equals(KeyCode.BACK_SPACE)) {
 				event.consume();
@@ -70,16 +78,6 @@ public class OverlayPopup extends Popup {
 				event.consume();
 				select(selectionIndex + 1);
 				addSelectionToCmdline();
-			}
-			
-			// If event is none of the above:
-			Platform.runLater(() -> GUIManager.getCmdLine().fireEvent(event));
-		});
-		
-		// Hide suggestions on BACKSPACE and SHIFT + TAB
-		this.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-			if (new KeyCodeCombination(KeyCode.TAB, KeyCombination.SHIFT_DOWN).match(event)) {
-				this.hide();
 			}
 		});
 		
@@ -139,7 +137,7 @@ public class OverlayPopup extends Popup {
 	
 	public void changeOption(int index, String newSuggestion) {
 		index = getValidIndexFrom(index);
-		// TODO Implement changeable option
+		selectionListView.getItems().set(index, newSuggestion);
 	}
 	
 	public void addOption(String suggestion) {
@@ -163,8 +161,8 @@ public class OverlayPopup extends Popup {
 		index = index > selectionListView.getItems().size() - 1 ? selectionListView.getItems().size() - 1 : index;
 		
 		if (index < 0 || index > selectionListView.getItems().size() - 1) {
-			sys.log("POPUP", InfoType.WARN, "Nothing to select in completion overlay.");
-			return 0;
+			// If index is out of range, there are currently no options to select from.
+			return -1;
 		}
 		
 		return index;
@@ -175,8 +173,11 @@ public class OverlayPopup extends Popup {
 	}
 	
 	private void select(int index) {
+		System.err.println("Index before fetch: " + index);
 		index = getValidIndexFrom(index);
+		System.err.println("Index after fetch: " + index);
 		selectionIndex = index;
+		if (index <= -1) { sys.log("POPUP", InfoType.DEBUG, "Nothing to select, returning."); return; }
 		selectionListView.getSelectionModel().select(index);
 	}
 	

@@ -14,27 +14,27 @@ import libraries.Global;
 /**
  * Code original from:
  * https://stackoverflow.com/questions/6899282/ansi-colors-in-java-swing-text-fields
- * Accessed 08.23.2022
+ * Accessed 23.08.2022
  * 
  * Modified version
  */
 
-public class JFXANSI {
+public class ANSI {
 	public static final Color D_Black   = Color.rgb( 000, 000, 000, 0.0d );
 	public static final Color D_Red     = Color.rgb( 000, 255, 000, 0.5d );
-	public static final Color D_Blue    = Color.rgb( 000, 000, 160, 0.5d );
+	public static final Color D_Blue    = Color.rgb( 000, 000, 255, 0.5d );
 	public static final Color D_Magenta = Color.rgb( 200, 000, 150, 0.5d );
 	public static final Color D_Green   = Color.rgb( 000, 255, 000, 0.5d );
-	public static final Color D_Yellow  = Color.rgb( 128, 128, 000, 0.9d ); //last one was 0.502f
-	public static final Color D_Cyan    = Color.rgb( 128, 032, 032, 0.5d );
-	public static final Color D_White   = Color.rgb( 255, 255, 255, 0.5d ); //last one was 0.753f
+	public static final Color D_Yellow  = Color.rgb( 128, 128, 000, 0.9d );
+	public static final Color D_Cyan    = Color.rgb( 032, 100, 100, 0.5d );
+	public static final Color D_White   = Color.rgb( 255, 255, 255, 0.5d );
 	public static final Color B_Black   = Color.rgb( 000, 000, 000, 0.5d );
 	public static final Color B_Red     = Color.rgb( 255, 000, 000, 1.0d );
-	public static final Color B_Blue    = Color.rgb( 000, 000, 000, 1.0d );
+	public static final Color B_Blue    = Color.rgb( 000, 064, 255, 1.0d );
 	public static final Color B_Magenta = Color.rgb( 200, 000, 150, 1.0d );
 	public static final Color B_Green   = Color.rgb( 000, 255, 000, 1.0d );
 	public static final Color B_Yellow  = Color.rgb( 255, 255, 000, 1.0d );
-	public static final Color B_Cyan    = Color.rgb( 32, 128, 180, 1.0d );
+	public static final Color B_Cyan    = Color.rgb( 032, 128, 180, 1.0d );
 	public static final Color B_White   = Color.rgb( 255, 255, 255, 1.0d );
 	public static final Color cReset    = Color.rgb( 000, 255, 000, 1.0d );
 	static Color colorCurrent    = cReset;

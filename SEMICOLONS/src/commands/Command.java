@@ -9,8 +9,9 @@ import java.util.concurrent.TimeoutException;
 
 import engine.InfoType;
 import engine.sys;
+import internalCommands.System_Exec;
 
-public class Command implements Future {
+public class Command implements Future<String> {
 	private String fullCommand;
 	private String command;
 	private ArrayList<String> params;
@@ -66,31 +67,35 @@ public class Command implements Future {
 
 	@Override
 	public boolean cancel(boolean mayInterruptIfRunning) {
-		// TODO Auto-generated method stub
-		return false;
+		// Kill external process if running
+		System_Exec.killProcessIfRunning();
+		CommandManagement.getCommandExecutor().shutdownNow();
+		CommandManagement.reinitializeExecutor();
+		return true;
 	}
 
 	@Override
 	public boolean isCancelled() {
-		// TODO Auto-generated method stub
-		return false;
+		return returnValue != null;
 	}
 
 	@Override
 	public boolean isDone() {
-		// TODO Auto-generated method stub
-		return false;
+		return returnValue != null;
 	}
 
 	@Override
-	public Object get() throws InterruptedException, ExecutionException {
-		// TODO Auto-generated method stub
-		return null;
+	public String get() throws InterruptedException, ExecutionException {
+		waitForReturnValue();
+		return returnValue;
 	}
-
+	
+	/**
+	 * @apiNote Currently the same as get() without timeout.
+	 */
 	@Override
-	public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-		// TODO Auto-generated method stub
-		return null;
+	public String get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+		waitForReturnValue();
+		return returnValue;
 	}
 }

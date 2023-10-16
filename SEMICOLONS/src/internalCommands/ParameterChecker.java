@@ -9,7 +9,13 @@ import java.util.ArrayList;
  *
  */
 
-public class LIB_Utils {
+public class ParameterChecker {
+	private ArrayList<String> params;
+	
+	protected ParameterChecker(ArrayList<String> params) {
+		this.params = params;
+	}
+	
 	/**
 	 * Checks these three conditions on the specified ArrayList:
 	 * 1. Is the list null?
@@ -17,9 +23,9 @@ public class LIB_Utils {
 	 * 3. Does the list contain null elements?
 	 * @return Whether the conditions are met or not.
 	 */
-	public static boolean checkValid(ArrayList<String> listIn) {
-		if (listIn != null && listIn.size() >= 1) {
-			for (String listElem : listIn) {
+	public boolean checkValid() {
+		if (params != null && params.size() >= 1) {
+			for (String listElem : params) {
 				if (listElem == null)
 					return false;
 			}

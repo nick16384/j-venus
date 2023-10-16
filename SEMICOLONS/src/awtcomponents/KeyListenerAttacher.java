@@ -91,7 +91,7 @@ public class KeyListenerAttacher {
 						} else {
 							sys.log("MAIN", InfoType.DEBUG, "Sending '" + fullCommand + "' to Command Parser");
 							try {
-								new commands.CommandOld(fullCommand).start();
+								new Command(fullCommand).start();
 								//For returnVal, try:
 								//CommandMain.executeCommand(new components.Command(fullCommand));
 							} catch (Exception ex) {
