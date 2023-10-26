@@ -10,7 +10,7 @@ import org.reactfx.EventStream;
 import org.reactfx.EventStreams;
 import org.reactfx.value.Var;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
@@ -177,7 +177,7 @@ public class OverlayPopup extends Popup {
 		index = getValidIndexFrom(index);
 		System.err.println("Index after fetch: " + index);
 		selectionIndex = index;
-		if (index <= -1) { sys.log("POPUP", InfoType.DEBUG, "Nothing to select, returning."); return; }
+		if (index <= -1) { sys.log("POPUP", LogLevel.DEBUG, "Nothing to select, returning."); return; }
 		selectionListView.getSelectionModel().select(index);
 	}
 	

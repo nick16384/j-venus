@@ -2,7 +2,7 @@ package jfxcomponents;
 
 import org.fxmisc.richtext.InlineCssTextArea;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.Runphase;
 import engine.sys;
 import main.Main;
@@ -109,7 +109,7 @@ public class ANSI {
 
 	public static Color getANSIColor(String ANSIColor) {
 		if (!ANSIColor.equals("\u001B[0m") && !lastColorCode.equals(ANSIColor)) {
-			sys.log("JFXANSI_DEBUG", InfoType.DEBUG, "Requesting new ANSI color: " + ANSIColor + "===" + "\u001B[0m");
+			sys.log("JFXANSI_DEBUG", LogLevel.DEBUG, "Requesting new ANSI color: " + ANSIColor + "===" + "\u001B[0m");
 			lastColorCode = ANSIColor;
 		}
 		if (ANSIColor.equals("\u001B[30m"))        { return D_Black; }
@@ -173,7 +173,7 @@ public class ANSI {
 	private static void insertNewString(String s, Color c) {
 		try { GUIManager.appendText(s, c); } 
 		catch (Exception e) {
-			sys.log("JFXANSI", InfoType.ERR, "Shell text write failed. Stacktrace below:");
+			sys.log("JFXANSI", LogLevel.ERR, "Shell text write failed. Stacktrace below:");
 			e.printStackTrace();
 		}
 	}

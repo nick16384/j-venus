@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import awtcomponents.AWTANSI;
 import awtcomponents.WindowMain;
 import commands.CommandManagement;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
@@ -38,12 +38,12 @@ public final class WatchdogThread {
 
 		watchdogThread = new Thread(null, new Runnable() {
 			public final void run() {
-				sys.log("WDT", InfoType.STATUS, "Watchdog enabled.");
+				sys.log("WDT", LogLevel.STATUS, "Watchdog enabled.");
 				Thread.currentThread().setPriority(1);
 				
 				Global.waitUntilReady();
 				
-				sys.log("WATCHDOG", InfoType.STATUS, "Watchdog idle now.");
+				sys.log("WATCHDOG", LogLevel.STATUS, "Watchdog idle now.");
 
 				while (Global.getCurrentPhase().equals(Runphase.INIT)) {
 					// wait for phase to change to "run"
@@ -135,7 +135,7 @@ public final class WatchdogThread {
 								+ "without errors, has thrown an exception, which means, some check failed miserably. This\n"
 								+ "problem probably arose from the program and has nothing to do with you, but because\n"
 								+ "stable operation is not guaranteed from now, this program will now terminate.");
-						sys.log("WDT", InfoType.CRIT, "Exception thrown inside WDT. Stopping with error. Stacktrace below:");
+						sys.log("WDT", LogLevel.CRIT, "Exception thrown inside WDT. Stopping with error. Stacktrace below:");
 						ex.printStackTrace();
 					}
 				}
@@ -143,14 +143,14 @@ public final class WatchdogThread {
 				//====================================== CHECKING END ======================================
 
 				long activeTime = System.currentTimeMillis() - timeStart;
-				sys.log("STOPPING", InfoType.STATUS, "Total runtime: " + activeTime + "ms");
-				sys.log("STOPPING", InfoType.STATUS, "Saving log file to: "
+				sys.log("STOPPING", LogLevel.STATUS, "Total runtime: " + activeTime + "ms");
+				sys.log("STOPPING", LogLevel.STATUS, "Saving log file to: "
 													+ Global.getLogFile().getAbsolutePath());
 				Shell.getCommandHistory().writeToFile();
 
 				// String logFilePath = "/var/J-Vexus_logs/" + "logfile1.txt";
 
-				sys.log("WATCHDOG", InfoType.STATUS, "Threads stopping...");
+				sys.log("WATCHDOG", LogLevel.STATUS, "Threads stopping...");
 				if (Global.javafxEnabled && JFxGUIThread.isGUIActive()) Platform.exit();
 				System.exit(exitCode);
 			}
@@ -167,7 +167,7 @@ public final class WatchdogThread {
 
 	
 	public static final void suspend() {
-		sys.log("WDT", InfoType.NONCRIT, "Watchdog thread cannot be suspended.");
+		sys.log("WDT", LogLevel.NONCRIT, "Watchdog thread cannot be suspended.");
 	}
 
 	public static final void shutdown(int exitCode) {
@@ -207,7 +207,7 @@ public final class WatchdogThread {
 		}
 		Global.setErrorRunphase();
 		try { Thread.sleep(200); } catch (InterruptedException ie) { ie.printStackTrace(); }
-		sys.log("[WDT]", InfoType.CRIT, errMsg);
+		sys.log("[WDT]", LogLevel.CRIT, errMsg);
 		Platform.runLater(() -> {
 			Shell.println(ANSI.B_Yellow,
 					"\n\n===============================================\n"
@@ -231,8 +231,8 @@ public final class WatchdogThread {
 				sys.log("Error stop wait was interrupted.");
 			}
 		} else {
-			sys.log("WTT", InfoType.ERR, "Can't wait less than 100 or more than 60,000 milliseconds until VM suspension.");
-			sys.log("WTT", InfoType.ERR, "Defaulting to 10 seconds.");
+			sys.log("WTT", LogLevel.ERR, "Can't wait less than 100 or more than 60,000 milliseconds until VM suspension.");
+			sys.log("WTT", LogLevel.ERR, "Defaulting to 10 seconds.");
 			Platform.runLater(() -> {
 				Shell.println(ANSI.B_Green, "This JVM will be suspended in 10 seconds.");
 			});

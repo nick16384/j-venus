@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import libraries.Global;
 
@@ -34,10 +34,10 @@ public class VirtualizedLocation {
 	public VirtualizedLocation(String rootLocation) {
 		if (rootLocation == null || rootLocation.startsWith(".")) {
 			rootLocation = Global.getFSRoot();
-			sys.log("VIRTLOC", InfoType.WARN, "Specified location not valid. Using FS root instead.");
+			sys.log("VIRTLOC", LogLevel.WARN, "Specified location not valid. Using FS root instead.");
 		}
 		realLocation = new File(rootLocation);
-		sys.log("VIRTLOC", InfoType.DEBUG, "New virtual location created at " + rootLocation);
+		sys.log("VIRTLOC", LogLevel.DEBUG, "New virtual location created at " + rootLocation);
 	}
 	
 	public boolean createNewFile(VirtualFile virtualPath) {
@@ -47,7 +47,7 @@ public class VirtualizedLocation {
 		try {
 			new File(realFileLocation).createNewFile();
 		} catch (IOException ioe) {
-			sys.log("VIRTLOC", InfoType.ERR, "Creating new file failed. Location: " + realFileLocation);
+			sys.log("VIRTLOC", LogLevel.ERR, "Creating new file failed. Location: " + realFileLocation);
 			ioe.printStackTrace();
 			return false;
 		}
@@ -63,7 +63,7 @@ public class VirtualizedLocation {
 		try {
 			Files.writeString(Paths.get(realFileLocation), text, StandardOpenOption.APPEND);
 		} catch (IOException ioe) {
-			sys.log("VIRTLOC", InfoType.ERR, "Writing to file \"" + realFileLocation + "\" unsuccessful.");
+			sys.log("VIRTLOC", LogLevel.ERR, "Writing to file \"" + realFileLocation + "\" unsuccessful.");
 			ioe.printStackTrace();
 			return false;
 		}
@@ -74,7 +74,7 @@ public class VirtualizedLocation {
 		String realFileLocation =
 				getActualLocationOf(virtualPath).getAbsolutePath();
 		if (!filesystem.FileCheckUtils.exists(new File(realFileLocation))) {
-			sys.log("VIRTLOC", InfoType.WARN, "File \""
+			sys.log("VIRTLOC", LogLevel.WARN, "File \""
 					+ realFileLocation
 					+ "\" doesn't exist, so it cannot be deleted.");
 			return false;
@@ -83,7 +83,7 @@ public class VirtualizedLocation {
 		if (new File(realFileLocation).delete())
 			return true;
 		
-		sys.log("VIRTLOC", InfoType.ERR, "Error attempting to delete file at \"" + realFileLocation + "\".");
+		sys.log("VIRTLOC", LogLevel.ERR, "Error attempting to delete file at \"" + realFileLocation + "\".");
 		return false;
 	}
 	
@@ -117,7 +117,7 @@ public class VirtualizedLocation {
 				convertToCurrentOSFormat(
 						realLocation.getAbsolutePath() + virtualRoot));
 		if (!FileCheckUtils.exists(realFile))
-			sys.log("VIRTLOC", InfoType.WARN,
+			sys.log("VIRTLOC", LogLevel.WARN,
 					"New virtual file ("+ realFile.getAbsolutePath() +") does not exist (yet).");
 		
 		return new VirtualFile(this, virtualRoot);
@@ -131,11 +131,11 @@ public class VirtualizedLocation {
 			path = path.replaceAll("/", "\\");
 			path = path.replaceFirst("/", Global.getFSRoot());
 		} else {
-			sys.log("VIRTLOC", InfoType.WARN, "Warning: OS file format not implemented yet, assuming unix.");
+			sys.log("VIRTLOC", LogLevel.WARN, "Warning: OS file format not implemented yet, assuming unix.");
 			path = path.replaceAll("\\", "/");
 			path = path.replaceFirst("[A-Z]:\\", "/");
 		}
-		sys.log("VIRTLOC", InfoType.DEBUG, "After conversion to OS format : " + path);
+		sys.log("VIRTLOC", LogLevel.DEBUG, "After conversion to OS format : " + path);
 		return path;
 	}
 }

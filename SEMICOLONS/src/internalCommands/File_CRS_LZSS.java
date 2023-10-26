@@ -1,6 +1,6 @@
 package internalCommands;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import shell.Shell;
 
@@ -74,16 +74,16 @@ public class File_CRS_LZSS
         
         String searchString = "";
         try {
-          sys.log("CRS.LZSS", InfoType.STATUS, "");
+          sys.log("CRS.LZSS", LogLevel.STATUS, "");
           if (searchBuffer.contains(Character.valueOf(c))) {
 
             
             if (lookAheadBuffer.substring(0, lookAheadBuffer.length() - 1).contains(Character.toString(c))) {
-              sys.log("CRS.LZSS", InfoType.DEBUG, "Found single match(inefficient)!");
+              sys.log("CRS.LZSS", LogLevel.DEBUG, "Found single match(inefficient)!");
               out = String.valueOf(out) + "<" + index + ",1>";
             } else {
               
-              sys.log("CRS.LZSS", InfoType.DEBUG, "Found match!");
+              sys.log("CRS.LZSS", LogLevel.DEBUG, "Found match!");
               searchString = String.valueOf(searchString) + Character.toString(c); byte b1; int k; char[] arrayOfChar1;
               for (k = (arrayOfChar1 = lookAheadBuffer.toCharArray()).length, b1 = 0; b1 < k; ) { char c1 = arrayOfChar1[b1];
                 if (c1 != '.' && 
@@ -94,7 +94,7 @@ public class File_CRS_LZSS
               out = String.valueOf(out) + "<" + index + "," + searchString.length() + ">";
             } 
           } else {
-            sys.log("CRS.LZSS", InfoType.DEBUG, "No match");
+            sys.log("CRS.LZSS", LogLevel.DEBUG, "No match");
             out = String.valueOf(out) + Character.toString(c);
           
           }

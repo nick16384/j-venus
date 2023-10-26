@@ -1,6 +1,6 @@
 package jfxcomponents;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import main.Main;
 import threads.ThreadAllocation;
@@ -11,16 +11,16 @@ public class JFxGUIThread {
 	
 	public static void initialize() {
 		jfxGUIThread = new Thread(null, () -> {
-			sys.log("JFXT", InfoType.INFO, "Starting JFx GUI thread.");
+			sys.log("JFXT", LogLevel.INFO, "Starting JFx GUI thread.");
 			/*while (GUIManager == null)
 				try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }*/
 			
-			sys.log("JFXT", InfoType.INFO, "Launching JavaFX GUI...");
+			sys.log("JFXT", LogLevel.INFO, "Launching JavaFX GUI...");
 			isGUIActive = true;
 			GUIManager.loadGUI();
 			//loadGUI() will not return until window is closed or Platform.exit() is called.
 			isGUIActive = false;
-			sys.log("JFXT", InfoType.INFO, "JavaFX window was closed. Stopping SEMICOLONS.");
+			sys.log("JFXT", LogLevel.INFO, "JavaFX window was closed. Stopping SEMICOLONS.");
 			sys.shutdown(0);
 		}, "JFXT");
 		

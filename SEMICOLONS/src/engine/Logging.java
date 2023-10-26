@@ -17,7 +17,7 @@ public class Logging {
 	
 	protected static void shell_write(int priority, String auth, String message) {
 		if (priority > 5) {
-			sys.log("LOWLEVEL", InfoType.ERR, ": priority out of range (1 - 5)");
+			sys.log("LOWLEVEL", LogLevel.ERR, ": priority out of range (1 - 5)");
 			return;
 		}
 		StyledDocument doc = Main.mainFrameAWT.getCmdLine().getStyledDocument();
@@ -29,35 +29,35 @@ public class Logging {
 				try {
 					doc.insertString(doc.getLength(), message, style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			} else if (priority == 2) {
 				StyleConstants.setForeground(style, new Color(128, 255, 0));
 				try {
 					doc.insertString(doc.getLength(), message, style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			} else if (priority == 3) {
 				StyleConstants.setForeground(style, new Color(255, 255, 0));
 				try {
 					doc.insertString(doc.getLength(), message, style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			} else if (priority == 4) {
 				StyleConstants.setForeground(style, new Color(255, 128, 0));
 				try {
 					doc.insertString(doc.getLength(), message, style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			} else if (priority == 5) {
 				StyleConstants.setForeground(style, new Color(255, 0, 0));
 				try {
 					doc.insertString(doc.getLength(), message, style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			}
 		} else {
@@ -67,7 +67,7 @@ public class Logging {
 					doc.insertString(doc.getLength(), "[ " + Global.getDateTime(false) + ", " + auth + " ]: " + message,
 							style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			} else if (priority == 2) {
 				StyleConstants.setForeground(style, new Color(128, 255, 0));
@@ -75,7 +75,7 @@ public class Logging {
 					doc.insertString(doc.getLength(), "[ " + Global.getDateTime(false) + ", " + auth + " ]: " + message,
 							style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			} else if (priority == 3) {
 				StyleConstants.setForeground(style, new Color(255, 255, 0));
@@ -83,7 +83,7 @@ public class Logging {
 					doc.insertString(doc.getLength(), "[ " + Global.getDateTime(false) + ", " + auth + " ]: " + message,
 							style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			} else if (priority == 4) {
 				StyleConstants.setForeground(style, new Color(255, 128, 0));
@@ -91,7 +91,7 @@ public class Logging {
 					doc.insertString(doc.getLength(), "[ " + Global.getDateTime(false) + ", " + auth + " ]: " + message,
 							style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			} else if (priority == 5) {
 				StyleConstants.setForeground(style, new Color(255, 0, 0));
@@ -99,13 +99,13 @@ public class Logging {
 					doc.insertString(doc.getLength(), "[ " + Global.getDateTime(false) + ", " + auth + " ]: " + message,
 							style);
 				} catch (BadLocationException e) {
-					sys.log("LOWLEVEL", InfoType.ERR, "Cannot write to cmdLine: BadLocationException");
+					sys.log("LOWLEVEL", LogLevel.ERR, "Cannot write to cmdLine: BadLocationException");
 				}
 			}
 		}
 	}
 
-	public static void logWrite(String auth, InfoType status, String message) {
+	public static void logWrite(String auth, LogLevel status, String message) {
 		// Following values are available as status:
 		// -1: Any(unknown) error
 		// 0: Status / debugging messages
@@ -124,19 +124,19 @@ public class Logging {
 			runtime = -1;
 		}
 		
-		if (status.equals(InfoType.ERR) && status.isEnabled()) {
+		if (status.equals(LogLevel.ERR) && status.isEnabled()) {
 			statusMessage = "[ " + runtime + ", -1/ERR, " + auth + " ]: " + message;
 		} else if (status.asInt() == 0 && status.isEnabled()) {
 			statusMessage = "[ " + runtime + ", 0/DEBUG, " + auth + " ]: " + message;
-		} else if (status.equals(InfoType.INFO) && status.isEnabled()) {
+		} else if (status.equals(LogLevel.INFO) && status.isEnabled()) {
 			statusMessage = "[ " + runtime + ", " + "1/INFO, " + auth + " ]: " + message;
-		} else if (status.equals(InfoType.WARN) && status.isEnabled()) {
+		} else if (status.equals(LogLevel.WARN) && status.isEnabled()) {
 			statusMessage = "[ " + runtime + ", " + "2/WARN, " + auth + " ]: " + message;
-		} else if (status.equals(InfoType.NONCRIT) && status.isEnabled()) {
+		} else if (status.equals(LogLevel.NONCRIT) && status.isEnabled()) {
 			statusMessage = "[ " + runtime + ", " + "3/NONCRIT, " + auth + " ]: " + message;
-		} else if (status.equals(InfoType.CRIT) && status.isEnabled()) {
+		} else if (status.equals(LogLevel.CRIT) && status.isEnabled()) {
 			statusMessage = "[ " + runtime + ", " + "4/CRIT, " + auth + " ]: " + message;
-		} else if (status.equals(InfoType.FATAL) && status.isEnabled()) {
+		} else if (status.equals(LogLevel.FATAL) && status.isEnabled()) {
 			statusMessage = "[ " + runtime + ", " + "5/FATAL, " + auth + " ]: " + message.toUpperCase();
 		}
 		

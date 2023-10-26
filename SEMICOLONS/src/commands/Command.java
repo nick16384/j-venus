@@ -7,7 +7,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import internalCommands.System_Exec;
 
@@ -16,6 +16,9 @@ public class Command implements Future<String> {
 	private String command;
 	private ArrayList<String> params;
 	private String returnValue;
+	
+	private long executionTimeStart = 0;
+	private long totalExecutionTime = 0;
 	
 	/**
 	 * Creates a new command and parses its contents.
@@ -38,13 +41,27 @@ public class Command implements Future<String> {
 		Object[] commandAndParams = CommandParser.parseCmd(fullCommand);
 		
 		if (commandAndParams == null || commandAndParams.length != 2) {
-			sys.log("CMD", InfoType.ERR, "Command could not be parsed.");
+			sys.log("CMD", LogLevel.ERR, "Command could not be parsed.");
 			throw new CommandParserException(
 					"Parsing command failed. Maybe, it contains special characters or a special sequence.");
 		}
 		
 		this.command = (String) commandAndParams[0];
 		this.params = (ArrayList<String>) commandAndParams[1];
+	}
+	
+	public void executionTimeStartNow() {
+		if (executionTimeStart <= 0)
+			executionTimeStart = System.currentTimeMillis();
+	}
+	
+	public void executionTimeEndNow() {
+		if (totalExecutionTime <= 0)
+			totalExecutionTime = System.currentTimeMillis() - executionTimeStart;
+	}
+	
+	public long getExecutionTime() {
+		return totalExecutionTime;
 	}
 	
 	public void start() throws IOException {

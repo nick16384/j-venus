@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.Runphase;
 import engine.sys;
 import jfxcomponents.ANSI;
@@ -38,20 +38,20 @@ public class Env {
 			}
 		} catch (NullPointerException npe) {
 			if (Global.getCurrentPhase().equals(Runphase.RUN)) {
-				Shell.print(2, "VARLIB", "Environment variable '$MAX_ENV_SIZE' does not exist.\n"
+				Shell.print(2, "ENV", "Environment variable '$MAX_ENV_SIZE' does not exist.\n"
 						+ "Please add it manually or run 'chEnv -update $MAX_ENV_SIZE'.\n");
-				sys.log("VARLIB", InfoType.WARN, "Environment variable '$MAX_ENV_SIZE' does not exist.\n"
+				sys.log("ENV", LogLevel.WARN, "Environment variable '$MAX_ENV_SIZE' does not exist.\n"
 						+ "Please add it manually or run 'chEnv -update $MAX_ENV_SIZE'.");
 				npe.printStackTrace();
 			}
 		}
 		if (key == null) {
-			sys.log("VARLIB", InfoType.ERR, "Tried to add envV with key null. Exited with error.");
-			Shell.print(3, "VARLIB", "Cannot add envV with key null.\n");
+			sys.log("ENV", LogLevel.ERR, "Tried to add envV with key null. Exited with error.");
+			Shell.print(3, "ENV", "Cannot add envV with key null.\n");
 			return;
 		} else if (val == null && Global.getCurrentPhase().equals(Runphase.RUN)) {
-			sys.log("VARLIB", InfoType.ERR, "Tried to set an envV with value 'null', when in RUN phase. Exited with error.");
-			Shell.print(3, "VARLIB", "Cannot set an envV with value 'null', when in RUN phase.\n");
+			sys.log("ENV", LogLevel.ERR, "Tried to set an envV with value 'null', when in RUN phase. Exited with error.");
+			Shell.print(3, "ENV", "Cannot set an envV with value 'null', when in RUN phase.\n");
 		}
 		
 		String envMsgOut = "New environment variable '" + key + "' -> '" + val + "' : ";
@@ -72,7 +72,7 @@ public class Env {
 				Shell.print(ANSI.B_Magenta, "Try 'env' to see, if your envV exists or try again.\n");
 			}
 		}
-		sys.log("VARLIB", InfoType.DEBUG, envMsgOut);
+		sys.log("ENV", LogLevel.DEBUG, envMsgOut);
 	}
 	
 	//TODO fix "max env size not existing" error
@@ -94,7 +94,7 @@ public class Env {
 			if (!key.startsWith("$$")) { //Do not modify constants
 				env.replace(key, newVal);
 			} else {
-				sys.log("VARLIB:CHENV", InfoType.WARN, "Tried to modify special variable or constant ($$*). "
+				sys.log("ENV:CHENV", LogLevel.WARN, "Tried to modify special variable or constant ($$*). "
 						+ "This incident will be reported.");
 				Shell.print(2, "HIDDEN", "Tried to modify special variable or constant ($$*).\n"
 						+ "This incident will be reported.\n");

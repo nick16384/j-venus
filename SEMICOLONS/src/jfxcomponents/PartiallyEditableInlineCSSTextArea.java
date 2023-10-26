@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 import org.fxmisc.richtext.InlineCssTextArea;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
@@ -81,7 +81,7 @@ public class PartiallyEditableInlineCSSTextArea extends InlineCssTextArea {
 				&& newReadOnlyToIndex <= this.getLength()) {
 			readOnlyToIndex = newReadOnlyToIndex;
 		} else {
-			sys.log("CLASS:CSSTextArea", InfoType.ERR, "New read-only length index " + newReadOnlyToIndex + " out of bounds.");
+			sys.log("CLASS:CSSTextArea", LogLevel.ERR, "New read-only length index " + newReadOnlyToIndex + " out of bounds.");
 		}
 	}
 }

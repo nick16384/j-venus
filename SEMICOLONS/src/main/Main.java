@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import java.util.Arrays;
 import java.util.List;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import shell.Shell;
 import libraries.Global;
@@ -19,13 +19,13 @@ public class Main {
 	
 	public static void main(String[] args) {
 		argsMain = Arrays.asList(args);
-		sys.log("MAIN", InfoType.INFO, "Commandline used for this VM (if empty, probably running on Windows):\n"
+		sys.log("MAIN", LogLevel.INFO, "Commandline used for this VM (if empty, probably running on Windows):\n"
 				+ ProcessHandle.current().info().commandLine().get());
-		sys.log("MAIN", InfoType.INFO, "Parent(s) launch info:");
+		sys.log("MAIN", LogLevel.INFO, "Parent(s) launch info:");
 		int stackedParentsCount = printProcessParentsInfo(ProcessHandle.current(), 0);
-		sys.log("MAIN", InfoType.INFO, "Stacked parents: " + stackedParentsCount);
+		sys.log("MAIN", LogLevel.INFO, "Stacked parents: " + stackedParentsCount);
 		if (stackedParentsCount > 20) {
-			sys.log("MAIN", InfoType.CRIT, "This JVM instance has restarted itself too often. Shutting down.");
+			sys.log("MAIN", LogLevel.CRIT, "This JVM instance has restarted itself too often. Shutting down.");
 			System.exit(1);
 		}
 		
@@ -49,10 +49,10 @@ public class Main {
 		
 		if (Arrays.asList(args).contains("--awt")) {
 			Global.javafxEnabled = false;
-			sys.log("MAIN", InfoType.INFO, "Using deprecated AWT window loader.");
+			sys.log("MAIN", LogLevel.INFO, "Using deprecated AWT window loader.");
 			awtcomponents.AWTWinload.awtWinload();
 		} else {
-			sys.log("MAIN", InfoType.INFO, "Using default JavaFX window loader.");
+			sys.log("MAIN", LogLevel.INFO, "Using default JavaFX window loader.");
 			try {
 				Global.javafxEnabled = true;
 			} catch (Exception e) {
@@ -71,9 +71,9 @@ public class Main {
 	
 	//========================================MAIN===========================================
 	public static final void initAWTWindow() {
-		sys.log("MAIN", InfoType.DEBUG, "Creating new WindowMain object.");
+		sys.log("MAIN", LogLevel.DEBUG, "Creating new WindowMain object.");
 		mainFrameAWT = new awtcomponents.WindowMain("J-Vexus " + Global.getVersion());
-		sys.log("MAIN", InfoType.DEBUG, "Attaching KeyListener to mainFrame.");
+		sys.log("MAIN", LogLevel.DEBUG, "Attaching KeyListener to mainFrame.");
 		awtcomponents.KeyListenerAttacher.attachKeyListener(mainFrameAWT);
 	}
 	

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 
 /**
@@ -21,10 +21,10 @@ public class LoadStartup {
 		
 		
 		if (true) { //TODO maybe this might not work, test it!!!
-			sys.log("STARTUP", InfoType.DEBUG, "Startup script file: " + startupFile.getAbsolutePath());
+			sys.log("STARTUP", LogLevel.DEBUG, "Startup script file: " + startupFile.getAbsolutePath());
 			startupFileString = Files.readString(Paths.get(startupFile.getAbsolutePath()));
 			//Problems with symlinks. File does exist but is referred by a symlink
-			sys.log("STARTUP", InfoType.DEBUG, "Read: " + startupFileString);
+			sys.log("STARTUP", LogLevel.DEBUG, "Read: " + startupFileString);
 			
 			if (startupFileString.startsWith("# JavaDOS startup script")) {
 				startupFileString = startupFileString.replaceFirst("# JavaDOS startup script\n", "");
@@ -34,10 +34,10 @@ public class LoadStartup {
 					return false;
 				}
 			} else {
-				sys.log("STARTUP", InfoType.ERR, "The startup file is not selected correctly or it is misconfigured.");
+				sys.log("STARTUP", LogLevel.ERR, "The startup file is not selected correctly or it is misconfigured.");
 			}
 		} else {
-			sys.log("STARTUP", InfoType.ERR, "The startup file does not exist.");
+			sys.log("STARTUP", LogLevel.ERR, "The startup file does not exist.");
 		}
 		return true;
 	}

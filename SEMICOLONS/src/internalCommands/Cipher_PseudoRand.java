@@ -3,7 +3,7 @@ package internalCommands;
 import java.util.ArrayList;
 
 import awtcomponents.AWTANSI;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import jfxcomponents.ANSI;
 import main.Main;
@@ -52,7 +52,7 @@ public class Cipher_PseudoRand {
 				seed = randomIteration(seed, i);
 			}
 		} catch (ArithmeticException | IllegalArgumentException e) {
-			sys.log("PSEUDORAND", InfoType.ERR, "Arithmetic or Illegal Argument Exception. Aborting calculation.");
+			sys.log("PSEUDORAND", LogLevel.ERR, "Arithmetic or Illegal Argument Exception. Aborting calculation.");
 			Shell.println("Arithmetic or Illegal Arument Exception. Aborting calculation.");
 		}
 		try { Thread.sleep(50); } catch (InterruptedException ie) { ie.printStackTrace(); }
@@ -91,7 +91,7 @@ public class Cipher_PseudoRand {
 			input = Math.abs(input * 473);
 			input = getLastNDigits(input, 8);
 		} catch (ArithmeticException | IllegalArgumentException e) {
-			sys.log("PSEUDORAND", InfoType.ERR, "Arithmetic error during calculation. Iteration count: " + iterationCount);
+			sys.log("PSEUDORAND", LogLevel.ERR, "Arithmetic error during calculation. Iteration count: " + iterationCount);
 			Shell.println(ANSI.B_Red, "Arithmetic error (probably divizion by zero) during calculation. "
 					+ "Discarding changes.\n"
 					+ "Iteration number: " + iterationCount);

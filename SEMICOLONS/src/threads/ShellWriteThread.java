@@ -1,11 +1,9 @@
 package threads;
 
 import javax.swing.text.BadLocationException;
-
-import engine.InfoType;
+import engine.LogLevel;
 import engine.Runphase;
 import engine.sys;
-import internalCommands.System_Cause_Error_Termination;
 import jfxcomponents.GUIManager;
 import jfxcomponents.ANSI;
 import libraries.Global;
@@ -18,9 +16,15 @@ public class ShellWriteThread {
 	private static DoubleTextBuffer writeBuffer;
 	private static final Object swtMonitor = new Object();
 	
+	private static ShellIOStream userInputStream;
+	private static ShellIOStream shellTextStream;
+	
 	private static Thread shellWriteThread;
 	
 	protected static void initialize() {
+		userInputStream = new ShellIOStream();
+		shellTextStream = new ShellIOStream();
+		
 		shellWriteThread = new Thread(() -> {
 			
 			Global.waitUntilReady();
@@ -53,7 +57,7 @@ public class ShellWriteThread {
 						try { awtcomponents.AWTANSI.appendANSI(
 								Main.mainFrameAWT.getCmdLine(), writeBuffer.readFromActive());
 						} catch (BadLocationException ble) {
-							sys.log("SWT", InfoType.WARN, "Write fail on AWT element. BadLocationException"); }
+							sys.log("SWT", LogLevel.WARN, "Write fail on AWT element. BadLocationException"); }
 					}
 					// =========================== WRITE TO SHELL END ===========================
 					
@@ -104,14 +108,25 @@ public class ShellWriteThread {
 	}
 	
 	public static void suspend() {
-		sys.log("SWT", InfoType.ERR, "Suspending SWT is not possible.");
+		sys.log("SWT", LogLevel.ERR, "Suspending SWT is not possible.");
 	}
 	
 	public static boolean isRunning() {
 		return shellWriteThread != null && shellWriteThread.isAlive();
 	}
 	
-	public static void updateShellStream() {
-		sys.log("pls implement updateShellStream in SWT");
+	public static void updateUserInputStream() {
+		String lastUserInput =
+				GUIManager.getCmdLine().getText()
+				.substring(GUIManager.getCmdLine().getReadOnlyToIndex());
+		sys.log("SWT:STREAM", LogLevel.DEBUG, "Last user input: " + lastUserInput);
+		userInputStream.write(lastUserInput);
+	}
+	
+	public static ShellIOStream getUserInputStream() {
+		return userInputStream;
+	}
+	public static ShellIOStream getShellTextStream() {
+		return shellTextStream;
 	}
 }

@@ -1,6 +1,6 @@
 package threads;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.Runphase;
 import engine.sys;
 import jfxcomponents.ANSI;
@@ -27,15 +27,15 @@ public class WatchdogThread2 {
 							
 							try {
 								if (Global.javafxEnabled && GUIManager.getCmdLine() != null)
-									sys.log("WDT2", InfoType.INFO, "Not setting caret to last position");
+									sys.log("WDT2", LogLevel.INFO, "Not setting caret to last position");
 									// set jfx caret to last pos
 								else
 									Main.mainFrameAWT.getCmdLine()
 											.setCaretPosition(Main.mainFrameAWT.getCmdLine().getText().length());
 							} catch (NullPointerException npe) {
-								sys.log("WDT2", InfoType.ERR, "Setting cursor to last text position threw an error. Main.mainFrame probably is null.");
+								sys.log("WDT2", LogLevel.ERR, "Setting cursor to last text position threw an error. Main.mainFrame probably is null.");
 							} catch (IllegalArgumentException iae) {
-								sys.log("WDT2", InfoType.ERR, "Setting cursor to last text position threw an error, because the set position was out of range.");
+								sys.log("WDT2", LogLevel.ERR, "Setting cursor to last text position threw an error, because the set position was out of range.");
 							}
 							
 							// This check often fails for no reason, so it is left out.
@@ -91,7 +91,7 @@ public class WatchdogThread2 {
 
 	
 	public static void suspend() {
-		sys.log("WDT2", InfoType.WARN, "WatchdogThread2 cannot be suspended.");
+		sys.log("WDT2", LogLevel.WARN, "WatchdogThread2 cannot be suspended.");
 	}
 
 	

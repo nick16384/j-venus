@@ -5,7 +5,7 @@ import org.fxmisc.richtext.InlineCssTextArea;
 
 import awtcomponents.AWTANSI;
 import commands.CommandManagement;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import filesystem.VirtualFile;
 import javafx.application.Application;
@@ -37,12 +37,12 @@ public class WindowGUI extends Application {
 	
 	@Override
 	public void init() {
-		sys.log("GUI", InfoType.DEBUG, "Window init currently not necessary (empty).");
+		sys.log("GUI", LogLevel.DEBUG, "Window init currently not necessary (empty).");
 	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		sys.log("JFX", InfoType.INFO, "Loading JavaFX window :)");
+		sys.log("JFX", LogLevel.INFO, "Loading JavaFX window :)");
 		
 		try {
 			primaryStage.setTitle("S.E.M.I.C.O.L.O.N. Shell " + Global.getVersion());
@@ -62,7 +62,7 @@ public class WindowGUI extends Application {
 			
 			Image icon = null;
 			VirtualFile iconFile = Global.getDataDir().newVirtualFile("/semicolons-icon.png");
-			sys.log("JFX", InfoType.DEBUG, "Icon path: " + iconFile.getAbsolutePath());
+			sys.log("JFX", LogLevel.DEBUG, "Icon path: " + iconFile.getAbsolutePath());
 			try { icon = new Image(
 					"file:" + iconFile.getAbsolutePath()); }
 			catch (Exception ex) { ex.printStackTrace(); }
@@ -79,7 +79,7 @@ public class WindowGUI extends Application {
 						CompletionOverlay.commandTypingIsFinished();
 						KeyEventHandlers.actionOnEnter();
 					} catch (Exception ex) {
-						sys.log("JFX", InfoType.ERR, "Exception in command extractor / formatter: "
+						sys.log("JFX", LogLevel.ERR, "Exception in command extractor / formatter: "
 								+ "Probably the prompt was edited by the user.");
 						Shell.print("Whatever you're trying, it's not funny!");
 						Shell.showPrompt();
@@ -89,7 +89,7 @@ public class WindowGUI extends Application {
 					try {
 						KeyEventHandlers.handleCommandRepeat(true);
 					} catch (Exception ex) {
-						sys.log("JFX", InfoType.ERR, "Command repeat encountered an exception. This is an internal undefined error.");
+						sys.log("JFX", LogLevel.ERR, "Command repeat encountered an exception. This is an internal undefined error.");
 						Shell.print("You broke something. It's not healthy for your PC.");
 						Shell.showPrompt();
 						ex.printStackTrace();
@@ -99,7 +99,7 @@ public class WindowGUI extends Application {
 					try {
 						KeyEventHandlers.handleCommandRepeat(false);
 					} catch (Exception ex) {
-						sys.log("JFX", InfoType.ERR, "Command repeat encountered an exception. This is an internal undefined error.");
+						sys.log("JFX", LogLevel.ERR, "Command repeat encountered an exception. This is an internal undefined error.");
 						Shell.print("You broke something. It's not healthy for your PC.");
 						Shell.showPrompt();
 						ex.printStackTrace();
@@ -111,10 +111,10 @@ public class WindowGUI extends Application {
 				}
 				
 				if (event.getCode().equals(KeyCode.PAGE_UP)) {
-					sys.log("JFX", InfoType.DEBUG, "Increasing shell font size.");
+					sys.log("JFX", LogLevel.DEBUG, "Increasing shell font size.");
 					//Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
 				} else if (event.getCode().equals(KeyCode.PAGE_DOWN)) {
-					sys.log("JFX", InfoType.DEBUG, "Shrinking shell font size.");
+					sys.log("JFX", LogLevel.DEBUG, "Shrinking shell font size.");
 					//Main.cmdLine.setFont(new Font("Terminus (TTF)", Main.cmdLine.getFont().getSize() - 1));
 					//TODO show big number on screen for font size change
 				}
@@ -125,7 +125,7 @@ public class WindowGUI extends Application {
 			
 			GUIManager.cmdLine.setOnKeyPressed((event) -> {
 				if (new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN).match(event)) {
-					sys.log("JFX", InfoType.DEBUG, "User pressed CTRL + C");
+					sys.log("JFX", LogLevel.DEBUG, "User pressed CTRL + C");
 					Shell.print(ANSI.D_Cyan, "^C");
 					CommandManagement.killCurrentIfRunning();
 				}
@@ -145,7 +145,7 @@ public class WindowGUI extends Application {
 			
 			CompletionOverlay.showOverlay(primaryStage);
 			
-			sys.log("JFX", InfoType.DEBUG, "start(primaryStage) method end reached.");
+			sys.log("JFX", LogLevel.DEBUG, "start(primaryStage) method end reached.");
 			
 		} catch (Exception ex) {
 			for(StackTraceElement e: ex.getStackTrace())
@@ -154,8 +154,8 @@ public class WindowGUI extends Application {
 	}
 	
 	public void stop() {
-		sys.log("JFX", InfoType.INFO, "Stopping JavaFX application...");
+		sys.log("JFX", LogLevel.INFO, "Stopping JavaFX application...");
 		Platform.exit();
-		sys.log("JFX", InfoType.INFO, "Stopping JavaFX application done.");
+		sys.log("JFX", LogLevel.INFO, "Stopping JavaFX application done.");
 	}
 }

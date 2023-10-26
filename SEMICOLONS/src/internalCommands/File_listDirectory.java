@@ -1,6 +1,6 @@
 package internalCommands;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import filesystem.FileCheckUtils;
 import jfxcomponents.ANSI;
@@ -28,7 +28,7 @@ public class File_listDirectory {
 			listDirName = Global.getCurrentDir();
 			listDir = new File(Global.getCurrentDir());
 		}
-		sys.log("LSDIR", InfoType.INFO, "Listing directory: '" + listDirName + "'");
+		sys.log("LSDIR", LogLevel.INFO, "Listing directory: '" + listDirName + "'");
 		
 		if (!FileCheckUtils.isDirStrict(listDir)) {
 			return "FileErr_NotADir";

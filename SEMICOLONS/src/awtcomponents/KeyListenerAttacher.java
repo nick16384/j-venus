@@ -12,7 +12,7 @@ import java.util.Arrays;
 import javax.swing.text.BadLocationException;
 
 import commands.Command;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import filesystem.InternalFiles;
 import libraries.Err;
@@ -39,7 +39,7 @@ public class KeyListenerAttacher {
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == KeyEvent.VK_ENTER) {
 					//UPDATE SHELL STREAM ==============================================================================
-					sys.log("AWT", InfoType.DEBUG, "Not updating shell stream.");
+					sys.log("AWT", LogLevel.DEBUG, "Not updating shell stream.");
 					//END UPDATE SHELL STREAM ==========================================================================
 					//Splitting WindowMain.cmdLine text into command
 					String[] lines = WindowMain.cmdLine.getText().split("\n");
@@ -71,11 +71,11 @@ public class KeyListenerAttacher {
 					//if (fullCommand.contains(VarLib.getPrompt())) { fullCommand = fullCommand.split("\\$ ")[1]; }
 					if (!fullCommand.isBlank()) {
 						if (fullCommand.contains(" && ")) {
-							sys.log("MAIN", InfoType.WARN, "Info: Found multiple commands connected with '&&'.");
-							sys.log("MAIN", InfoType.WARN, "This is still experimental: Expect errors.");
+							sys.log("MAIN", LogLevel.WARN, "Info: Found multiple commands connected with '&&'.");
+							sys.log("MAIN", LogLevel.WARN, "This is still experimental: Expect errors.");
 							Shell.println("Using experimental command interconnect: '&&'");
 							for (String subCommand : fullCommand.split(" && ")) {
-								sys.log("MAIN", InfoType.DEBUG, "Running '" + fullCommand + "'");
+								sys.log("MAIN", LogLevel.DEBUG, "Running '" + fullCommand + "'");
 								sys.log("Subcommand: " + subCommand);
 								try {
 									Command cmd = new Command(subCommand);
@@ -89,7 +89,7 @@ public class KeyListenerAttacher {
 								}
 							}
 						} else {
-							sys.log("MAIN", InfoType.DEBUG, "Sending '" + fullCommand + "' to Command Parser");
+							sys.log("MAIN", LogLevel.DEBUG, "Sending '" + fullCommand + "' to Command Parser");
 							try {
 								new Command(fullCommand).start();
 								//For returnVal, try:
@@ -99,14 +99,14 @@ public class KeyListenerAttacher {
 							}
 						}
 						//=========================ADD FULLCMD TO HISTORY===============================
-						sys.log("AWT", InfoType.WARN, "Command repeat in AWT disabled.");
+						sys.log("AWT", LogLevel.WARN, "Command repeat in AWT disabled.");
 						//============================END ADD FULLCMD TO HISTORY==============================
 					} else {
 						Shell.showPrompt();
 					}
 				} else if (e.getKeyChar() == KeyEvent.VK_TAB) {
 					//========================================COMMAND REPEAT============================================
-					sys.log("AWT", InfoType.WARN, "Command repeat in AWT disabled.");
+					sys.log("AWT", LogLevel.WARN, "Command repeat in AWT disabled.");
 					//========================================COMMAND REPEAT END============================================
 				}
 			}

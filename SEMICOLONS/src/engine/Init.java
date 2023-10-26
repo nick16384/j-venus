@@ -32,8 +32,8 @@ public class Init {
 	 */
 	public static boolean init(String[] vmArgsArray) {
 		if (!Global.getCurrentPhase().equals(Runphase.PREINIT)) {
-			sys.log("INIT", InfoType.ERR, "Init already done. Cannot do twice or more.\n");
-			sys.log("INIT", InfoType.INFO, "If you want to force reinitialization, set the current phase to \"pre-init\".");
+			sys.log("INIT", LogLevel.ERR, "Init already done. Cannot do twice or more.\n");
+			sys.log("INIT", LogLevel.INFO, "If you want to force reinitialization, set the current phase to \"pre-init\".");
 			return false;
 		}
 		//Very complicated way to convert array of main args to ArrayList<String>
@@ -68,39 +68,39 @@ public class Init {
 			System.out.println("the Command Line argument '--single-threaded'!");
 		}
 		if (vmArgs.contains("--debug") || vmArgs.contains("-v") || vmArgs.contains("--verbose")) {
-			InfoType.DEBUG.enable(); InfoType.STATUS.enable();
+			LogLevel.DEBUG.enable(); LogLevel.STATUS.enable();
 		}
 		if (vmArgs.contains("--silent") || vmArgs.contains("--quiet")) {
-			InfoType.DEBUG.disable(); InfoType.STATUS.disable(); InfoType.INFO.disable();
+			LogLevel.DEBUG.disable(); LogLevel.STATUS.disable(); LogLevel.INFO.disable();
 		}
 		if (!libraries.Global.singleThreaded) {
 			ThreadAllocation.launchAll();
 		}
 		
 		Global.setNextRunphase(); // Init
-		sys.log("INIT", InfoType.INFO, "Loading internal variables...");
+		sys.log("INIT", LogLevel.INFO, "Loading internal variables...");
 		
 		libraries.VariableInitializion.initializeAll();
 		
-		sys.log("INIT", InfoType.STATUS, "Done.");
-		sys.log("INIT", InfoType.INFO, "Warning: Log is currently very verbose due to debugging reasons.");
-		sys.log("INIT", InfoType.INFO, "Will be reduced within alpha versions.");
+		sys.log("INIT", LogLevel.STATUS, "Done.");
+		sys.log("INIT", LogLevel.INFO, "Warning: Log is currently very verbose due to debugging reasons.");
+		sys.log("INIT", LogLevel.INFO, "Will be reduced within alpha versions.");
 		if (vmArgs.contains("--enable-deprecated")) {
-			sys.log("INIT", InfoType.STATUS, "No deprecated features to enable.");
+			sys.log("INIT", LogLevel.STATUS, "No deprecated features to enable.");
 		}
 		try {
-			sys.log("INIT", InfoType.INFO, "Loading startup script");
+			sys.log("INIT", LogLevel.INFO, "Loading startup script");
 			boolean error = threads.LoadStartup.loadAndExecute();
 			if (error) {
 				//TODO next: fix startupscripts(ext cmds, startupscr)
-				sys.log("STARTUPSCRIPTRUN", InfoType.ERR, "Error when loading startup script: Internal error");
+				sys.log("STARTUPSCRIPTRUN", LogLevel.ERR, "Error when loading startup script: Internal error");
 			}
 		} catch (IOException ioe) {
-			sys.log("STARTUPSCRIPTRUN", InfoType.ERR, "Error when loading startup script: IOException");
+			sys.log("STARTUPSCRIPTRUN", LogLevel.ERR, "Error when loading startup script: IOException");
 			ioe.printStackTrace();
 		}
 		
-		sys.log("INIT", InfoType.INFO, "Creating virtual files...");
+		sys.log("INIT", LogLevel.INFO, "Creating virtual files...");
 		// Virtual files are only set up to prevent NullPointerExceptions.
 		// Any class is allowed at any time to change whatever file to a more recent version.
 		InternalFiles.setCmdHistory(Global.getDataDir().newVirtualFile("/cmd_history"));
@@ -117,13 +117,13 @@ public class Init {
 		InternalFiles.getMotdBackup().createOnFilesystem();
 		InternalFiles.getSemicolonsIcon().createOnFilesystem();
 		
-		sys.log("INIT", InfoType.INFO, "Reinitializing environment...");
+		sys.log("INIT", LogLevel.INFO, "Reinitializing environment...");
 		Env.updateEnv("$$ALL");
-		sys.log("INIT", InfoType.INFO, "Done.");
+		sys.log("INIT", LogLevel.INFO, "Done.");
 		
-		sys.log("INIT", InfoType.INFO, "Enabling command history...");
+		sys.log("INIT", LogLevel.INFO, "Enabling command history...");
 		Shell.initializeCommandHistory();
-		sys.log("INIT", InfoType.INFO, "Done.");
+		sys.log("INIT", LogLevel.INFO, "Done.");
 		
 		/*sys.log("Initializing main frame...");
 		Main mainWindow = new Main();
@@ -131,7 +131,7 @@ public class Init {
 		new modules.ProtectedTextComponent(mainWindow.getMain().getMainWindow().cmdLine).unprotectAllText();*/
 		//mainWindow.getMainWindow().cmdLine.setText("");
 		//OpenLib.cmdLinePrepare();
-		sys.log("INIT", InfoType.INFO, "Finished initialization part.");
+		sys.log("INIT", LogLevel.INFO, "Finished initialization part.");
 		return true;
 	}
 }

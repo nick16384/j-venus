@@ -1,1 +1,12 @@
-modules
+awtcomponents
+commands
+components
+engine
+filesystem
+internalCommands
+jfxcomponents
+libraries
+main
+net
+shell
+threads

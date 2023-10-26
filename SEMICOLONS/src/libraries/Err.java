@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import awtcomponents.AWTANSI;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import filesystem.VirtualFile;
 import jfxcomponents.ANSI;
@@ -16,16 +16,16 @@ import shell.Shell;
 public class Err {
 	public static void shellPrintErr(Exception ex, String errName, String errType) {
 		if (ex == null) {
-			sys.log("ERRMSG", InfoType.WARN, "Exception is null, so no error message displayed.");
+			sys.log("ERRMSG", LogLevel.WARN, "Exception is null, so no error message displayed.");
 			Shell.println("Warning: Error message suppressed. See more information in log at \"ERRMSG\".");
 			return;
 		}
 		String stacktrace = "";
 		
 		if (errName == null) {
-			sys.log("ERR", InfoType.CRIT, "ERROR (DEF)");
+			sys.log("ERR", LogLevel.CRIT, "ERROR (DEF)");
 		} else {
-			sys.log("ERR", InfoType.CRIT, errName);
+			sys.log("ERR", LogLevel.CRIT, errName);
 		}
 		Shell.print(4, "ERR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
 				+ ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");

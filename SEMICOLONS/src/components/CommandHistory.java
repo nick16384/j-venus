@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import filesystem.InternalFiles;
 import libraries.Global;
@@ -39,7 +39,7 @@ public class CommandHistory {
 				commandHistoryBackupStr == null ? "" : commandHistoryStr.trim();
 		
 		if (!commandHistoryStr.equals(commandHistoryBackupStr))
-			sys.log("CMDHIST", InfoType.CRIT, "Command history and Command history backup file contents mismatch!");
+			sys.log("CMDHIST", LogLevel.CRIT, "Command history and Command history backup file contents mismatch!");
 		
 		return commandHistoryStr;
 	}
@@ -55,7 +55,7 @@ public class CommandHistory {
 			maxHistoryElements =
 					Integer.parseInt(InternalFiles.getCmdHistoryMaxLength().readContents());
 		} catch (Exception ex) {
-			sys.log("CMDHIST", InfoType.WARN, "Cannot read max history size, using default value "
+			sys.log("CMDHIST", LogLevel.WARN, "Cannot read max history size, using default value "
 					+ Global.DEFAULT_MAX_HISTORY_SIZE + ".");
 		}
 		String newFullHistory = newHistoryElementsStr + "\n" + originalHistoryFileContents;

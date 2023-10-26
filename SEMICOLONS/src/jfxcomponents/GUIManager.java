@@ -10,9 +10,10 @@ import org.fxmisc.richtext.InlineCssTextArea;
 
 import awtcomponents.AWTANSI;
 import commands.CommandManagement;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.Runphase;
 import engine.sys;
+import filesystem.InternalFiles;
 import filesystem.VirtualFile;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -52,7 +53,7 @@ public class GUIManager {
 	
 	public static void loadGUI() {
 		mainGUI = new WindowGUI();
-		sys.log("JFX", InfoType.INFO, "Starting JavaFX application...");
+		sys.log("JFX", LogLevel.INFO, "Starting JavaFX application...");
 		mainGUI.launch();
 	}
 	
@@ -68,26 +69,28 @@ public class GUIManager {
 										  cmdLine.getText().length(),
 										  "-fx-fill: #" + color.toString().substring(2, 8) + ";");
 				} catch (Exception ex) {
-					sys.log("JFX", InfoType.WARN, "Writing text to cmdLine failed.");
+					sys.log("JFX", LogLevel.WARN, "Writing text to cmdLine failed.");
 					ex.printStackTrace();
 				}
 			});
 			Platform.requestNextPulse();
 		} else {
-			sys.log("JFX", InfoType.WARN, "Appending text not possible, because Main.cmdLine is null.");
+			sys.log("JFX", LogLevel.WARN, "Appending text not possible, because Main.cmdLine is null.");
 		}
 	}
 	
 	protected static void configureCssStylesheet(Scene scene) {
-		File cssFile = Global.getDataDir().newVirtualFile("/consoleStyle/default-stylesheet.css");
+		InternalFiles.setConsoleCssStylesheet(
+				Global.getDataDir().newVirtualFile("/consoleStyle/default-stylesheet.css"));
 		
-		createCssStylesheetFileIfNotExisting(cssFile);
+		createCssStylesheetFileIfNotExisting();
 		scene.getStylesheets().clear();
-		sys.log("JFX", InfoType.INFO, "Loading external stylesheet...");
-		scene.getStylesheets().add("file:///" + cssFile.getAbsolutePath().replace("\\", "/"));
+		sys.log("JFX", LogLevel.INFO, "Loading external stylesheet...");
+		scene.getStylesheets().add("file:///"
+				+ InternalFiles.getConsoleCssStylesheet().getAbsolutePath().replace("\\", "/"));
 	}
 	
-	private static void createCssStylesheetFileIfNotExisting(File cssFile) {
+	private static void createCssStylesheetFileIfNotExisting() {
 		String cssData =
 				".root {\n"
 				+ "	-fx-font-family: \"Terminus (TTF)\";\n"
@@ -104,14 +107,16 @@ public class GUIManager {
 				+ "	-fx-translate-x: 4;\n"
 				+ "}";
 		
-		if (!filesystem.FileCheckUtils.exists(cssFile)) {
-			try {
-				sys.log("JFX:CSS", InfoType.INFO, "External CSS stylesheet does not exist. Creating default file.");
-				cssFile.createNewFile();
-				Files.writeString(cssFile.toPath(), cssData, StandardOpenOption.WRITE);
-			} catch (IOException ioe) {
-				sys.log("JFX:CSS", InfoType.ERR, "Error creating new default CSS stylesheet.");
-				sys.log("JFX:CSS", InfoType.ERR, "Running in fallback color mode.");
+		if (!filesystem.FileCheckUtils.exists(InternalFiles.getConsoleCssStylesheet())) {
+			sys.log("JFX:CSS", LogLevel.INFO, "External CSS stylesheet does not exist. Creating default file.");
+			boolean success = false;
+			success = InternalFiles.getConsoleCssStylesheet().createOnFilesystem();
+			success = InternalFiles.getConsoleCssStylesheet().writeString(cssData, StandardOpenOption.WRITE);
+			if (success) {
+				sys.log("JFX:CSS", LogLevel.STATUS, "CSS File successfully created and written to.");
+			} else {
+				sys.log("JFX:CSS", LogLevel.ERR, "CSS File could not be created or written to.");
+				sys.log("JFX:CSS", LogLevel.ERR, "Running in fallback color mode.");
 			}
 		}
 	}

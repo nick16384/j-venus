@@ -1,7 +1,7 @@
 package threads;
 
 import commands.CommandManagement;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import jfxcomponents.JFxGUIThread;
 
@@ -11,25 +11,25 @@ import jfxcomponents.JFxGUIThread;
 public class ThreadAllocation {
 	
 	public static void launchAll() {
-		sys.log("THREAD-ALLOC", InfoType.INFO, "Launching all internal threads...");
+		sys.log("THREAD-ALLOC", LogLevel.INFO, "Launching all internal threads...");
 		if (WatchdogThread.isRunning())
-		{ sys.log("THREAD-ALLOC", InfoType.WARN, "WatchdogThread already running."); }
+		{ sys.log("THREAD-ALLOC", LogLevel.WARN, "WatchdogThread already running."); }
 		else { WatchdogThread.initialize(); }
 		
 		if (WatchdogThread2.isRunning())
-		{ sys.log("THREAD-ALLOC", InfoType.WARN, "WatchdogThread2 already running."); }
+		{ sys.log("THREAD-ALLOC", LogLevel.WARN, "WatchdogThread2 already running."); }
 		else { WatchdogThread2.initialize(); }
 		
 		if (ShellWriteThread.isRunning())
-		{ sys.log("THREAD-ALLOC", InfoType.WARN, "ShellWriteThread already running."); }
+		{ sys.log("THREAD-ALLOC", LogLevel.WARN, "ShellWriteThread already running."); }
 		else { ShellWriteThread.initialize(); }
 		
 		if (CommandManagement.isRunning())
-		{ sys.log("THREAD-ALLOC", InfoType.WARN, "Command Manager Thread already running."); }
+		{ sys.log("THREAD-ALLOC", LogLevel.WARN, "Command Manager Thread already running."); }
 		else { CommandManagement.initialize(); }
 		
 		if (JFxGUIThread.isRunning())
-		{ sys.log("THREAD-ALLOC", InfoType.WARN, "JavaFX GUI Thread already running."); }
+		{ sys.log("THREAD-ALLOC", LogLevel.WARN, "JavaFX GUI Thread already running."); }
 		else { JFxGUIThread.initialize(); }
 	}
 	

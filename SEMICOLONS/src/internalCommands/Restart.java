@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import awtcomponents.AWTANSI;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import jfxcomponents.ANSI;
 import libraries.Env;

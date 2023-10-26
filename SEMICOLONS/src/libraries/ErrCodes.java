@@ -9,6 +9,7 @@ public enum ErrCodes {
 	//e.g. NotAFile -> <Error Message>
 	
 	CmdNotFound ("The specified command was not found."),
+	CmdNotFound_External ("An external command (binary or .jar file) was not found on the system."),
 	ParamErr_WrongType ("A parameter was specified, but another (data) type was expected."),
 	ParseErr_MapFail ("Command parser warn: Mapping of strings to internal variables not successful."),
 	ParseErr_PrefetchErr ("Command parser warn: An error occurred while fetching command data (probably envVars)."),
@@ -30,7 +31,9 @@ public enum ErrCodes {
 	ThreadErr_SWT_Off ("Internal thread warn: Shell Write Thread inactive. Restart, Shell output is interrupted. View log."),
 	ShellModeNonNormal ("Shell mode is not \"normal\". This could potentially mean, that an internal error occured. Restart."),
 	RuntimeErr ("Command runtime warn: Command exited with an exception."),
-	PrematureTermination ("Command execution was terminated prematurely, therefore the command could not finish.");
+	PrematureTermination ("Command execution was terminated prematurely, therefore the command could not finish."),
+	ProcessGeneralError ("External process returned 1 (general error)."),
+	ProcessUnspecifiedError ("External process returned an unspecified error code (>1).");
 	
 	public final String description;
 	
@@ -43,12 +46,7 @@ public enum ErrCodes {
 	 * @param errName
 	 * @return
 	 */
-	public static final String getErrDesc(String errName) {
-		for (ErrCodes ec : values()) {
-			if (ec.name().equals(errName)) {
-				return ec.description;
-			}
-		}
-		return null;
+	public static final String getErrDesc(ErrCodes error) {
+		return error.description;
 	}
 }

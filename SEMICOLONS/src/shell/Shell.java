@@ -1,8 +1,7 @@
 package shell;
 
-import awtcomponents.AWTANSI;
 import components.CommandHistory;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.Runphase;
 import engine.sys;
 import javafx.application.Platform;
@@ -12,7 +11,6 @@ import jfxcomponents.GUIManager;
 import libraries.Global;
 import main.Main;
 import threads.ShellWriteThread;
-import threads.ThreadAllocation;
 
 /**
  * Contains all functions required by other methods for the shell.
@@ -37,7 +35,7 @@ public class Shell {
 			else
 				promptPattern = newPromptPattern;
 		} else {
-			sys.log("OPENLIB", InfoType.WARN, "Attempt to set prompt to null, changing nothing.");
+			sys.log("OPENLIB", LogLevel.WARN, "Attempt to set prompt to null, changing nothing.");
 		}
 	}
 
@@ -99,9 +97,9 @@ public class Shell {
 			Shell.print(ANSI.B_Green, "\n" + prompt);
 
 		} else {
-			sys.log("LIB", InfoType.CRIT, "Shell prepare was called during pre-init. Doing nothing, but this");
-			sys.log("LIB", InfoType.CRIT, "is unusual and should not be seen multiple times.");
-			sys.log("LIB", InfoType.CRIT, "Although, it's just a beta version by now, so it's just like that :)");
+			sys.log("LIB", LogLevel.CRIT, "Shell prepare was called during pre-init. Doing nothing, but this");
+			sys.log("LIB", LogLevel.CRIT, "is unusual and should not be seen multiple times.");
+			sys.log("LIB", LogLevel.CRIT, "Although, it's just a beta version by now, so it's just like that :)");
 		}
 		if (!Global.javafxEnabled)
 			Main.mainFrameAWT.getCmdLine().setEditable(true);

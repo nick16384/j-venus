@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import main.Main;
 
@@ -61,7 +61,7 @@ public class WindowMain extends JFrame {
 		//this.setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
 		if (TranslucencyCheck.isTranslucencySupported()) {
 			sys.log("Translucency is supported on this system.");
-			sys.log("HIDDEN", InfoType.WARN, "Not setting translucency. Developer's note: Make this work (not crash, especially Windows)");
+			sys.log("HIDDEN", LogLevel.WARN, "Not setting translucency. Developer's note: Make this work (not crash, especially Windows)");
 			//this.setOpacity(0.2f);
 		}
 		setVisible(true);
@@ -96,7 +96,7 @@ public class WindowMain extends JFrame {
 		cmdLine.setFont(shellFont);
 		cmdLine.setCaretColor(Color.CYAN);
 		try { cmdLine.setCaretPosition(cmdLine.getText().length()); } //TODO Fix cursor not in right position (windows)
-		catch (IllegalArgumentException iae) { sys.log("MAIN", InfoType.WARN, "Could not set cursor position"); }
+		catch (IllegalArgumentException iae) { sys.log("MAIN", LogLevel.WARN, "Could not set cursor position"); }
 		
 		this.add(mainShellPanel);
 		mainShellPanel.add(cmdLine);

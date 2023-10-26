@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 import awtcomponents.AWTANSI;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import filesystem.FileCheckUtils;
 import filesystem.InternalFiles;
@@ -42,7 +42,7 @@ public class VariableInitializion {
 		try {
 			Global.hostname = java.net.InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException uhe) {
-			sys.log("INITVARS", InfoType.WARN, "Could not determine hostname for this machine, using default 'LOCAL'");
+			sys.log("INITVARS", LogLevel.WARN, "Could not determine hostname for this machine, using default 'LOCAL'");
 			Global.hostname = "LOCAL";
 		}
 
@@ -68,7 +68,7 @@ public class VariableInitializion {
 			System.err.println("Could not create log file. Logs won't be saved.");
 		} else {
 			System.out.println("Saving log file to " + Global.getLogFile().getAbsolutePath());
-			sys.log("INITVARS", InfoType.DEBUG, "Log file at " + Global.getLogFile().getAbsolutePath());
+			sys.log("INITVARS", LogLevel.DEBUG, "Log file at " + Global.getLogFile().getAbsolutePath());
 		}
 
 		Global.mainThread = Thread.currentThread();
@@ -77,7 +77,7 @@ public class VariableInitializion {
 		// catch (FileNotFoundException fnfe) { logWrite("INITVARS", 2, "Could not find
 		// log path. Cannot save log."); }
 		if (Global.osName.equalsIgnoreCase("UnknownOS")) {
-			sys.log("LIB", InfoType.WARN, "INITVARS: Operating system not supported. Exiting...");
+			sys.log("LIB", LogLevel.WARN, "INITVARS: Operating system not supported. Exiting...");
 			sys.shutdown(1);
 		}
 		
@@ -164,7 +164,7 @@ public class VariableInitializion {
 	 * Read "message of the day"-file, take out lines starting with // or #, and replace envVars
 	 */
 	private static final void fetchMOTD() {
-		sys.log("INITVARS", InfoType.INFO, "Fetching MOTD (message of the day)...");
+		sys.log("INITVARS", LogLevel.INFO, "Fetching MOTD (message of the day)...");
 		String motdRaw = Global.getDataDir().newVirtualFile("/motd").readContents();
 		if (motdRaw != "") {
 			Global.motd = "";
@@ -185,7 +185,7 @@ public class VariableInitializion {
 							"\\" + nextEnvName,
 							Env.getEnv(nextEnvName));
 				} catch (NullPointerException npe) {
-					sys.log("VLIB", InfoType.ERR, "Replacement of $VAR with actual value failed in MOTD fetching.");
+					sys.log("VLIB", LogLevel.ERR, "Replacement of $VAR with actual value failed in MOTD fetching.");
 					Global.motd = Global.motd.replaceFirst("\\$", "");
 				}
 				System.out.println("EVCount: " + evcount);

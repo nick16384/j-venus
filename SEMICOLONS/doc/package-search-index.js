@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"modules"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"awtcomponents"},{"l":"commands"},{"l":"components"},{"l":"engine"},{"l":"filesystem"},{"l":"internalCommands"},{"l":"jfxcomponents"},{"l":"libraries"},{"l":"main"},{"l":"net"},{"l":"shell"},{"l":"threads"}];updateSearchResults();

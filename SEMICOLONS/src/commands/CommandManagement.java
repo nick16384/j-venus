@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import awtcomponents.AWTANSI;
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import jfxcomponents.ANSI;
 import libraries.Err;
@@ -40,17 +40,22 @@ public class CommandManagement {
 				try {
 					currentCommand = commandQueue.take();
 				} catch (InterruptedException ie) {
-					sys.log("CMGR", InfoType.WARN, "Waiting for command input has been interrupted.");
+					sys.log("CMGR", LogLevel.WARN, "Waiting for command input has been interrupted.");
 					ie.printStackTrace();
 					continue; // Do not execute, since no command is available for sure.
 				}
 				
 				// Continues here IF a command is available
 				commandExecutor.execute(() -> {
-					sys.log("CMGR", InfoType.DEBUG, "Launching " + currentCommand.getCommand());
+					sys.log("CMGR", LogLevel.DEBUG, "Launching " + currentCommand.getCommand());
 					
 					synchronized (commandExecutor) {
+						currentCommand.executionTimeStartNow();
 						executeCommand();
+						currentCommand.executionTimeEndNow();
+						sys.log("CMGR", LogLevel.STATUS,
+								"Command '" + currentCommand.getCommand() + "'"
+								+ " took " + currentCommand.getExecutionTime() + "ms to execute.");
 						doErrorCheckingAndCleanup();
 						commandExecutor.notify();
 					}
@@ -84,12 +89,12 @@ public class CommandManagement {
 		Shell.print("Exception in \"" + currentCommand.getCommand() + "\" : ");
 		if (ErrCodes.getErrDesc(returnValues.get(currentCommand)) != null) {
 			// Known error
-			sys.log("CMGR", InfoType.DEBUG,
+			sys.log("CMGR", LogLevel.DEBUG,
 					"Error type \"" + returnValues.get(currentCommand) + "\" found.");
 			Shell.print(ANSI.B_Yellow, ErrCodes.getErrDesc(returnValues.get(currentCommand)));
 		} else {
 			// Unknown error
-			sys.log("CMGR", InfoType.WARN,
+			sys.log("CMGR", LogLevel.WARN,
 					"Command error not found in libraries.ErrCodes: "
 							+ returnValues.get(currentCommand));
 			Shell.print(ANSI.B_Red,
@@ -102,10 +107,10 @@ public class CommandManagement {
 		Command lastCommand = commandQueue.poll();
 		
 		if (lastCommand != null && !lastCommand.equals(currentCommand))
-			sys.log("CMGR", InfoType.CRIT, "Last command executed does not match queue head!");
+			sys.log("CMGR", LogLevel.CRIT, "Last command executed does not match queue head!");
 		
 		if (!disablePrompt) {
-			sys.log("CMGR", InfoType.STATUS, "Command "
+			sys.log("CMGR", LogLevel.STATUS, "Command "
 					+ currentCommand.getCommand()
 					+ " requested no prompt to be shown.");
 			Shell.print("\n");
@@ -124,18 +129,18 @@ public class CommandManagement {
 	}
 	
 	public static void killCurrentIfRunning() {
-		sys.log("CMGR", InfoType.INFO, "Terminating command execution.");
+		sys.log("CMGR", LogLevel.INFO, "Terminating command execution.");
 		currentCommand.cancel(true);
 	}
 	
 	public static void suspend() {
-		sys.log("CMGR", InfoType.DEBUG, "Suspending command manager thread.");
+		sys.log("CMGR", LogLevel.DEBUG, "Suspending command manager thread.");
 		suspend = true;
 	}
 	
 	public static void invokeCommand(Command cmd) {
 		boolean insertionSuccess = commandQueue.offer(cmd);
-		sys.log("CMGR", InfoType.DEBUG, "Command invokation: "
+		sys.log("CMGR", LogLevel.DEBUG, "Command invokation: "
 				+ cmd.getCommand() + " : " + (insertionSuccess ? "SUCCESS" : "FAIL"));
 	}
 	

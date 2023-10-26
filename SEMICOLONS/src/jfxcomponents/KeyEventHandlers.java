@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import filesystem.InternalFiles;
 import filesystem.VirtualFile;
@@ -35,7 +35,7 @@ public class KeyEventHandlers {
 	protected static synchronized void actionOnEnter() {
 		Shell.getCommandHistory().resetRowStats();
 		//UPDATE SHELL STREAM ==============================================================================
-		ShellWriteThread.updateShellStream();
+		ShellWriteThread.updateUserInputStream();
 		//END UPDATE SHELL STREAM ==========================================================================
 		//Splitting WindowMain.cmdLine text into command
 		String[] lines = GUIManager.getCmdLine().getText().split("\n");
@@ -56,11 +56,11 @@ public class KeyEventHandlers {
 		//if (fullCommand.contains(VarLib.getPrompt())) { fullCommand = fullCommand.split("\\$ ")[1]; }
 		if (!fullCommand.isBlank()) {
 			if (fullCommand.contains(" && ")) {
-				sys.log("MAIN", InfoType.WARN, "Info: Found multiple commands connected with '&&'.");
-				sys.log("MAIN", InfoType.WARN, "This is still experimental: Expect errors.");
+				sys.log("MAIN", LogLevel.WARN, "Info: Found multiple commands connected with '&&'.");
+				sys.log("MAIN", LogLevel.WARN, "This is still experimental: Expect errors.");
 				Shell.println("Using experimental command interconnect: '&&'");
 				for (String subCommand : fullCommand.split(" && ")) {
-					sys.log("MAIN", InfoType.DEBUG, "Running '" + fullCommand + "'");
+					sys.log("MAIN", LogLevel.DEBUG, "Running '" + fullCommand + "'");
 					sys.log("Subcommand: " + subCommand);
 					try {
 						commands.Command cmd = new commands.Command(subCommand);
@@ -74,7 +74,7 @@ public class KeyEventHandlers {
 					}
 				}
 			} else {
-				sys.log("MAIN", InfoType.DEBUG, "Sending '" + fullCommand + "' to Command Parser");
+				sys.log("MAIN", LogLevel.DEBUG, "Sending '" + fullCommand + "' to Command Parser");
 				try {
 					new commands.Command(fullCommand).start();
 					//For returnVal, try:

@@ -2,7 +2,7 @@ package commands;
 
 import java.util.ArrayList;
 
-import engine.InfoType;
+import engine.LogLevel;
 import engine.sys;
 import internalCommands.*;
 import shell.Shell;
@@ -89,7 +89,7 @@ public class CmdSearch {
 			}
 		} catch (InterruptedException ie) {
 			// An interrupt means to stop command execution immediately.
-			sys.log("CMDSEARCH", InfoType.WARN, "Terminating command execution immediately.");
+			sys.log("CMDSEARCH", LogLevel.WARN, "Terminating command execution immediately.");
 			return "PrematureTermination";
 		}
 		return returnVal;
@@ -109,7 +109,7 @@ public class CmdSearch {
 		sys.log("External .jar execution to be implemented!");
 		
 		// SYSTEM BINARY ===============================================
-		sys.log("CMDEXEC", InfoType.INFO, "Running command as external system process.");
+		sys.log("CMDEXEC", LogLevel.INFO, "Running command as external system process.");
 		ArrayList<String> newCommandArray = new ArrayList<String>();
 		newCommandArray.add(command);
 		newCommandArray.addAll(params);

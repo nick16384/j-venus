@@ -8,6 +8,7 @@ public class InternalFiles {
 	private static VirtualFile motdBackup;
 	private static VirtualFile semicolonsIcon;
 	private static VirtualFile logFile;
+	private static VirtualFile consoleCssStylesheet;
 	public static VirtualFile getCmdHistory() {
 		return cmdHistory;
 	}
@@ -49,5 +50,11 @@ public class InternalFiles {
 	}
 	public static void setLogFile(VirtualFile logFile) {
 		InternalFiles.logFile = logFile;
+	}
+	public static VirtualFile getConsoleCssStylesheet() {
+		return consoleCssStylesheet;
+	}
+	public static void setConsoleCssStylesheet(VirtualFile consoleCssStylesheet) {
+		InternalFiles.consoleCssStylesheet = consoleCssStylesheet;
 	}
 }
