@@ -59,6 +59,7 @@ semicolons/data/cmd_history_max_length\
 ## Current development status:
 The following list lists all current issues and features to be implemented.
 Be aware, that it might not be fully up to date, because this list isn't updated daily.
+- [ ] 0. 🔁 <b>\[Bug/Issue] Separating entire project into shell and GUI part (due to increased architectural issues)</b>
 - [ ] 1. ⛔ \[Feature] Add "undo" command for file operation (after e.g. accidental file deletion)
 - [ ] 2. ⛔ \[Feature] Add support for command interaction (Bi-directional streams)
 - [ ] 3. 🔁 \[Feature] Live syntax highlighting, as user types (JavaFX only, if.)
